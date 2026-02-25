@@ -115,6 +115,17 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* ==================== INTRO VIDEO ==================== */
+#intro-video {
+  padding: 0;
+  background: #000;
+}
+#intro-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* ==================== WELCOME SCREEN ==================== */
 #welcome {
   justify-content: center;
@@ -1463,8 +1474,13 @@ body {
 <body>
 <div class="bg-layer bg-gradient"></div>
 
+<!-- INTRO VIDEO SCREEN -->
+<div id="intro-video" class="screen active">
+  <video id="introVideo" src="Intro.MP4" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+</div>
+
 <!-- WELCOME SCREEN -->
-<div id="welcome" class="screen active">
+<div id="welcome" class="screen">
   <div class="welcome-mascot">🌟</div>
   <h1 class="welcome-title" data-i18n="welcome_title">¡Hola, pequeño/a!</h1>
   <p class="welcome-subtitle" data-i18n="welcome_subtitle">¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre</p>
@@ -2894,10 +2910,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Si ya hay nombre guardado, lo ponemos en el input pero NO mostramos menú todavía
   if (playerName) {
     document.getElementById('playerNameInput').value = playerName;
-    initMenu();
-    showScreen('menu');
+    // No llamamos a initMenu() ni a showScreen('menu') aquí, porque primero va el video
   }
   
   updateAllText();
@@ -2915,6 +2931,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     lastTouchEnd = now;
   }, { passive: false });
+  
+  // ============================================
+  // INTRO VIDEO LOGIC
+  // ============================================
+  const introVideo = document.getElementById('introVideo');
+  const introScreen = document.getElementById('intro-video');
+  
+  function finalizarIntro() {
+    // Evitar múltiples ejecuciones
+    if (!introScreen.classList.contains('active')) return;
+    
+    // Ocultar la pantalla de video
+    introScreen.classList.remove('active');
+    
+    // Decidir a dónde ir
+    if (playerName) {
+      initMenu();               // Actualiza el menú con el nombre guardado
+      showScreen('menu');        // Va directamente al menú
+    } else {
+      showScreen('welcome');     // Muestra la pantalla de bienvenida
+    }
+  }
+  
+  if (introVideo) {
+    introVideo.addEventListener('ended', finalizarIntro); // Al terminar el video
+    introVideo.addEventListener('click', finalizarIntro); // Al hacer clic (saltar)
+  }
 });
 </script>
 </body>
