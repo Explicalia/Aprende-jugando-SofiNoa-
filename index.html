@@ -7,31 +7,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --barca-blue: #004D98;
-  --barca-red: #A50044;
-  --barca-blue-light: #3d7dc7;
-  --barca-red-light: #d4335a;
-  --explicalia-black: #0a0a0a;
-  --explicalia-gold: #D4AF37;
-  --explicalia-gold-light: #F4D03F;
   --color-primary: #6366f1;
+  --color-primary-dark: #4f46e5;
+  --color-secondary: #f97316;
   --color-accent: #10b981;
   --color-warning: #fbbf24;
   --color-error: #ef4444;
   --color-success: #22c55e;
+  --color-pink: #ec4899;
   --color-bg: #faf5ff;
   --color-surface: #ffffff;
   --color-text: #1e1b4b;
   --color-text-secondary: #475569;
-  --glass-bg: rgba(255,255,255,0.92);
-  --glass-border: rgba(255,255,255,0.8);
+  --glass-bg: rgba(255,255,255,0.9);
+  --glass-border: rgba(255,255,255,0.7);
   --font-family: 'Nunito', sans-serif;
   --radius-lg: 16px;
   --radius-xl: 20px;
   --radius-2xl: 24px;
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
   --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-  --shadow-xl: 0 12px 40px rgba(0,0,0,0.15);
+  --barca-blue: #004D98;
+  --barca-red: #A50044;
+  --barca-blue-light: #3d7dc7;
+  --barca-red-light: #d4335a;
+  --explicalia-black: #0a0a0a;
+  --explicalia-gold: #D4AF37;
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { height: 100%; }
@@ -46,7 +48,6 @@ body {
   -webkit-touch-callout: none;
   min-height: 100%;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
 }
 
 /* INTRO VIDEO */
@@ -63,6 +64,36 @@ body {
 }
 #intro-screen.hidden { display: none; }
 #intro-video { width: 100%; height: 100%; object-fit: cover; }
+.intro-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+.intro-fallback-logo {
+  font-size: 4rem;
+  animation: logoFloat 3s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
+}
+.intro-fallback-title {
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--barca-blue), var(--barca-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.intro-fallback-subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+}
 .intro-tap-hint {
   position: absolute;
   bottom: 15%;
@@ -106,13 +137,11 @@ body {
   overflow-x: hidden;
   scroll-behavior: smooth;
   touch-action: pan-y manipulation;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
 }
 .screen.active { display: flex; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* EASTER EGG TRIGGER - BOMBILLA */
+/* BOMBILLA ELEGANTE */
 .easter-egg-trigger {
   position: absolute;
   top: 12px;
@@ -127,11 +156,11 @@ body {
   background: transparent;
   border: none;
   padding: 0;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.3s var(--spring-bounce);
   touch-action: manipulation;
 }
 .easter-egg-trigger:hover { transform: scale(1.1); }
-.easter-egg-trigger:active { transform: scale(0.95); }
+.easter-egg-trigger:active { transform: scale(0.9); }
 .easter-egg-trigger svg { width: 32px; height: 32px; overflow: visible; }
 .bulb-glass {
   fill: rgba(255, 255, 255, 0.1);
@@ -148,6 +177,7 @@ body {
 .bulb-base { fill: #8a8a8a; stroke: #666; stroke-width: 0.5; }
 .bulb-rays { stroke: var(--barca-blue); stroke-width: 1.5; stroke-linecap: round; opacity: 0; animation: raysAppear 2s ease-in-out infinite; }
 .bulb-glow { fill: url(#glowGradient); opacity: 0; animation: glowPulse 2s ease-in-out infinite; }
+
 @keyframes bulbPulse {
   0%, 100% { fill: rgba(0, 77, 152, 0.15); filter: drop-shadow(0 0 2px rgba(0, 77, 152, 0.3)); }
   50% { fill: rgba(165, 0, 68, 0.25); filter: drop-shadow(0 0 8px rgba(165, 0, 68, 0.5)); }
@@ -162,6 +192,35 @@ body {
   80%, 100% { opacity: 0; transform: scale(1.1); }
 }
 @keyframes glowPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+/* MUSIC BUTTON */
+.music-trigger {
+  position: absolute;
+  top: 12px;
+  right: 60px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--barca-red), #ff6b9d);
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  transition: transform 0.3s var(--spring-bounce);
+  touch-action: manipulation;
+  box-shadow: 0 4px 15px rgba(165, 0, 68, 0.4);
+}
+.music-trigger:hover { transform: scale(1.1); }
+.music-trigger:active { transform: scale(0.9); }
+.music-trigger.playing { animation: musicPulse 1s ease-in-out infinite; }
+.music-trigger svg { width: 22px; height: 22px; fill: white; }
+@keyframes musicPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(165, 0, 68, 0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 6px 25px rgba(165, 0, 68, 0.6); }
+}
 
 /* WELCOME */
 #welcome { justify-content: center; gap: 20px; text-align: center; position: relative; }
@@ -181,10 +240,17 @@ body {
   border-radius: var(--radius-2xl);
   background: var(--color-surface);
   box-shadow: var(--shadow-md);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
 }
-.name-input:focus { outline: none; border-color: var(--barca-blue); box-shadow: 0 0 0 4px rgba(0,77,152,0.1); }
-.avatar-select { padding: 14px; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); width: 100%; }
+.name-input:focus { outline: none; border-color: var(--color-primary); transform: scale(1.02); }
+
+.avatar-select {
+  padding: 14px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--glass-border);
+  width: 100%;
+}
 .avatar-select-label { font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 8px; text-align: center; }
 .avatar-options { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .avatar-option {
@@ -193,16 +259,17 @@ body {
   border: 3px solid transparent;
   border-radius: var(--radius-xl);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s var(--spring-bounce);
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-surface);
   touch-action: manipulation;
+  flex-shrink: 0;
 }
-.avatar-option.selected { border-color: var(--barca-blue); transform: scale(1.1); box-shadow: 0 0 12px rgba(0,77,152,0.3); }
-.avatar-option:active { transform: scale(0.95); }
+.avatar-option.selected { border-color: var(--color-primary); transform: scale(1.15); }
 .avatar-option img { width: 36px; height: 36px; }
+
 .start-btn {
   width: 100%;
   padding: 16px 24px;
@@ -211,25 +278,26 @@ body {
   font-weight: 800;
   text-align: center;
   color: white;
-  background: linear-gradient(135deg, var(--barca-blue) 0%, var(--barca-red) 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   border: none;
   border-radius: var(--radius-2xl);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,77,152,0.4);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.4);
   min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   touch-action: manipulation;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  flex-shrink: 0;
+  transition: all 0.2s var(--spring-bounce);
 }
-.start-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,77,152,0.5); }
+.start-btn:hover { transform: translateY(-3px) scale(1.02); }
 .start-btn:active { transform: translateY(0) scale(0.98); }
 
 /* MENU */
 #menu { gap: 14px; position: relative; }
 .menu-header { text-align: center; margin-bottom: 4px; padding-top: 8px; }
-.greeting { font-size: 0.85rem; font-weight: 700; color: var(--barca-blue); text-transform: uppercase; letter-spacing: 0.1em; }
+.greeting { font-size: 0.85rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; }
 .menu-title { font-size: clamp(1.2rem, 5vw, 1.7rem); font-weight: 900; text-align: center; }
 .player-avatar {
   display: flex;
@@ -252,45 +320,66 @@ body {
   font-size: 1.8rem;
   box-shadow: 0 4px 12px rgba(251,191,36,0.35);
   border: 3px solid white;
+  flex-shrink: 0;
+  transition: transform 0.3s var(--spring-bounce);
 }
+.avatar-mascot:hover { transform: scale(1.1) rotate(5deg); }
 .player-stats { text-align: center; }
 .player-name { font-size: 1.1rem; font-weight: 900; }
-.player-level { font-size: 0.8rem; color: var(--barca-blue); font-weight: 700; }
+.player-level { font-size: 0.8rem; color: var(--color-primary); font-weight: 700; }
 .player-stars { font-size: 0.8rem; color: var(--color-warning); }
-.progress-overview { width: 100%; max-width: 380px; padding: 14px; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); }
+
+.progress-overview {
+  width: 100%;
+  max-width: 360px;
+  padding: 14px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--glass-border);
+  flex-shrink: 0;
+}
 .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
 .progress-title { font-size: 0.85rem; color: var(--color-text-secondary); }
-.progress-value { font-size: 0.9rem; font-weight: 800; color: var(--barca-blue); }
+.progress-value { font-size: 0.9rem; font-weight: 800; color: var(--color-primary); }
 .progress-bar-bg { height: 8px; background: #e5e7eb; border-radius: 10px; overflow: hidden; }
-.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--barca-blue), var(--barca-red)); border-radius: 10px; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--barca-blue), var(--barca-red)); border-radius: 10px; transition: width 0.5s var(--spring-bounce); }
 
-/* GRID DE 5 JUEGOS */
-.games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 380px; }
-.games-grid .game-card:nth-child(5) { grid-column: span 2; max-width: 180px; margin: 0 auto; }
+.games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 360px; }
 .game-card {
   padding: 14px;
   background: var(--glass-bg);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s var(--spring-bounce);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   touch-action: manipulation;
+  flex-shrink: 0;
 }
-.game-card:hover { transform: translateY(-3px) scale(1.02); box-shadow: var(--shadow-lg); border-color: var(--barca-blue); }
-.game-card:active { transform: translateY(-1px) scale(0.98); }
-.game-icon { font-size: 2.2rem; margin-bottom: 6px; }
-.game-title { font-size: 0.9rem; font-weight: 800; text-align: center; width: 100%; line-height: 1.2; }
+.game-card:hover { transform: translateY(-4px) scale(1.03); box-shadow: var(--shadow-lg); }
+.game-card:active { transform: translateY(0) scale(0.97); }
+.game-icon { font-size: 2rem; margin-bottom: 6px; transition: transform 0.3s var(--spring-bounce); }
+.game-card:hover .game-icon { transform: scale(1.2); }
+.game-title { font-size: 0.95rem; font-weight: 800; text-align: center; width: 100%; display: flex; align-items: center; justify-content: center; line-height: 1.2; }
 .game-levels { display: flex; justify-content: center; gap: 4px; margin-top: 6px; }
 .level-dot { width: 7px; height: 7px; border-radius: 50%; background: #e5e7eb; transition: all 0.3s; }
-.level-dot.completed { background: var(--color-success); }
-.level-dot.current { background: var(--color-warning); animation: dotPulse 1s ease-in-out infinite; }
+.level-dot.completed { background: var(--color-success); transform: scale(1.2); }
+.level-dot.current { background: var(--color-warning); animation: dotPulse 1.5s ease-in-out infinite; }
 @keyframes dotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
-.language-selector { padding: 12px; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); text-align: center; max-width: 380px; width: 100%; }
+.language-selector {
+  padding: 12px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--glass-border);
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  flex-shrink: 0;
+}
 .language-label { font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 6px; }
 .language-buttons { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
 .lang-btn {
@@ -302,10 +391,15 @@ body {
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s var(--spring-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   touch-action: manipulation;
 }
-.lang-btn.active { background: linear-gradient(135deg, var(--barca-blue), var(--barca-red)); color: white; border-color: transparent; transform: scale(1.05); }
+.lang-btn:hover { transform: scale(1.05); }
+.lang-btn:active { transform: scale(0.95); }
+.lang-btn.active { background: var(--barca-blue); color: white; border-color: var(--barca-blue); }
 .settings-row { display: flex; gap: 8px; margin-top: 6px; justify-content: center; flex-wrap: wrap; }
 .settings-btn {
   padding: 10px 16px;
@@ -316,10 +410,14 @@ body {
   border-radius: var(--radius-xl);
   background: var(--color-surface);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   touch-action: manipulation;
-  transition: all 0.2s;
+  transition: all 0.2s var(--spring-bounce);
 }
-.settings-btn:hover { border-color: var(--barca-blue); }
+.settings-btn:hover { transform: scale(1.03); }
+.settings-btn:active { transform: scale(0.97); }
 
 /* GAME SELECT */
 #game-select { gap: 14px; position: relative; }
@@ -338,10 +436,11 @@ body {
   cursor: pointer;
   min-height: 56px;
   touch-action: manipulation;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  transition: all 0.25s var(--spring-bounce);
 }
-.level-card:hover { border-color: var(--barca-blue); transform: translateX(4px); }
-.level-card:active { transform: translateX(2px) scale(0.99); }
+.level-card:hover { transform: scale(1.02) translateX(4px); }
+.level-card:active { transform: scale(0.98); }
 .level-card.locked { opacity: 0.5; cursor: not-allowed; }
 .level-number {
   width: 40px;
@@ -353,10 +452,12 @@ body {
   font-weight: 900;
   font-size: 1rem;
   background: #e5e7eb;
+  flex-shrink: 0;
+  transition: all 0.3s;
 }
-.level-card.completed .level-number { background: linear-gradient(135deg, var(--barca-blue), var(--barca-red)); color: white; }
+.level-card.completed .level-number { background: var(--color-success); color: white; transform: scale(1.1); }
 .level-card.current .level-number { background: var(--color-warning); color: white; animation: levelPulse 1.5s ease-in-out infinite; }
-@keyframes levelPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0.4); } 50% { box-shadow: 0 0 0 8px rgba(251,191,36,0); } }
+@keyframes levelPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 .level-info { flex: 1; min-width: 0; }
 .level-name { font-size: 0.95rem; font-weight: 800; }
 .level-desc { font-size: 0.75rem; color: var(--color-text-secondary); }
@@ -372,14 +473,22 @@ body {
   border-radius: var(--radius-lg);
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  transition: all 0.2s var(--spring-bounce);
 }
-.back-btn:hover { border-color: var(--barca-blue); transform: scale(1.05); }
-.back-btn:active { transform: scale(0.95); }
+.back-btn:hover { transform: scale(1.1); }
+.back-btn:active { transform: scale(0.9); }
 
 /* GAME */
 #game { gap: 10px; position: relative; }
-.game-top-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.game-top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  flex-shrink: 0;
+}
 .menu-btn {
   padding: 10px 14px;
   display: flex;
@@ -396,21 +505,41 @@ body {
   cursor: pointer;
   min-height: 44px;
   touch-action: manipulation;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s var(--spring-bounce);
 }
-.menu-btn:hover { transform: scale(1.02); }
-.menu-btn:active { transform: scale(0.98); }
+.menu-btn:hover { transform: scale(1.05); }
+.menu-btn:active { transform: scale(0.95); }
 .game-level-badge { font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); }
 .progress-stars { display: flex; gap: 3px; }
-.progress-star { font-size: 1.1rem; color: #e5e7eb; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.progress-star.earned { color: var(--color-warning); transform: scale(1.2); animation: starEarn 0.5s ease; }
-@keyframes starEarn { 0% { transform: scale(0); } 50% { transform: scale(1.4); } 100% { transform: scale(1.2); } }
+.progress-star { font-size: 1.1rem; color: #e5e7eb; transition: all 0.4s var(--spring-bounce); }
+.progress-star.earned { color: var(--color-warning); animation: starPop 0.5s ease; }
+@keyframes starPop { 0% { transform: scale(0) rotate(-180deg); } 50% { transform: scale(1.4) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
 
-.game-instruction { width: 100%; max-width: 360px; padding: 12px; text-align: center; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); }
+.game-instruction {
+  width: 100%;
+  max-width: 360px;
+  padding: 12px;
+  text-align: center;
+  background: var(--glass-bg);
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--glass-border);
+  flex-shrink: 0;
+}
 .instruction-text { font-size: 0.95rem; font-weight: 700; text-align: center; }
 .instruction-name { color: var(--barca-blue); }
 
-.game-area { display: none; flex: 1; width: 100%; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px; touch-action: pan-y manipulation; overflow-y: auto; padding-bottom: 20px; }
+.game-area { 
+  display: none; 
+  flex: 1; 
+  width: 100%; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: flex-start; 
+  gap: 12px; 
+  touch-action: pan-y manipulation;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
 .game-area.active { display: flex; }
 
 /* MEMORY */
@@ -419,7 +548,7 @@ body {
   aspect-ratio: 1;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.5s var(--spring-bounce);
   cursor: pointer;
   min-width: 55px;
   touch-action: manipulation;
@@ -444,29 +573,55 @@ body {
 
 /* NUMBERS */
 .numbers-container { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 360px; width: 100%; }
-.number-intro-card { padding: 20px; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); text-align: center; cursor: pointer; touch-action: manipulation; width: 100%; transition: all 0.2s; }
-.number-intro-card:hover { border-color: var(--barca-blue); }
-.number-big { font-size: 4.5rem; font-weight: 900; color: var(--barca-blue); text-shadow: 2px 2px 4px rgba(0,77,152,0.2); }
+.number-intro-card {
+  padding: 20px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-2xl);
+  border: 2px solid var(--glass-border);
+  text-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  width: 100%;
+  transition: all 0.2s var(--spring-bounce);
+}
+.number-intro-card:hover { transform: scale(1.02); }
+.number-intro-card:active { transform: scale(0.98); }
+.number-big { font-size: 4.5rem; font-weight: 900; color: var(--barca-blue); }
 .number-objects { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
-.number-object { font-size: 2.2rem; animation: objectBounce 0.5s ease infinite; animation-delay: calc(var(--i) * 0.1s); }
-@keyframes objectBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.number-object { font-size: 2.2rem; animation: objectBounce 0.5s ease backwards; }
+@keyframes objectBounce { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .counting-objects { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 16px; background: var(--glass-bg); border-radius: var(--radius-2xl); }
-.counting-item { font-size: 2.2rem; padding: 8px; border-radius: var(--radius-lg); cursor: pointer; touch-action: manipulation; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.counting-item.touched { background: #dcfce7; transform: scale(1.15); }
+.counting-item { 
+  font-size: 2.2rem; 
+  padding: 8px; 
+  border-radius: var(--radius-lg); 
+  cursor: pointer; 
+  touch-action: manipulation;
+  transition: all 0.2s var(--spring-bounce);
+}
+.counting-item.touched { 
+  background: #dcfce7; 
+  transform: scale(1.2) rotate(5deg);
+}
 .count-option {
-  width: 56px; height: 56px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; font-weight: 900;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 900;
   background: var(--color-surface);
   border: 3px solid var(--glass-border);
   border-radius: var(--radius-xl);
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s var(--spring-bounce);
 }
-.count-option:hover { border-color: var(--barca-blue); transform: scale(1.05); }
+.count-option:hover { transform: scale(1.1); }
+.count-option:active { transform: scale(0.9); }
 .count-option.correct { background: #dcfce7; border-color: var(--color-success); animation: correctPop 0.4s ease; }
-@keyframes correctPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+@keyframes correctPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 .count-option.wrong { animation: shake 0.4s; border-color: var(--color-error); }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 
@@ -475,8 +630,8 @@ body {
 .sofia-plane { font-size: 3rem; animation: fly 3s ease-in-out infinite; }
 @keyframes fly { 0%, 100% { transform: translateX(-15px) rotate(-8deg); } 50% { transform: translateX(15px) rotate(8deg); } }
 .sofia-country-card { text-align: center; padding: 16px; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); width: 100%; }
-.sofia-flag { font-size: 4rem; }
-.sofia-country-name { font-size: 1.3rem; font-weight: 900; margin: 8px 0; }
+.sofia-flag { font-size: 3.5rem; }
+.sofia-country-name { font-size: 1.2rem; font-weight: 900; margin: 6px 0; }
 .sofia-options { width: 100%; display: flex; flex-direction: column; gap: 8px; }
 .capital-btn {
   width: 100%;
@@ -490,212 +645,257 @@ body {
   border-radius: var(--radius-2xl);
   cursor: pointer;
   touch-action: manipulation;
+  flex-shrink: 0;
   min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s var(--spring-bounce);
 }
-.capital-btn:hover { border-color: var(--barca-blue); transform: translateX(4px); }
+.capital-btn:hover { transform: scale(1.03); }
+.capital-btn:active { transform: scale(0.97); }
 .capital-btn.correct { background: #dcfce7; border-color: var(--color-success); }
 .capital-btn.wrong { background: #fef2f2; border-color: var(--color-error); }
 
 /* COLORS */
 .colors-container { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 360px; width: 100%; }
-.color-target { text-align: center; padding: 16px; background: var(--glass-bg); border-radius: var(--radius-2xl); width: 100%; }
-.target-emoji { font-size: 4rem; }
-.target-question { font-size: 1rem; margin-top: 8px; text-align: center; }
-.target-word { font-weight: 800; color: var(--barca-blue); }
-.color-palette { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.color-target {
+  text-align: center;
+  padding: 20px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-2xl);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.target-emoji { 
+  font-size: 4.5rem; 
+  display: block;
+  margin-bottom: 8px;
+  animation: emojiFloat 3s ease-in-out infinite;
+}
+@keyframes emojiFloat { 
+  0%, 100% { transform: translateY(0) rotate(-2deg); } 
+  50% { transform: translateY(-8px) rotate(2deg); } 
+}
+.target-question { font-size: 1.1rem; margin-top: 8px; text-align: center; font-weight: 700; }
+.target-word { font-weight: 900; color: var(--barca-blue); }
+.target-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-top: 8px;
+  opacity: 0;
+  animation: fadeInHint 0.5s ease 1s forwards;
+}
+@keyframes fadeInHint { to { opacity: 1; } }
+.color-palette { 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  gap: 12px; 
+  padding: 16px;
+}
 .color-btn {
-  width: 55px; height: 55px;
+  width: 58px;
+  height: 58px;
   border-radius: var(--radius-2xl);
   border: 4px solid white;
   cursor: pointer;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   touch-action: manipulation;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.color-btn:hover { transform: scale(1.1); }
-.color-btn.selected { transform: scale(1.15); box-shadow: 0 0 20px rgba(0,0,0,0.3); }
-
-/* PIANO - MÚSICA */
-.piano-container { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 380px; width: 100%; }
-.piano-title-card { width: 100%; padding: 16px; background: linear-gradient(135deg, rgba(0,77,152,0.1), rgba(165,0,68,0.1)); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); text-align: center; }
-.piano-title-text { font-size: 1.1rem; font-weight: 800; }
-.piano-subtitle { font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 4px; }
-
-.piano-keyboard {
-  display: flex;
-  justify-content: center;
+  transition: all 0.25s var(--spring-bounce);
   position: relative;
-  padding: 20px 16px;
-  background: linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 100%);
+}
+.color-btn::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: calc(var(--radius-2xl) + 4px);
+  border: 3px solid transparent;
+  transition: all 0.2s;
+}
+.color-btn:hover { transform: scale(1.15) translateY(-4px); }
+.color-btn:active { transform: scale(0.9); }
+.color-btn.selected::after { border-color: var(--color-success); }
+.color-btn.correct { 
+  animation: colorCorrect 0.5s ease;
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+}
+@keyframes colorCorrect {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.3); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.color-btn.wrong { 
+  animation: colorWrong 0.4s ease;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+@keyframes colorWrong {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* MUSIC GAME */
+.music-container { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 360px; width: 100%; }
+.music-header {
+  text-align: center;
+  padding: 16px;
+  background: var(--glass-bg);
   border-radius: var(--radius-2xl);
   width: 100%;
-  max-width: 360px;
-  overflow-x: auto;
+}
+.music-level-title { font-size: 1.1rem; font-weight: 800; color: var(--barca-blue); }
+.music-instruction { font-size: 0.9rem; color: var(--color-text-secondary); margin-top: 4px; }
+.music-round-info {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--barca-red);
+  margin-top: 4px;
+}
+.music-sequence {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: var(--radius-2xl);
+  min-height: 80px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sequence-note {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: white;
+  opacity: 0.4;
+  transition: all 0.3s var(--spring-bounce);
+}
+.sequence-note.active {
+  opacity: 1;
+  transform: scale(1.3);
+  box-shadow: 0 0 20px currentColor;
+}
+.sequence-note.played { opacity: 1; transform: scale(1.1); }
+.piano-container {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px 16px;
+  background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+  border-radius: var(--radius-2xl);
+  width: 100%;
 }
 .piano-key {
-  width: 38px;
+  width: 42px;
   height: 120px;
-  background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
-  border: 2px solid #ccc;
+  background: linear-gradient(180deg, #fff 0%, #e8e8e8 100%);
   border-radius: 0 0 8px 8px;
+  border: 2px solid #ccc;
   cursor: pointer;
   touch-action: manipulation;
+  position: relative;
+  transition: all 0.1s;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 8px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #666;
-  transition: all 0.1s;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
 }
-.piano-key:hover { background: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%); }
-.piano-key:active, .piano-key.pressed {
-  background: linear-gradient(180deg, #e0e0e0 0%, #d0d0d0 100%);
+.piano-key:active {
+  background: linear-gradient(180deg, #ddd 0%, #ccc 100%);
   transform: translateY(3px);
-  height: 117px;
 }
-.piano-key.highlighted {
-  animation: keyGlow 0.5s ease infinite;
-  box-shadow: 0 0 15px var(--barca-blue), 0 0 30px var(--barca-red);
+.piano-key.pressed {
+  background: linear-gradient(180deg, #fff9c4 0%, #ffd54f 100%);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  transform: translateY(2px);
 }
-@keyframes keyGlow { 0%, 100% { box-shadow: 0 0 15px var(--barca-blue); } 50% { box-shadow: 0 0 25px var(--barca-red); } }
-.piano-key.correct-hit { background: #dcfce7 !important; border-color: var(--color-success) !important; }
-.piano-key.black {
-  width: 28px;
-  height: 75px;
-  background: linear-gradient(180deg, #333 0%, #111 100%);
-  border-color: #000;
-  color: #aaa;
-  margin: 0 -14px;
-  z-index: 10;
-  border-radius: 0 0 6px 6px;
+.piano-key .note-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #666;
 }
-.piano-key.black:active, .piano-key.black.pressed { background: linear-gradient(180deg, #444 0%, #222 100%); height: 72px; }
-
-.piano-songs { width: 100%; display: flex; flex-direction: column; gap: 8px; }
-.song-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--glass-bg);
-  border: 2px solid var(--glass-border);
-  border-radius: var(--radius-2xl);
-  cursor: pointer;
-  touch-action: manipulation;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+.piano-key.correct {
+  background: linear-gradient(180deg, #a5d6a7 0%, #66bb6a 100%);
+  box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
 }
-.song-btn:hover { border-color: var(--barca-blue); transform: translateX(4px); }
-.song-btn.playing { border-color: var(--barca-red); background: linear-gradient(135deg, rgba(0,77,152,0.1), rgba(165,0,68,0.1)); }
-.song-btn .song-icon { font-size: 1.5rem; transition: transform 0.3s; }
-.song-btn.playing .song-icon { animation: pulseIcon 0.5s ease infinite; }
-@keyframes pulseIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-.song-info { text-align: left; }
-.song-title { font-weight: 800; font-size: 1rem; }
-.song-hint { font-size: 0.75rem; color: var(--color-text-secondary); }
-
-.note-indicator {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  font-size: 4rem;
-  background: linear-gradient(135deg, var(--barca-blue), var(--barca-red));
-  color: white;
-  padding: 20px 30px;
-  border-radius: var(--radius-2xl);
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: var(--shadow-xl);
+.piano-key.wrong {
+  background: linear-gradient(180deg, #ef9a9a 0%, #e57373 100%);
+  animation: shake 0.3s;
 }
-.note-indicator.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-
-.melody-progress {
-  width: 100%;
+.music-progress {
   display: flex;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
+  margin-top: 8px;
 }
-.melody-dot { width: 12px; height: 12px; border-radius: 50%; background: #e5e7eb; transition: all 0.3s; }
-.melody-dot.completed { background: var(--color-success); transform: scale(1.2); }
-.melody-dot.current { background: var(--barca-blue); animation: dotPulse 0.5s ease infinite; }
+.music-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  transition: all 0.3s var(--spring-bounce);
+}
+.music-dot.completed { background: var(--color-success); transform: scale(1.2); }
+.music-dot.current { background: var(--color-warning); animation: dotPulse 1s ease-in-out infinite; }
 
 /* VOCAB POPUP */
 .vocab-popup {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+  transform: translate(-50%, -50%);
   background: var(--color-surface);
-  padding: 24px 32px;
+  padding: 20px 28px;
   border-radius: var(--radius-2xl);
   text-align: center;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
   z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 3px solid var(--barca-blue);
+  display: none;
 }
-.vocab-popup.show { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
-.vocab-emoji { font-size: 3.5rem; animation: vocabPop 0.5s ease; }
-@keyframes vocabPop { 0% { transform: scale(0) rotate(-20deg); } 50% { transform: scale(1.2) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
-.vocab-word { font-size: 1.4rem; font-weight: 800; color: var(--barca-blue); margin: 8px 0; }
-.vocab-translation { font-size: 1.2rem; color: var(--color-accent); font-weight: 700; }
-.vocab-hint { font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 8px; }
-
-/* REINFORCEMENT POPUP */
-.reinforce-popup {
-  position: fixed;
-  bottom: 20%;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: linear-gradient(135deg, var(--barca-blue), var(--barca-red));
-  color: white;
-  padding: 16px 24px;
-  border-radius: var(--radius-2xl);
-  text-align: center;
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: var(--shadow-xl);
-}
-.reinforce-popup.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.reinforce-text { font-size: 1.1rem; font-weight: 700; }
-.reinforce-english { font-size: 1.4rem; font-weight: 900; margin-top: 4px; }
+.vocab-popup.show { display: block; animation: popIn 0.4s var(--spring-bounce); }
+@keyframes popIn { from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+.vocab-emoji { font-size: 3rem; }
+.vocab-word { font-size: 1.2rem; font-weight: 800; color: var(--barca-blue); }
+.vocab-translation { font-size: 1rem; color: var(--color-accent); font-weight: 700; }
 
 /* LEVEL COMPLETE */
 #level-complete { justify-content: center; gap: 16px; text-align: center; position: relative; }
-.complete-mascot { font-size: 3.5rem; animation: celebrate 0.5s ease; }
-@keyframes celebrate { 0% { transform: scale(0) rotate(-20deg); } 50% { transform: scale(1.2) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
-.complete-title { font-size: clamp(1.4rem, 6vw, 1.9rem); font-weight: 900; text-align: center; }
+.complete-mascot { font-size: 3.5rem; animation: mascotBounce 0.6s ease; }
+@keyframes mascotBounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+.complete-title { font-size: clamp(1.4rem, 6vw, 1.9rem); font-weight: 900; text-align: center; animation: titlePop 0.5s ease; }
+@keyframes titlePop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .complete-subtitle { font-size: 0.95rem; color: var(--color-text-secondary); text-align: center; }
 .complete-stars { display: flex; justify-content: center; gap: 10px; }
-.complete-star { font-size: 2.2rem; color: #e5e7eb; transition: all 0.3s; }
-.complete-star.earned { color: var(--color-warning); animation: starPop 0.4s ease; }
-@keyframes starPop { 0% { transform: scale(0); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+.complete-star { font-size: 2.2rem; color: #e5e7eb; }
+.complete-star.earned { color: var(--color-warning); animation: starBounce 0.5s ease backwards; }
+@keyframes starBounce { 0% { transform: scale(0) rotate(-180deg); } 60% { transform: scale(1.3) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
 .words-learned { max-width: 320px; }
 .words-title { font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 10px; text-align: center; }
 .words-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.word-chip { padding: 10px; background: var(--glass-bg); border-radius: var(--radius-xl); text-align: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.word-chip:hover { transform: scale(1.05); background: #fef3c7; box-shadow: var(--shadow-md); }
-.word-emoji { font-size: 1.8rem; }
-.word-es { font-size: 0.75rem; font-weight: 800; color: var(--barca-blue); }
-.word-en { font-size: 0.7rem; color: var(--color-accent); font-weight: 700; }
+.word-chip {
+  padding: 8px;
+  background: var(--glass-bg);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s var(--spring-bounce);
+}
+.word-chip:hover { transform: scale(1.1); }
+.word-chip:active { transform: scale(0.95); }
+.word-emoji { font-size: 1.6rem; }
+.word-es { font-size: 0.7rem; font-weight: 800; color: var(--barca-blue); }
+.word-en { font-size: 0.65rem; color: var(--color-accent); }
 .complete-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-width: 260px; align-items: center; }
 .complete-btn {
   width: 100%;
@@ -712,25 +912,24 @@ body {
   align-items: center;
   justify-content: center;
   touch-action: manipulation;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  transition: all 0.2s var(--spring-bounce);
 }
+.complete-btn:hover { transform: scale(1.03); }
+.complete-btn:active { transform: scale(0.97); }
 .complete-btn.primary { background: linear-gradient(135deg, var(--barca-blue), var(--barca-red)); color: white; box-shadow: 0 4px 16px rgba(0,77,152,0.3); }
-.complete-btn.primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,77,152,0.4); }
 .complete-btn.secondary { background: var(--glass-bg); border: 2px solid var(--glass-border); }
-.complete-btn.secondary:hover { border-color: var(--barca-blue); }
 
 /* CONFETTI */
 .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
 .confetti { position: absolute; width: 10px; height: 10px; top: -10px; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-/* EASTER EGG OVERLAY - ESTILO EXPLICALIA */
+/* EASTER EGG OVERLAY */
 .easter-egg-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.92);
   z-index: 1000;
   display: none;
   align-items: center;
@@ -739,92 +938,142 @@ body {
   touch-action: manipulation;
   overflow-y: auto;
 }
-.easter-egg-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+.easter-egg-overlay.active { display: flex; }
 .easter-egg-card {
-  background: linear-gradient(145deg, var(--explicalia-black) 0%, #1a1a1a 50%, #0f0f0f 100%);
+  background: linear-gradient(145deg, #0f0f0f 0%, #1a1a1a 100%);
   border: 2px solid var(--explicalia-gold);
-  border-radius: 24px;
+  border-radius: 20px;
   width: 100%;
-  max-width: 360px;
-  padding: 28px 20px;
+  max-width: 340px;
+  padding: 22px 18px;
   text-align: center;
   flex-shrink: 0;
-  box-shadow: 0 0 40px rgba(212,175,55,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-  animation: cardSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cardSlide 0.4s var(--spring-bounce);
 }
-@keyframes cardSlide { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-.explicalia-brand {
-  font-size: 1.3rem;
-  font-weight: 900;
-  background: linear-gradient(90deg, var(--explicalia-gold), var(--explicalia-gold-light), var(--explicalia-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.05em;
-}
-.explicalia-url { font-size: 0.9rem; color: var(--explicalia-gold); margin-top: 4px; opacity: 0.9; }
-.explicalia-subtitle { font-size: 0.7rem; color: #6B7280; margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase; }
-.explicalia-divider { width: 60%; height: 1px; background: linear-gradient(90deg, transparent, var(--explicalia-gold), transparent); margin: 16px auto; }
-.easter-egg-title { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 16px; }
-.easter-egg-progress { font-size: 0.7rem; color: var(--explicalia-gold); margin-bottom: 8px; letter-spacing: 0.05em; }
-.easter-egg-question { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 16px; line-height: 1.5; }
-.easter-egg-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+@keyframes cardSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.explicalia-brand { font-size: 1.2rem; font-weight: 800; background: linear-gradient(90deg, var(--explicalia-gold), #f5d77e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.explicalia-subtitle { font-size: 0.75rem; color: #6B7280; margin-top: 4px; }
+.explicalia-divider { width: 50%; height: 1px; background: linear-gradient(90deg, transparent, var(--explicalia-gold), transparent); margin: 14px auto; }
+.easter-egg-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 16px; }
+.easter-egg-progress { font-size: 0.7rem; color: #4B5563; margin-bottom: 6px; }
+.easter-egg-question { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 12px; }
+.easter-egg-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
 .easter-egg-option {
-  background: rgba(212,175,55,0.1);
-  border: 2px solid rgba(212,175,55,0.3);
-  border-radius: 14px;
-  padding: 12px 16px;
-  font-size: 0.95rem;
+  background: #1A1A1A;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s;
   touch-action: manipulation;
 }
-.easter-egg-option:hover { border-color: var(--explicalia-gold); background: rgba(212,175,55,0.2); transform: translateX(4px); }
-.easter-egg-option:active { transform: translateX(2px) scale(0.98); }
-.easter-egg-option.correct { background: rgba(34,197,94,0.2); border-color: #22c55e; color: #4ade80; }
-.easter-egg-option.wrong { background: rgba(239,68,68,0.2); border-color: #ef4444; color: #f87171; }
+.easter-egg-option:hover { border-color: var(--explicalia-gold); transform: scale(1.02); }
+.easter-egg-option.correct { background: rgba(212, 175, 55, 0.2); border-color: var(--explicalia-gold); }
+.easter-egg-option.wrong { background: rgba(165,0,68,0.2); border-color: var(--barca-red); }
 .easter-egg-btn {
-  background: linear-gradient(135deg, var(--explicalia-gold), var(--explicalia-gold-light));
-  color: var(--explicalia-black);
+  background: linear-gradient(135deg, var(--explicalia-gold), #c9a227);
+  color: #0a0a0a;
   border: none;
-  border-radius: 14px;
-  padding: 12px 24px;
-  font-size: 0.95rem;
-  font-weight: 800;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  letter-spacing: 0.03em;
+  transition: all 0.2s var(--spring-bounce);
 }
-.easter-egg-btn:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(212,175,55,0.4); }
-.deco-bar { display: flex; height: 4px; border-radius: 2px; overflow: hidden; margin-top: 16px; }
+.easter-egg-btn:hover { transform: scale(1.05); }
+.deco-bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; margin-top: 14px; }
 .deco-bar span { flex: 1; }
 .barca-blue-bar { background: var(--barca-blue); }
 .barca-red-bar { background: var(--barca-red); }
 
-.explicalia-success-icon { font-size: 3rem; margin-bottom: 12px; animation: successPop 0.5s ease; }
-@keyframes successPop { 0% { transform: scale(0) rotate(-20deg); } 50% { transform: scale(1.2) rotate(10deg); } 100% { transform: scale(1) rotate(0); } }
-.explicalia-success-title { font-size: 1.1rem; font-weight: 800; background: linear-gradient(90deg, var(--explicalia-gold), var(--explicalia-gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
-.explicalia-success-message { font-size: 0.9rem; color: #e5e7eb; margin-bottom: 16px; line-height: 1.6; }
-.explicalia-success-message strong { color: var(--explicalia-gold); }
+/* EXPLICALIA SUCCESS */
+.explicalia-success-icon {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  animation: successPop 0.5s ease;
+}
+@keyframes successPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.explicalia-success-title {
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--explicalia-gold), #f5d77e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 6px;
+}
+.explicalia-success-message {
+  font-size: 0.9rem;
+  color: #fff;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* SONG MODAL */
+.song-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 1500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+}
+.song-modal.active { display: flex; }
+.song-modal video {
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: var(--radius-2xl);
+}
+.song-close {
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: var(--barca-red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s var(--spring-bounce);
+}
+.song-close:hover { transform: scale(1.05); }
 
 /* RESPONSIVE */
 @media (max-width: 360px) {
-  .memory-card { min-width: 48px; }
-  .piano-key { width: 32px; height: 100px; }
-  .piano-key.black { width: 24px; height: 65px; }
+  .memory-card { min-width: 50px; }
+  .game-card { padding: 12px; }
+  .game-title { font-size: 0.9rem; }
+  .capital-btn { padding: 12px 10px; font-size: 0.95rem; min-height: 48px; }
+  .count-option { width: 50px; height: 50px; font-size: 1.4rem; }
+  .number-big { font-size: 3.5rem; }
+  .sofia-flag { font-size: 3rem; }
+  .complete-btn { padding: 12px 16px; min-height: 50px; }
+  .color-btn { width: 52px; height: 52px; }
+  .piano-key { width: 38px; height: 100px; }
 }
 @media (min-width: 768px) {
-  .games-grid { grid-template-columns: repeat(3, 1fr); max-width: 600px; }
-  .games-grid .game-card:nth-child(5) { grid-column: span 1; max-width: none; }
+  .games-grid { grid-template-columns: repeat(3, 1fr); max-width: 500px; }
+  .game-card { min-height: 130px; }
+  .complete-btn { min-height: 58px; font-size: 1rem; }
+  .capital-btn { padding: 16px; font-size: 1.05rem; }
 }
 @media (pointer: coarse) {
-  .game-card, .level-card, .complete-btn, .menu-btn, .start-btn, .lang-btn, .settings-btn, .back-btn, .capital-btn { min-height: 50px; }
+  .game-card, .level-card, .complete-btn, .menu-btn, .start-btn, .lang-btn, .settings-btn, .back-btn, .capital-btn {
+    min-height: 50px;
+  }
   .memory-card { min-width: 65px; }
   .count-option { width: 60px; height: 60px; }
   .color-btn { width: 60px; height: 60px; }
+  .avatar-option { width: 56px; height: 56px; }
 }
 </style>
 </head>
@@ -832,10 +1081,23 @@ body {
 
 <!-- INTRO VIDEO -->
 <div id="intro-screen" onclick="skipIntro()">
-  <video id="intro-video" autoplay muted playsinline onended="skipIntro()" onerror="handleVideoError()">
-    <source src="intro.mp4" type="video/mp4">
+  <video id="intro-video" autoplay muted playsinline onended="skipIntro()" onerror="showIntroFallback()">
+    <source src="intro.MP4" type="video/mp4">
   </video>
+  <div class="intro-fallback" id="introFallback" style="display:none;">
+    <div class="intro-fallback-logo">🌟</div>
+    <div class="intro-fallback-title">Sofía y Noa</div>
+    <div class="intro-fallback-subtitle">Aprende Jugando</div>
+  </div>
   <div class="intro-tap-hint" id="introHint">Toca para comenzar</div>
+</div>
+
+<!-- SONG MODAL -->
+<div class="song-modal" id="songModal">
+  <video id="songVideo" controls>
+    <source src="gemini_generated_video_6CE8FA43.mp4" type="video/mp4">
+  </video>
+  <button class="song-close" onclick="closeSongModal()">Cerrar</button>
 </div>
 
 <div class="bg-layer"></div>
@@ -843,7 +1105,7 @@ body {
 <!-- WELCOME SCREEN -->
 <div id="welcome" class="screen active">
   <button class="easter-egg-trigger" onclick="openEasterEgg()" aria-label="Preguntas para adultos">
-    <svg viewBox="0 0 40 40" fill="none">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="barcaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#004D98"/>
@@ -853,6 +1115,10 @@ body {
           <stop offset="0%" style="stop-color:rgba(255,255,255,0.8)"/>
           <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
         </radialGradient>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
       <g class="bulb-rays-group">
         <line class="bulb-rays" x1="20" y1="3" x2="20" y2="0"/>
@@ -861,22 +1127,30 @@ body {
         <line class="bulb-rays" x1="34" y1="14" x2="37" y2="12"/>
         <line class="bulb-rays" x1="6" y1="14" x2="3" y2="12"/>
       </g>
-      <path class="bulb-glass" d="M20 6 C12 6 8 12 8 18 C8 22 10 26 14 29 L14 32 L26 32 L26 29 C30 26 32 22 32 18 C32 12 28 6 20 6 Z"/>
+      <path class="bulb-glass" d="M20 6 C12 6 8 12 8 18 C8 22 10 26 14 29 L14 32 L26 32 L26 29 C30 26 32 22 32 18 C32 12 28 6 20 6 Z" filter="url(#glow)"/>
       <ellipse class="bulb-glow" cx="20" cy="16" rx="6" ry="5"/>
-      <path class="bulb-filament" d="M16 28 Q16 22 18 20 Q20 18 20 22 Q20 18 22 20 Q24 22 24 28"/>
+      <g class="filament-group">
+        <path class="bulb-filament" d="M16 28 Q16 22 18 20 Q20 18 20 22 Q20 18 22 20 Q24 22 24 28"/>
+      </g>
       <rect class="bulb-base" x="15" y="32" width="10" height="3" rx="1"/>
       <rect class="bulb-base" x="16" y="35" width="8" height="2" rx="1"/>
       <rect class="bulb-base" x="17" y="37" width="6" height="2" rx="1"/>
     </svg>
   </button>
   
+  <button class="music-trigger" id="musicBtn" onclick="toggleSong()" aria-label="La canción de Sofía y Noa" title="La canción de Sofía y Noa">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </svg>
+  </button>
+  
   <div class="welcome-mascot">🌟</div>
-  <h1 class="welcome-title" data-i18n="welcomeTitle">¡Hola, pequeño/a!</h1>
-  <p class="welcome-subtitle" data-i18n="welcomeSubtitle">¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre</p>
+  <h1 class="welcome-title">¡Hola, pequeño/a!</h1>
+  <p class="welcome-subtitle">¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre</p>
   <form class="welcome-form" onsubmit="return startGame(event)">
     <input type="text" class="name-input" id="playerNameInput" placeholder="Tu nombre..." maxlength="12" required>
     <div class="avatar-select">
-      <div class="avatar-select-label" data-i18n="chooseAvatar">Elige tu mascota:</div>
+      <div class="avatar-select-label">Elige tu mascota:</div>
       <div class="avatar-options">
         <div class="avatar-option selected" data-avatar="teddy" onclick="selectAvatar('teddy')">
           <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f9f8.svg" alt="oso">
@@ -892,33 +1166,45 @@ body {
         </div>
       </div>
     </div>
-    <button type="submit" class="start-btn" data-i18n="startAdventure">Comenzar aventura</button>
+    <button type="submit" class="start-btn">Comenzar aventura</button>
   </form>
 </div>
 
 <!-- MENU SCREEN -->
 <div id="menu" class="screen">
   <button class="easter-egg-trigger" onclick="openEasterEgg()" aria-label="Preguntas para adultos">
-    <svg viewBox="0 0 40 40" fill="none">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="barcaGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#004D98"/>
+          <stop offset="100%" style="stop-color:#A50044"/>
+        </linearGradient>
+      </defs>
       <g class="bulb-rays-group">
         <line class="bulb-rays" x1="20" y1="3" x2="20" y2="0"/>
         <line class="bulb-rays" x1="30" y1="6" x2="32" y2="3"/>
         <line class="bulb-rays" x1="10" y1="6" x2="8" y2="3"/>
-        <line class="bulb-rays" x1="34" y1="14" x2="37" y2="12"/>
-        <line class="bulb-rays" x1="6" y1="14" x2="3" y2="12"/>
       </g>
       <path class="bulb-glass" d="M20 6 C12 6 8 12 8 18 C8 22 10 26 14 29 L14 32 L26 32 L26 29 C30 26 32 22 32 18 C32 12 28 6 20 6 Z"/>
       <ellipse class="bulb-glow" cx="20" cy="16" rx="6" ry="5"/>
-      <path class="bulb-filament" d="M16 28 Q16 22 18 20 Q20 18 20 22 Q20 18 22 20 Q24 22 24 28"/>
+      <g class="filament-group">
+        <path class="bulb-filament" d="M16 28 Q16 22 18 20 Q20 18 20 22 Q20 18 22 20 Q24 22 24 28"/>
+      </g>
       <rect class="bulb-base" x="15" y="32" width="10" height="3" rx="1"/>
       <rect class="bulb-base" x="16" y="35" width="8" height="2" rx="1"/>
       <rect class="bulb-base" x="17" y="37" width="6" height="2" rx="1"/>
     </svg>
   </button>
   
+  <button class="music-trigger" id="musicBtn2" onclick="toggleSong()" aria-label="La canción de Sofía y Noa" title="La canción de Sofía y Noa">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </svg>
+  </button>
+  
   <div class="menu-header">
-    <div class="greeting" data-i18n="welcomeBack">Bienvenido/a de nuevo</div>
-    <h1 class="menu-title" data-i18n="whatLearn">¿Qué quieres aprender hoy?</h1>
+    <div class="greeting">Bienvenido/a de nuevo</div>
+    <h1 class="menu-title">¿Qué quieres aprender hoy?</h1>
     <div class="player-avatar">
       <div class="avatar-mascot" id="menuMascot">🧸</div>
       <div class="player-stats">
@@ -930,7 +1216,7 @@ body {
   </div>
   <div class="progress-overview">
     <div class="progress-header">
-      <span class="progress-title" data-i18n="totalProgress">Progreso total</span>
+      <span class="progress-title">Progreso total</span>
       <span class="progress-value" id="totalProgress">0%</span>
     </div>
     <div class="progress-bar-bg">
@@ -940,32 +1226,32 @@ body {
   <div class="games-grid">
     <div class="game-card" onclick="openGameSelect('zoo')">
       <div class="game-icon">🦁</div>
-      <div class="game-title" data-i18n="gameZoo">El Gran Zoo</div>
+      <div class="game-title">El Gran Zoo</div>
       <div class="game-levels" id="zooLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('numbers')">
       <div class="game-icon">🔢</div>
-      <div class="game-title" data-i18n="gameNumbers">Números</div>
+      <div class="game-title">Números</div>
       <div class="game-levels" id="numbersLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('sofia')">
       <div class="game-icon">✈️</div>
-      <div class="game-title" data-i18n="gameSofia">El Mundo de Sofía</div>
+      <div class="game-title">El Mundo de Sofía</div>
       <div class="game-levels" id="sofiaLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('colors')">
       <div class="game-icon">🎨</div>
-      <div class="game-title" data-i18n="gameColors">Los colores de Noa</div>
+      <div class="game-title">Los colores de Noa</div>
       <div class="game-levels" id="colorsLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('music')">
       <div class="game-icon">🎹</div>
-      <div class="game-title" data-i18n="gameMusic">La Música de Noa y Sofía</div>
+      <div class="game-title">La Música de Noa</div>
       <div class="game-levels" id="musicLevels"></div>
     </div>
   </div>
   <div class="language-selector">
-    <div class="language-label" data-i18n="selectLang">Idioma / Language:</div>
+    <div class="language-label">Idioma / Language:</div>
     <div class="language-buttons">
       <button class="lang-btn active" onclick="setLanguage('es')">🇪🇸 ES</button>
       <button class="lang-btn" onclick="setLanguage('en')">🇬🇧 EN</button>
@@ -973,8 +1259,8 @@ body {
     </div>
   </div>
   <div class="settings-row">
-    <button class="settings-btn" onclick="changeName()" data-i18n="changeName">Cambiar nombre</button>
-    <button class="settings-btn" onclick="resetProgress()" data-i18n="reset">Reiniciar</button>
+    <button class="settings-btn" onclick="changeName()">Cambiar nombre</button>
+    <button class="settings-btn" onclick="resetProgress()">Reiniciar</button>
   </div>
 </div>
 
@@ -992,7 +1278,7 @@ body {
 <div id="game" class="screen">
   <div class="game-top-bar">
     <button class="back-btn" onclick="exitGame()">←</button>
-    <button class="menu-btn" onclick="goToMenu()">🏠 <span data-i18n="menu">Menú</span></button>
+    <button class="menu-btn" onclick="goToMenu()">🏠 Menú</button>
     <div class="game-level-badge" id="levelBadge">Nivel 1</div>
     <div class="progress-stars" id="progressStars"></div>
   </div>
@@ -1003,7 +1289,7 @@ body {
   <div class="game-area" id="numbersArea"><div class="numbers-container" id="numbersContainer"></div></div>
   <div class="game-area" id="sofiaArea"><div class="sofia-container" id="sofiaContainer"></div></div>
   <div class="game-area" id="colorsArea"><div class="colors-container" id="colorsContainer"></div></div>
-  <div class="game-area" id="musicArea"><div class="piano-container" id="pianoContainer"></div></div>
+  <div class="game-area" id="musicArea"><div class="music-container" id="musicContainer"></div></div>
 </div>
 
 <!-- VOCAB POPUP -->
@@ -1011,17 +1297,7 @@ body {
   <div class="vocab-emoji" id="vocabEmoji"></div>
   <div class="vocab-word" id="vocabWord"></div>
   <div class="vocab-translation" id="vocabTranslation"></div>
-  <div class="vocab-hint" id="vocabHint">🔊 Toca para escuchar</div>
 </div>
-
-<!-- REINFORCEMENT POPUP -->
-<div class="reinforce-popup" id="reinforcePopup">
-  <div class="reinforce-text" id="reinforceText">¡Recuerda!</div>
-  <div class="reinforce-english" id="reinforceEnglish"></div>
-</div>
-
-<!-- NOTE INDICATOR -->
-<div class="note-indicator" id="noteIndicator"></div>
 
 <!-- LEVEL COMPLETE -->
 <div id="level-complete" class="screen">
@@ -1030,12 +1306,12 @@ body {
   <p class="complete-subtitle" id="completeSubtitle">Completaste el nivel</p>
   <div class="complete-stars" id="completeStars"></div>
   <div class="words-learned">
-    <div class="words-title">📚 <span data-i18n="wordsLearned">Palabras aprendidas</span></div>
+    <div class="words-title">📚 Palabras aprendidas</div>
     <div class="words-grid" id="wordsGrid"></div>
   </div>
   <div class="complete-actions">
-    <button class="complete-btn primary" onclick="nextLevel()" data-i18n="nextLevel">Siguiente nivel</button>
-    <button class="complete-btn secondary" onclick="goToMenu()" data-i18n="backMenu">Volver al menú</button>
+    <button class="complete-btn primary" onclick="nextLevel()">Siguiente nivel</button>
+    <button class="complete-btn secondary" onclick="goToMenu()">Volver al menú</button>
   </div>
 </div>
 
@@ -1048,788 +1324,373 @@ body {
 </div>
 
 <script>
-// =============================================
-// SISTEMA TRILINGÜE COMPLETO ES/EN/RO
-// =============================================
-const I18N = {
-  es: {
-    welcomeTitle: '¡Hola, pequeño/a!',
-    welcomeSubtitle: '¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre',
-    chooseAvatar: 'Elige tu mascota:',
-    startAdventure: 'Comenzar aventura',
-    welcomeBack: 'Bienvenido/a de nuevo',
-    whatLearn: '¿Qué quieres aprender hoy?',
-    totalProgress: 'Progreso total',
-    gameZoo: 'El Gran Zoo',
-    gameNumbers: 'Números',
-    gameSofia: 'El Mundo de Sofía',
-    gameColors: 'Los colores de Noa',
-    gameMusic: 'La Música de Noa y Sofía',
-    selectLang: 'Idioma / Language:',
-    changeName: 'Cambiar nombre',
-    reset: 'Reiniciar',
-    menu: 'Menú',
-    wordsLearned: 'Palabras aprendidas',
-    nextLevel: 'Siguiente nivel',
-    backMenu: 'Volver al menú',
-    findPairs: '¡Encuentra las parejas!',
-    learnNumbers: '¡Aprende los números!',
-    tapContinue: '¡Toca para continuar!',
-    guessCapitals: '¡Adivina las capitales!',
-    whatCapital: '¿Cuál es su capital?',
-    learnColors: '¡Aprende los colores!',
-    whatColor: '¿De qué color es',
-    playPiano: '¡Toca el piano!',
-    tapCount: '¡Toca cada objeto mientras cuentas!',
-    howMany: '¿Cuántos hay?',
-    putOrder: 'Pon los números en orden:',
-    levelComplete: '¡Lo lograste!',
-    levelSubtitle: 'Completaste el nivel',
-    remember: '¡Recuerda!',
-    touchHear: '🔊 Toca para escuchar',
-    levelNames: {
-      zoo: ['Memoria Fácil', 'Memoria Media', 'Memoria Difícil', 'Sonidos del Zoo', 'Safari Completo'],
-      numbers: ['Conoce los Números', 'Contemos Juntos', '¿Cuántos Hay?', 'Ordena los Números', 'Cuenta hasta 10'],
-      sofia: ['España y Rumanía', 'Más Países', 'Por Europa', 'El Mundo', 'Viaje Global'],
-      colors: ['Colores Básicos', 'Más Colores', 'Rosa y Blanco', 'Todos los Colores', 'Maestro de Colores'],
-      music: ['Notas Básicas', 'Melodías Fáciles', 'Himno del Barça', 'Crea tu Canción', 'Concierto Final']
-    },
-    levelDescs: {
-      zoo: ['3 parejas', '4 parejas', '6 parejas', 'Más animales', 'Reto máximo'],
-      numbers: ['1 al 3', 'Toca y cuenta', 'Adivina', 'Pon en orden', 'Hasta 10'],
-      sofia: ['2 países', '3 países', '5 países', '7 países', 'Todos'],
-      colors: ['Principales', 'Más colores', 'Nuevos', 'Todos', 'Reto final'],
-      music: ['Do Re Mi', 'Melodías', '¡Barça!', 'Libre', 'Gran final']
-    }
-  },
-  en: {
-    welcomeTitle: 'Hello, little one!',
-    welcomeSubtitle: 'What\'s your name? Your mom or dad can write it',
-    chooseAvatar: 'Choose your pet:',
-    startAdventure: 'Start adventure',
-    welcomeBack: 'Welcome back',
-    whatLearn: 'What do you want to learn today?',
-    totalProgress: 'Total progress',
-    gameZoo: 'The Big Zoo',
-    gameNumbers: 'Numbers',
-    gameSofia: 'Sofia\'s World',
-    gameColors: 'Noa\'s Colors',
-    gameMusic: 'Noa and Sofia\'s Music',
-    selectLang: 'Language / Idioma:',
-    changeName: 'Change name',
-    reset: 'Reset',
-    menu: 'Menu',
-    wordsLearned: 'Words learned',
-    nextLevel: 'Next level',
-    backMenu: 'Back to menu',
-    findPairs: 'Find the pairs!',
-    learnNumbers: 'Learn the numbers!',
-    tapContinue: 'Tap to continue!',
-    guessCapitals: 'Guess the capitals!',
-    whatCapital: 'What is its capital?',
-    learnColors: 'Learn the colors!',
-    whatColor: 'What color is',
-    playPiano: 'Play the piano!',
-    tapCount: 'Tap each object while counting!',
-    howMany: 'How many are there?',
-    putOrder: 'Put the numbers in order:',
-    levelComplete: 'You did it!',
-    levelSubtitle: 'Level completed',
-    remember: 'Remember!',
-    touchHear: '🔊 Tap to listen',
-    levelNames: {
-      zoo: ['Easy Memory', 'Medium Memory', 'Hard Memory', 'Zoo Sounds', 'Full Safari'],
-      numbers: ['Know Numbers', 'Let\'s Count', 'How Many?', 'Order Numbers', 'Count to 10'],
-      sofia: ['Spain & Romania', 'More Countries', 'Around Europe', 'The World', 'Global Trip'],
-      colors: ['Basic Colors', 'More Colors', 'Pink & White', 'All Colors', 'Color Master'],
-      music: ['Basic Notes', 'Easy Melodies', 'Barça Anthem', 'Create Song', 'Final Concert']
-    },
-    levelDescs: {
-      zoo: ['3 pairs', '4 pairs', '6 pairs', 'More animals', 'Max challenge'],
-      numbers: ['1 to 3', 'Tap & count', 'Guess', 'Put in order', 'Up to 10'],
-      sofia: ['2 countries', '3 countries', '5 countries', '7 countries', 'All'],
-      colors: ['Main ones', 'More colors', 'New ones', 'All', 'Final challenge'],
-      music: ['Do Re Mi', 'Melodies', '¡Barça!', 'Free', 'Grand finale']
-    }
-  },
-  ro: {
-    welcomeTitle: 'Bună, micuțule!',
-    welcomeSubtitle: 'Cum te numești? Mami sau tati poate scrie numele tău',
-    chooseAvatar: 'Alege-ți animalul:',
-    startAdventure: 'Începe aventura',
-    welcomeBack: 'Bine ai revenit',
-    whatLearn: 'Ce vrei să înveți azi?',
-    totalProgress: 'Progres total',
-    gameZoo: 'Marea Grădină Zoologică',
-    gameNumbers: 'Numere',
-    gameSofia: 'Lumea Sofiei',
-    gameColors: 'Culorile Noei',
-    gameMusic: 'Muzica Noei și a Sofiei',
-    selectLang: 'Limba / Language:',
-    changeName: 'Schimbă numele',
-    reset: 'Resetează',
-    menu: 'Meniu',
-    wordsLearned: 'Cuvinte învățate',
-    nextLevel: 'Nivelul următor',
-    backMenu: 'Înapoi la meniu',
-    findPairs: 'Găsește perechile!',
-    learnNumbers: 'Învață numerele!',
-    tapContinue: 'Atinge pentru a continua!',
-    guessCapitals: 'Ghicește capitalele!',
-    whatCapital: 'Care este capitala?',
-    learnColors: 'Învață culorile!',
-    whatColor: 'De ce culoare este',
-    playPiano: 'Cântă la pian!',
-    tapCount: 'Atinge fiecare obiect în timp ce numeri!',
-    howMany: 'Câte sunt?',
-    putOrder: 'Pune numerele în ordine:',
-    levelComplete: 'Ai reușit!',
-    levelSubtitle: 'Nivel completat',
-    remember: 'Ține minte!',
-    touchHear: '🔊 Atinge pentru a asculta',
-    levelNames: {
-      zoo: ['Memorie Ușoară', 'Memorie Medie', 'Memorie Dificilă', 'Sunete Zoo', 'Safari Complet'],
-      numbers: ['Cunoaște Numerele', 'Să Numărăm', 'Câte Sunt?', 'Ordine Numere', 'Până la 10'],
-      sofia: ['Spania și România', 'Mai Multe Țări', 'Prin Europa', 'Lumea', 'Călătorie Globală'],
-      colors: ['Culori de Bază', 'Mai Multe Culori', 'Roz și Alb', 'Toate Culorile', 'Maestru Culori'],
-      music: ['Note de Bază', 'Melodii Ușoare', 'Imnul Barça', 'Crează Melodie', 'Concert Final']
-    },
-    levelDescs: {
-      zoo: ['3 perechi', '4 perechi', '6 perechi', 'Mai multe animale', 'Provocare maximă'],
-      numbers: ['1 la 3', 'Atinge și numără', 'Ghicește', 'Pune în ordine', 'Până la 10'],
-      sofia: ['2 țări', '3 țări', '5 țări', '7 țări', 'Toate'],
-      colors: ['Principale', 'Mai multe culori', 'Noi', 'Toate', 'Provocare finală'],
-      music: ['Do Re Mi', 'Melodii', '¡Barça!', 'Liber', 'Final mare']
-    }
-  }
-};
-
-// =============================================
-// DATOS DEL JUEGO - TRILINGÜES
-// =============================================
-const ANIMALS = [
-  {emoji:"🦁",es:"LEÓN",en:"Lion",ro:"Leu"},
-  {emoji:"🐯",es:"TIGRE",en:"Tiger",ro:"Tigru"},
-  {emoji:"🐘",es:"ELEFANTE",en:"Elephant",ro:"Elefant"},
-  {emoji:"🦒",es:"JIRAFA",en:"Giraffe",ro:"Girafă"},
-  {emoji:"🦓",es:"CEBRA",en:"Zebra",ro:"Zebra"},
-  {emoji:"🐒",es:"MONO",en:"Monkey",ro:"Maimuță"},
-  {emoji:"🐮",es:"VACA",en:"Cow",ro:"Vacă"},
-  {emoji:"🐷",es:"CERDO",en:"Pig",ro:"Porc"},
-  {emoji:"🐔",es:"GALLINA",en:"Chicken",ro:"Găină"},
-  {emoji:"🐴",es:"CABALLO",en:"Horse",ro:"Cal"},
-  {emoji:"🐶",es:"PERRO",en:"Dog",ro:"Câine"},
-  {emoji:"🐱",es:"GATO",en:"Cat",ro:"Pisică"},
-  {emoji:"🐰",es:"CONEJO",en:"Rabbit",ro:"Iepure"},
-  {emoji:"🦊",es:"ZORRO",en:"Fox",ro:"Vulpe"},
-  {emoji:"🐻",es:"OSO",en:"Bear",ro:"Urs"},
-  {emoji:"🐼",es:"PANDA",en:"Panda",ro:"Panda"},
-  {emoji:"🐨",es:"KOALA",en:"Koala",ro:"Koala"},
-  {emoji:"🦘",es:"CANGURO",en:"Kangaroo",ro:"Cangur"},
-  {emoji:"🐢",es:"TORTUGA",en:"Turtle",ro:"Țestoasă"},
-  {emoji:"🐸",es:"RANA",en:"Frog",ro:"Broască"},
-  {emoji:"🐧",es:"PINGÜINO",en:"Penguin",ro:"Pinguin"},
-  {emoji:"🦄",es:"UNICORNIO",en:"Unicorn",ro:"Inorog"},
-  {emoji:"🦉",es:"BÚHO",en:"Owl",ro:"Bufniță"},
-  {emoji:"🦋",es:"MARIPOSA",en:"Butterfly",ro:"Fluture"}
-];
-
-const NUMBERS = [
-  {num:1,es:"UNU",en:"One",ro:"Unu"},
-  {num:2,es:"DOS",en:"Two",ro:"Doi"},
-  {num:3,es:"TRES",en:"Three",ro:"Trei"},
-  {num:4,es:"CUATRO",en:"Four",ro:"Patru"},
-  {num:5,es:"CINCO",en:"Five",ro:"Cinci"},
-  {num:6,es:"SEIS",en:"Six",ro:"Șase"},
-  {num:7,es:"SIETE",en:"Seven",ro:"Șapte"},
-  {num:8,es:"OCHO",en:"Eight",ro:"Opt"},
-  {num:9,es:"NUEVE",en:"Nine",ro:"Nouă"},
-  {num:10,es:"DIEZ",en:"Ten",ro:"Zece"}
-];
-
-const COUNT_OBJS = ["🍎","🌟","🎈","🦋","🌸","🍪","⚽","🎨","📚","🎁","🚗","🐕","🌺","🍊","💎"];
-
-const COUNTRIES = [
-  {flag:"🇪🇸",country:"España",countryEn:"Spain",countryRo:"Spania",capital:"Madrid",capitalEn:"Madrid",capitalRo:"Madrid"},
-  {flag:"🇷🇴",country:"Rumanía",countryEn:"Romania",countryRo:"România",capital:"Bucarest",capitalEn:"Bucharest",capitalRo:"București"},
-  {flag:"🇫🇷",country:"Francia",countryEn:"France",countryRo:"Franța",capital:"París",capitalEn:"Paris",capitalRo:"Paris"},
-  {flag:"🇮🇹",country:"Italia",countryEn:"Italy",countryRo:"Italia",capital:"Roma",capitalEn:"Rome",capitalRo:"Roma"},
-  {flag:"🇬🇧",country:"Reino Unido",countryEn:"United Kingdom",countryRo:"Regatul Unit",capital:"Londres",capitalEn:"London",capitalRo:"Londra"},
-  {flag:"🇩🇪",country:"Alemania",countryEn:"Germany",countryRo:"Germania",capital:"Berlín",capitalEn:"Berlin",capitalRo:"Berlin"},
-  {flag:"🇵🇹",country:"Portugal",countryEn:"Portugal",countryRo:"Portugalia",capital:"Lisboa",capitalEn:"Lisbon",capitalRo:"Lisabona"},
-  {flag:"🇳🇱",country:"Países Bajos",countryEn:"Netherlands",countryRo:"Olanda",capital:"Ámsterdam",capitalEn:"Amsterdam",capitalRo:"Amsterdam"},
-  {flag:"🇵🇱",country:"Polonia",countryEn:"Poland",countryRo:"Polonia",capital:"Varsovia",capitalEn:"Warsaw",capitalRo:"Varșovia"},
-  {flag:"🇺🇸",country:"Estados Unidos",countryEn:"United States",countryRo:"Statele Unite",capital:"Washington",capitalEn:"Washington",capitalRo:"Washington"},
-  {flag:"🇲🇽",country:"México",countryEn:"Mexico",countryRo:"Mexic",capital:"Ciudad de México",capitalEn:"Mexico City",capitalRo:"Ciudad de México"},
-  {flag:"🇦🇷",country:"Argentina",countryEn:"Argentina",countryRo:"Argentina",capital:"Buenos Aires",capitalEn:"Buenos Aires",capitalRo:"Buenos Aires"},
-  {flag:"🇧🇷",country:"Brasil",countryEn:"Brazil",countryRo:"Brazilia",capital:"Brasilia",capitalEn:"Brasilia",capitalRo:"Brasilia"},
-  {flag:"🇯🇵",country:"Japón",countryEn:"Japan",countryRo:"Japonia",capital:"Tokio",capitalEn:"Tokyo",capitalRo:"Tokio"}
-];
-
-const COLORS_OBJ = [
-  {emoji:"🍎",color:"rojo",colorEn:"Red",colorRo:"Roșu",hex:"#ef4444"},
-  {emoji:"🍌",color:"amarillo",colorEn:"Yellow",colorRo:"Galben",hex:"#fbbf24"},
-  {emoji:"🥒",color:"verde",colorEn:"Green",colorRo:"Verde",hex:"#22c55e"},
-  {emoji:"🫐",color:"azul",colorEn:"Blue",colorRo:"Albastru",hex:"#3b82f6"},
-  {emoji:"🧡",color:"naranja",colorEn:"Orange",colorRo:"Portocaliu",hex:"#f97316"},
-  {emoji:"🍇",color:"morado",colorEn:"Purple",colorRo:"Mov",hex:"#a855f7"},
-  {emoji:"🌸",color:"rosa",colorEn:"Pink",colorRo:"Roz",hex:"#ec4899"},
-  {emoji:"☁️",color:"blanco",colorEn:"White",colorRo:"Alb",hex:"#f8fafc"}
-];
-
-const COLORS_PAL = [
-  {name:"ROJO",en:"Red",ro:"Roșu",hex:"#ef4444"},
-  {name:"AMARILLO",en:"Yellow",ro:"Galben",hex:"#fbbf24"},
-  {name:"VERDE",en:"Green",ro:"Verde",hex:"#22c55e"},
-  {name:"AZUL",en:"Blue",ro:"Albastru",hex:"#3b82f6"},
-  {name:"NARANJA",en:"Orange",ro:"Portocaliu",hex:"#f97316"},
-  {name:"MORADO",en:"Purple",ro:"Mov",hex:"#a855f7"},
-  {name:"ROSA",en:"Pink",ro:"Roz",hex:"#ec4899"},
-  {name:"BLANCO",en:"White",ro:"Alb",hex:"#f8fafc"}
-];
-
-// NIVELES PARA LOS 5 JUEGOS
-const LEVELS = {
-  zoo:[{pairs:3,rounds:3},{pairs:4,rounds:4},{pairs:6,rounds:6},{pairs:6,rounds:6},{pairs:8,rounds:8}],
-  numbers:[{type:"intro",nums:[1,2,3],rounds:3},{type:"count",max:3,rounds:4},{type:"select",max:5,rounds:5},{type:"order",seq:[1,2,3,4,5],rounds:5},{type:"select",max:10,rounds:6}],
-  sofia:[{count:2,rounds:2},{count:3,rounds:3},{count:5,rounds:5},{count:7,rounds:7},{count:10,rounds:10}],
-  colors:[{colors:["rojo","amarillo","verde","azul"],rounds:4},{colors:["rojo","amarillo","verde","azul","naranja","morado"],rounds:5},{colors:null,rounds:6},{colors:null,rounds:6},{colors:null,rounds:8}],
-  music:[{type:"learn",notes:["C","D","E"],rounds:3},{type:"melody",melody:"simple",rounds:1},{type:"barca",rounds:1},{type:"free",rounds:1},{type:"concert",rounds:1}]
-};
-
-const AVATARS = {
-  teddy:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f9f8.svg",
-  bunny:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f430.svg",
-  fox:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f98a.svg",
-  cat:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f408.svg"
-};
-
-// FRECUENCIAS DE NOTAS MUSICALES
-const NOTE_FREQUENCIES = {
-  'C': 261.63, 'C#': 277.18, 'D': 293.66, 'D#': 311.13,
-  'E': 329.63, 'F': 349.23, 'F#': 369.99, 'G': 392.00,
-  'G#': 415.30, 'A': 440.00, 'A#': 466.16, 'B': 493.88, 'C5': 523.25
-};
-
-const NOTE_NAMES = {
-  es: {C:'DO',D:'RE',E:'MI',F:'FA',G:'SOL',A:'LA',B:'SI',C5:'DO'},
-  en: {C:'C',D:'D',E:'E',F:'F',G:'G',A:'A',B:'B',C5:'C'},
-  ro: {C:'DO',D:'RE',E:'MI',F:'FA',G:'SOL',A:'LA',B:'SI',C5:'DO'}
-};
-
-// HIMNO DEL BARÇA - MELODÍA RECONOCIBLE
-const BARCA_ANTHEM = [
-  {note:"E",dur:350},{note:"E",dur:350},{note:"G",dur:350},{note:"A",dur:500},
-  {note:"G",dur:350},{note:"E",dur:500},
-  {note:"D",dur:350},{note:"D",dur:350},{note:"F",dur:350},{note:"G",dur:500},
-  {note:"F",dur:350},{note:"D",dur:350},{note:"E",dur:350},{note:"C",dur:500},
-  {note:"E",dur:350},{note:"G",dur:500},{note:"A",dur:350},{note:"G",dur:350},
-  {note:"F",dur:350},{note:"E",dur:350},{note:"D",dur:350},{note:"C",dur:700},
-  {note:"G",dur:350},{note:"G",dur:350},{note:"G",dur:350},
-  {note:"A",dur:350},{note:"G",dur:350},{note:"F",dur:350},{note:"E",dur:500},
-  {note:"D",dur:350},{note:"E",dur:350},{note:"F",dur:350},{note:"D",dur:500},
-  {note:"C",dur:700}
-];
-
-// MELODÍA SIMPLE PARA NIVEL 2
-const SIMPLE_MELODY = [
-  {note:"C",dur:400},{note:"D",dur:400},{note:"E",dur:400},
-  {note:"C",dur:400},{note:"E",dur:400},{note:"D",dur:800}
-];
-
-// =============================================
-// ESTADO DEL JUEGO
-// =============================================
-let lang = 'es';
-let playerName = '';
-let avatar = 'teddy';
-let game = '';
-let level = 0;
-let progress = {};
-let score = 0;
-let totalRounds = 0;
-let learned = [];
-let flipped = [];
-let locked = false;
-let numIdx = 0;
-let countAns = 0;
-let sofiaData = [];
-let sofiaIdx = 0;
-let colorItem = null;
-let eeStep = 0;
-let currentSongTimeout = null;
-let melodyIdx = 0;
-let reinforceQueue = [];
-let audioVolume = 0.08;
-
-// =============================================
-// DETECCIÓN DE DISPOSITIVO
-// =============================================
+// === DEVICE DETECTION ===
+const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(navigator.userAgent) || (window.innerWidth >= 768 && 'ontouchstart' in window);
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+if(isTablet) document.body.classList.add('tablet-device');
 
-// =============================================
-// INTRO VIDEO
-// =============================================
+// === INTRO VIDEO ===
 function skipIntro() {
   document.getElementById('intro-screen').classList.add('hidden');
   localStorage.setItem('introSeen', 'true');
   initAudio();
 }
+function showIntroFallback() {
+  document.getElementById('intro-video').style.display = 'none';
+  document.getElementById('introFallback').style.display = 'flex';
+}
 function handleVideoError() {
-  document.getElementById('introHint').textContent = getText('tapContinue');
+  showIntroFallback();
 }
 if (localStorage.getItem('introSeen') === 'true') {
   document.getElementById('intro-screen').classList.add('hidden');
 }
 
-// =============================================
-// SISTEMA DE IDIOMAS
-// =============================================
-function getText(key) {
-  const keys = key.split('.');
-  let text = I18N[lang];
-  for (const k of keys) text = text?.[k];
-  return text || key;
+// === SONG VIDEO ===
+function toggleSong() {
+  const modal = document.getElementById('songModal');
+  const video = document.getElementById('songVideo');
+  const btn1 = document.getElementById('musicBtn');
+  const btn2 = document.getElementById('musicBtn2');
+  
+  modal.classList.add('active');
+  video.play();
+  if(btn1) btn1.classList.add('playing');
+  if(btn2) btn2.classList.add('playing');
+  
+  playSound('tap');
+}
+function closeSongModal() {
+  const modal = document.getElementById('songModal');
+  const video = document.getElementById('songVideo');
+  const btn1 = document.getElementById('musicBtn');
+  const btn2 = document.getElementById('musicBtn2');
+  
+  video.pause();
+  video.currentTime = 0;
+  modal.classList.remove('active');
+  if(btn1) btn1.classList.remove('playing');
+  if(btn2) btn2.classList.remove('playing');
 }
 
-function setLanguage(l) {
-  lang = l;
-  localStorage.setItem('lang', l);
-  document.querySelectorAll('.lang-btn').forEach((b, i) => {
-    b.classList.toggle('active', (l === 'es' && i === 0) || (l === 'en' && i === 1) || (l === 'ro' && i === 2));
-  });
-  updateAllText();
-}
+// === DATA ===
+const ANIMALS = [
+  {emoji:"🦁",es:"LEÓN",en:"Lion"},{emoji:"🐯",es:"TIGRE",en:"Tiger"},{emoji:"🐘",es:"ELEFANTE",en:"Elephant"},
+  {emoji:"🦒",es:"JIRAFA",en:"Giraffe"},{emoji:"🦓",es:"CEBRA",en:"Zebra"},{emoji:"🐒",es:"MONO",en:"Monkey"},
+  {emoji:"🐮",es:"VACA",en:"Cow"},{emoji:"🐷",es:"CERDO",en:"Pig"},{emoji:"🐔",es:"GALLINA",en:"Chicken"},
+  {emoji:"🐴",es:"CABALLO",en:"Horse"},{emoji:"🐶",es:"PERRO",en:"Dog"},{emoji:"🐱",es:"GATO",en:"Cat"},
+  {emoji:"🐰",es:"CONEJO",en:"Rabbit"},{emoji:"🦊",es:"ZORRO",en:"Fox"},{emoji:"🐻",es:"OSO",en:"Bear"},
+  {emoji:"🐼",es:"PANDA",en:"Panda"},{emoji:"🐨",es:"KOALA",en:"Koala"},{emoji:"🦘",es:"CANGURO",en:"Kangaroo"},
+  {emoji:"🐢",es:"TORTUGA",en:"Turtle"},{emoji:"🐸",es:"RANA",en:"Frog"},{emoji:"🐧",es:"PINGÜINO",en:"Penguin"},
+  {emoji:"🦄",es:"UNICORNIO",en:"Unicorn"},{emoji:"🦉",es:"BÚHO",en:"Owl"},{emoji:"🦋",es:"MARIPOSA",en:"Butterfly"}
+];
+const NUMBERS = [
+  {num:1,es:"UNO",en:"One"},{num:2,es:"DOS",en:"Two"},{num:3,es:"TRES",en:"Three"},
+  {num:4,es:"CUATRO",en:"Four"},{num:5,es:"CINCO",en:"Five"},{num:6,es:"SEIS",en:"Six"},
+  {num:7,es:"SIETE",en:"Seven"},{num:8,es:"OCHO",en:"Eight"},{num:9,es:"NUEVE",en:"Nine"},{num:10,es:"DIEZ",en:"Ten"}
+];
+const COUNT_OBJS = ["🍎","🌟","🎈","🦋","🌸","🍪","⚽","🎨","📚","🎁","🚗","🐕","🌺","🍊","💎"];
+const COUNTRIES = [
+  {flag:"🇪🇸",country:"España",capital:"Madrid",capitalEn:"Madrid"},
+  {flag:"🇷🇴",country:"Rumanía",capital:"Bucarest",capitalEn:"Bucharest"},
+  {flag:"🇫🇷",country:"Francia",capital:"París",capitalEn:"Paris"},
+  {flag:"🇮🇹",country:"Italia",capital:"Roma",capitalEn:"Rome"},
+  {flag:"🇬🇧",country:"Reino Unido",capital:"Londres",capitalEn:"London"},
+  {flag:"🇩🇪",country:"Alemania",capital:"Berlín",capitalEn:"Berlin"},
+  {flag:"🇵🇹",country:"Portugal",capital:"Lisboa",capitalEn:"Lisbon"},
+  {flag:"🇳🇱",country:"Países Bajos",capital:"Ámsterdam",capitalEn:"Amsterdam"},
+  {flag:"🇵🇱",country:"Polonia",capital:"Varsovia",capitalEn:"Warsaw"},
+  {flag:"🇺🇸",country:"Estados Unidos",capital:"Washington",capitalEn:"Washington"},
+  {flag:"🇲🇽",country:"México",capital:"Ciudad de México",capitalEn:"Mexico City"},
+  {flag:"🇦🇷",country:"Argentina",capital:"Buenos Aires",capitalEn:"Buenos Aires"},
+  {flag:"🇧🇷",country:"Brasil",capital:"Brasilia",capitalEn:"Brasilia"},
+  {flag:"🇯🇵",country:"Japón",capital:"Tokio",capitalEn:"Tokyo"}
+];
+const COLORS_OBJ = [
+  {emoji:"🍎",color:"rojo",colorEn:"Red",hex:"#ef4444"},
+  {emoji:"🍌",color:"amarillo",colorEn:"Yellow",hex:"#fbbf24"},
+  {emoji:"🥒",color:"verde",colorEn:"Green",hex:"#22c55e"},
+  {emoji:"🫐",color:"azul",colorEn:"Blue",hex:"#3b82f6"},
+  {emoji:"🧡",color:"naranja",colorEn:"Orange",hex:"#f97316"},
+  {emoji:"🍇",color:"morado",colorEn:"Purple",hex:"#a855f7"},
+  {emoji:"🌸",color:"rosa",colorEn:"Pink",hex:"#ec4899"},
+  {emoji:"☁️",color:"blanco",colorEn:"White",hex:"#f8fafc"}
+];
+const COLORS_PAL = [
+  {name:"ROJO",en:"Red",hex:"#ef4444"},{name:"AMARILLO",en:"Yellow",hex:"#fbbf24"},
+  {name:"VERDE",en:"Green",hex:"#22c55e"},{name:"AZUL",en:"Blue",hex:"#3b82f6"},
+  {name:"NARANJA",en:"Orange",hex:"#f97316"},{name:"MORADO",en:"Purple",hex:"#a855f7"},
+  {name:"ROSA",en:"Pink",hex:"#ec4899"},{name:"BLANCO",en:"White",hex:"#f8fafc"}
+];
 
-function updateAllText() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = getText(el.getAttribute('data-i18n'));
-  });
-}
+// MUSIC GAME DATA - Piano notes
+const PIANO_NOTES = [
+  {note: 'C', freq: 261.63, color: '#ef4444', label: 'Do'},
+  {note: 'D', freq: 293.66, color: '#f97316', label: 'Re'},
+  {note: 'E', freq: 329.63, color: '#fbbf24', label: 'Mi'},
+  {note: 'F', freq: 349.23, color: '#22c55e', label: 'Fa'},
+  {note: 'G', freq: 392.00, color: '#3b82f6', label: 'Sol'},
+  {note: 'A', freq: 440.00, color: '#a855f7', label: 'La'},
+  {note: 'B', freq: 493.88, color: '#ec4899', label: 'Si'}
+];
 
-// =============================================
-// EASTER EGG - ESTILO EXPLICALIA
-// =============================================
-function openEasterEgg() {
-  eeStep = 0;
-  renderEE();
-  document.getElementById('easterEggOverlay').classList.add('active');
-  hapticFeedback('medium');
-}
+// Song patterns for Simon Says mode (each level has different starting notes)
+const SONG_PATTERNS = {
+  // Level 2: Start with 2 notes, add 1 each round
+  martillo: ['C', 'D', 'E', 'C', 'D', 'E', 'F', 'E'],
+  // Level 3: Start with 2 notes
+  twinkle: ['C', 'C', 'G', 'G', 'A', 'A', 'G', 'F'],
+  // Level 4: Start with 2 notes
+  happy: ['G', 'G', 'A', 'G', 'C', 'B', 'A', 'G'],
+  // Level 5: Himno Barça - Start with 2 notes
+  barca: ['C', 'E', 'G', 'C', 'E', 'G', 'A', 'G', 'F', 'E', 'D', 'C']
+};
 
-function closeEasterEgg(e) {
-  if (e && e.target !== e.currentTarget) return;
-  document.getElementById('easterEggOverlay').classList.remove('active');
-}
+const LEVELS = {
+  zoo:[{pairs:3,rounds:3},{pairs:4,rounds:4},{pairs:6,rounds:6},{pairs:4,rounds:4},{pairs:8,rounds:8}],
+  numbers:[{type:"intro",nums:[1,2,3],rounds:3},{type:"count",max:3,rounds:4},{type:"select",max:5,rounds:5},{type:"order",seq:[1,2,3,4,5],rounds:5},{type:"select",max:10,rounds:6}],
+  sofia:[{count:2,rounds:2},{count:3,rounds:3},{count:5,rounds:5},{count:7,rounds:7},{count:10,rounds:10}],
+  colors:[{colors:["rojo","amarillo","verde","azul"],rounds:4},{colors:["rojo","amarillo","verde","azul","naranja","morado"],rounds:5},{colors:null,rounds:6},{colors:null,rounds:6},{colors:null,rounds:8}],
+  music:[{type:"free",rounds:5},{type:"simon",song:"martillo",rounds:6},{type:"simon",song:"twinkle",rounds:6},{type:"simon",song:"happy",rounds:6},{type:"simon",song:"barca",rounds:8}]
+};
+const AVATARS = {teddy:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f9f8.svg",bunny:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f430.svg",fox:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f98a.svg",cat:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f408.svg"};
 
-function renderEE() {
-  const c = document.getElementById('easterEggCard');
-  if (eeStep === 0) {
-    c.innerHTML = `
-      <div class="explicalia-brand">EXPLICALIA</div>
-      <div class="explicalia-url">www.explicalia.com</div>
-      <div class="explicalia-subtitle">Creador del juego</div>
-      <div class="explicalia-divider"></div>
-      <div class="easter-egg-title">Preguntas importantes para poder jugar 😎</div>
-      <button class="easter-egg-btn" onclick="eeStep=1;renderEE()">CONTINUAR →</button>
-      <div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>
-    `;
-  } else if (eeStep === 1) {
-    c.innerHTML = `
-      <div class="explicalia-brand">EXPLICALIA</div>
-      <div class="explicalia-divider"></div>
-      <div class="easter-egg-progress">PREGUNTA 1 de 2</div>
-      <div class="easter-egg-question">¿Quién es el mejor jugador de la historia del fútbol?</div>
-      <div class="easter-egg-options">
-        <div class="easter-egg-option" onclick="answerEE(1,'A')">A) Messi 🇦🇷 ⭐</div>
-        <div class="easter-egg-option" onclick="answerEE(1,'B')">B) Pelé 🇧🇷</div>
-        <div class="easter-egg-option" onclick="answerEE(1,'C')">C) Maradona 🇦🇷</div>
-      </div>
-      <div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>
-    `;
-  } else if (eeStep === 2) {
-    c.innerHTML = `
-      <div class="explicalia-brand">EXPLICALIA</div>
-      <div class="explicalia-divider"></div>
-      <div class="easter-egg-progress">PREGUNTA 2 de 2</div>
-      <div class="easter-egg-question">¿Quién es el mejor piloto de motos del mundo?</div>
-      <div class="easter-egg-options">
-        <div class="easter-egg-option" onclick="answerEE(2,'A')">A) Valentino Rossi 🇮🇹</div>
-        <div class="easter-egg-option" onclick="answerEE(2,'B')">B) Marc Márquez 🇪🇸 ⭐</div>
-        <div class="easter-egg-option" onclick="answerEE(2,'C')">C) Jorge Lorenzo 🇪🇸</div>
-      </div>
-      <div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>
-    `;
-  } else if (eeStep === 3) {
-    c.innerHTML = `
-      <div class="explicalia-brand">EXPLICALIA SYSTEM</div>
-      <div class="explicalia-divider"></div>
-      <div class="explicalia-success-icon">🏆</div>
-      <div class="explicalia-success-title">¡FELICIDADES!</div>
-      <div class="explicalia-success-message">
-        Has demostrado saber lo más importante:<br>
-        <strong>MESSI</strong> es el mejor jugador de la historia<br>
-        y <strong>MARC MÁRQUEZ</strong> el mejor piloto de motos.<br><br>
-        ¡Ya puedes jugar!
-      </div>
-      <button class="easter-egg-btn" onclick="closeEasterEgg({target:{}})">COMENZAR JUEGO</button>
-      <div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>
-    `;
-  }
-}
+// === STATE ===
+let lang='es',playerName='',avatar='teddy',game='',level=0,progress={},score=0,totalRounds=0,learned=[],flipped=[],locked=false,numIdx=0,countAns=0,countTouched=[],sofiaData=[],sofiaIdx=0,colorItem=null,eeStep=0;
+let musicSequence = [], musicUserSequence = [], musicNoteIndex = 0, musicPhase = 'idle', musicRound = 0, musicMaxNotes = 2;
 
-function answerEE(q, a) {
-  const opts = document.querySelectorAll('.easter-egg-option');
-  hapticFeedback('light');
-  if (q === 1) {
-    if (a === 'A') {
+// === EASTER EGG ===
+function openEasterEgg(){eeStep=0;renderEE();document.getElementById('easterEggOverlay').classList.add('active');}
+function closeEasterEgg(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('easterEggOverlay').classList.remove('active');}
+function renderEE(){
+  const c=document.getElementById('easterEggCard');
+  if(eeStep===0)c.innerHTML='<div class="explicalia-brand">www.explicalia.com</div><div class="explicalia-subtitle">Creador del juego</div><div class="explicalia-divider"></div><div class="easter-egg-title">Preguntas importantes para poder jugar 😎😇</div><button class="easter-egg-btn" onclick="eeStep=1;renderEE()">CONTINUAR →</button><div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>';
+  else if(eeStep===1)c.innerHTML='<div class="explicalia-brand">www.explicalia.com</div><div class="explicalia-divider"></div><div class="easter-egg-progress">PREGUNTA 1 de 2</div><div class="easter-egg-question">¿Quién es el mejor jugador de la historia del fútbol?</div><div class="easter-egg-options"><div class="easter-egg-option" onclick="answerEE(1,\'A\')">A) Messi 🇦🇷</div><div class="easter-egg-option" onclick="answerEE(1,\'B\')">B) Iniesta 🇪🇸</div><div class="easter-egg-option" onclick="answerEE(1,\'C\')">C) Xavi 🇪🇸</div></div><div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>';
+  else if(eeStep===2)c.innerHTML='<div class="explicalia-brand">www.explicalia.com</div><div class="explicalia-divider"></div><div class="easter-egg-progress">PREGUNTA 2 de 2</div><div class="easter-egg-question">¿Quién es el mejor piloto de motos del mundo?</div><div class="easter-egg-options"><div class="easter-egg-option" onclick="answerEE(2,\'A\')">A) Marc M.</div><div class="easter-egg-option" onclick="answerEE(2,\'B\')">B) M. Márquez</div><div class="easter-egg-option" onclick="answerEE(2,\'C\')">C) Marc Márquez</div></div><div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>';
+  else if(eeStep===3)c.innerHTML='<div class="explicalia-brand">EXPLICALIA SYSTEM</div><div class="explicalia-divider"></div><div class="explicalia-success-icon">🏆</div><div class="explicalia-success-title">¡FELICIDADES!</div><div class="explicalia-success-message">Has demostrado saber lo más importante:<br><strong>MESSI</strong> es el mejor jugador de la historia<br>y <strong>MARC MÁRQUEZ</strong> el mejor piloto de motos.<br><br>¡Ya puedes jugar!</div><button class="easter-egg-btn" onclick="closeEasterEgg({target:{}})">COMENZAR JUEGO</button><div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>';
+}
+function answerEE(q,a){
+  const opts=document.querySelectorAll('.easter-egg-option');
+  if(q===1){
+    if(a==='A'){
+      // Correct answer - Apple style feedback
       opts[0].classList.add('correct');
       playSound('success');
-      setTimeout(() => { eeStep = 2; renderEE(); }, 1000);
-    } else {
-      opts[a === 'B' ? 1 : 2].classList.add('wrong');
-      setTimeout(() => { opts[0].classList.add('correct'); }, 400);
-      setTimeout(() => { eeStep = 2; renderEE(); }, 1500);
+      setTimeout(()=>{eeStep=2;renderEE();},1000);
+    }else{
+      // Wrong answer - show correct after delay
+      const wrongIdx = a==='B'?1:2;
+      opts[wrongIdx].classList.add('wrong');
+      playSound('wrong');
+      setTimeout(()=>{opts[0].classList.add('correct');playSound('correct');},400);
+      setTimeout(()=>{eeStep=2;renderEE();},1500);
     }
-  } else {
-    if (a === 'B') {
-      opts[1].classList.add('correct');
+  }else{
+    if(a==='C'){
+      // Correct answer - Apple style feedback
+      opts[2].classList.add('correct');
       playSound('success');
-      setTimeout(() => { eeStep = 3; renderEE(); }, 1000);
-    } else {
-      opts[a === 'A' ? 0 : 2].classList.add('wrong');
-      setTimeout(() => { opts[1].classList.add('correct'); }, 400);
-      setTimeout(() => { eeStep = 3; renderEE(); }, 1500);
+      setTimeout(()=>{eeStep=3;renderEE();},1000);
+    }else{
+      // Wrong answer - show correct after delay
+      const wrongIdx = a==='A'?0:1;
+      opts[wrongIdx].classList.add('wrong');
+      playSound('wrong');
+      setTimeout(()=>{opts[2].classList.add('correct');playSound('correct');},400);
+      setTimeout(()=>{eeStep=3;renderEE();},1500);
     }
   }
 }
 
-// =============================================
-// HAPTIC FEEDBACK (Vibración tipo iOS)
-// =============================================
-function hapticFeedback(type = 'light') {
-  if (!navigator.vibrate) return;
-  const patterns = {
-    light: [10],
-    medium: [20],
-    heavy: [30],
-    success: [10, 30, 10],
-    error: [30, 50, 30]
-  };
-  navigator.vibrate(patterns[type] || patterns.light);
-}
+// === NAV ===
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function startGame(e){e.preventDefault();const n=document.getElementById('playerNameInput').value.trim();if(n.length<2)return false;playerName=n.charAt(0).toUpperCase()+n.slice(1).toLowerCase();saveProg();initMenu();showScreen('menu');playSound('success');return false;}
+function initMenu(){document.getElementById('playerNameDisplay').textContent=playerName;document.getElementById('menuMascot').innerHTML='<img src="'+AVATARS[avatar]+'" style="width:40px;height:40px;">';updateProg();updateDots();}
+function goToMenu(){playSound('tap');showScreen('menu');updateProg();updateDots();}
+function changeName(){playSound('tap');document.getElementById('playerNameInput').value='';showScreen('welcome');}
 
-// =============================================
-// NAVEGACIÓN
-// =============================================
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
+// === PROGRESS ===
+function loadProg(){const s=localStorage.getItem('progV12');if(s){const d=JSON.parse(s);progress=d.progress||{};playerName=d.name||'';avatar=d.avatar||'teddy';}if(!progress.zoo)progress.zoo=[];if(!progress.numbers)progress.numbers=[];if(!progress.sofia)progress.sofia=[];if(!progress.colors)progress.colors=[];if(!progress.music)progress.music=[];const l=localStorage.getItem('lang');if(l)lang=l;document.querySelectorAll('.avatar-option').forEach(o=>o.classList.toggle('selected',o.dataset.avatar===avatar));}
+function saveProg(){localStorage.setItem('progV12',JSON.stringify({name:playerName,avatar:avatar,progress:progress}));}
+function updateProg(){let t=0,c=0;Object.keys(LEVELS).forEach(g=>{t+=LEVELS[g].length;c+=progress[g]?progress[g].length:0;});const p=t>0?Math.round((c/t)*100):0;document.getElementById('totalProgress').textContent=p+'%';document.getElementById('progressFill').style.width=p+'%';const lvl=c<5?'Principiante':c<10?'Explorador':c<15?'Aventurero':'Maestro';document.getElementById('playerLevelDisplay').textContent=lvl;document.getElementById('playerStarsDisplay').textContent='⭐ '+c;}
+function updateDots(){Object.keys(LEVELS).forEach(g=>{const c=document.getElementById(g+'Levels');if(!c)return;c.innerHTML='';const l=LEVELS[g].length,d=progress[g]?progress[g].length:0;for(let i=0;i<l;i++){const dot=document.createElement('div');dot.className='level-dot';if(i<d)dot.classList.add('completed');else if(i===d)dot.classList.add('current');c.appendChild(dot);}});}
+function resetProgress(){if(confirm('¿Borrar todo el progreso?')){progress={zoo:[],numbers:[],sofia:[],colors:[],music:[]};saveProg();updateProg();updateDots();playSound('tap');}}
 
-function startGame(e) {
-  e.preventDefault();
-  const n = document.getElementById('playerNameInput').value.trim();
-  if (n.length < 2) return false;
-  playerName = n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
-  saveProg();
-  initMenu();
-  showScreen('menu');
-  playSound('success');
-  hapticFeedback('success');
-  return false;
-}
+// === LANG ===
+function setLanguage(l){lang=l;localStorage.setItem('lang',l);document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(l==='es'&&i===0)||(l==='en'&&i===1)||(l==='ro'&&i===2)));}
 
-function initMenu() {
-  document.getElementById('playerNameDisplay').textContent = playerName;
-  document.getElementById('menuMascot').innerHTML = '<img src="' + AVATARS[avatar] + '" style="width:40px;height:40px;">';
-  updateProg();
-  updateDots();
-}
+// === AVATAR ===
+function selectAvatar(a){avatar=a;document.querySelectorAll('.avatar-option').forEach(o=>o.classList.toggle('selected',o.dataset.avatar===a));playSound('tap');}
 
-function goToMenu() {
-  playSound('tap');
-  hapticFeedback('light');
-  if (currentSongTimeout) {
-    clearTimeout(currentSongTimeout);
-    currentSongTimeout = null;
-  }
-  showScreen('menu');
-  updateProg();
-  updateDots();
-}
-
-function changeName() {
-  playSound('tap');
-  document.getElementById('playerNameInput').value = '';
-  showScreen('welcome');
-}
-
-// =============================================
-// PROGRESO
-// =============================================
-function loadProg() {
-  const s = localStorage.getItem('progV6');
-  if (s) {
-    const d = JSON.parse(s);
-    progress = d.progress || {};
-    playerName = d.name || '';
-    avatar = d.avatar || 'teddy';
-  }
-  ['zoo', 'numbers', 'sofia', 'colors', 'music'].forEach(g => {
-    if (!progress[g]) progress[g] = [];
-  });
-  const l = localStorage.getItem('lang');
-  if (l) lang = l;
-  document.querySelectorAll('.avatar-option').forEach(o => o.classList.toggle('selected', o.dataset.avatar === avatar));
-}
-
-function saveProg() {
-  localStorage.setItem('progV6', JSON.stringify({ name: playerName, avatar: avatar, progress: progress }));
-}
-
-function updateProg() {
-  let t = 0, c = 0;
-  Object.keys(LEVELS).forEach(g => {
-    t += LEVELS[g].length;
-    c += progress[g] ? progress[g].length : 0;
-  });
-  const p = t > 0 ? Math.round((c / t) * 100) : 0;
-  document.getElementById('totalProgress').textContent = p + '%';
-  document.getElementById('progressFill').style.width = p + '%';
-  const lvl = c < 5 ? 'Principiante' : c < 10 ? 'Explorador' : c < 15 ? 'Aventurero' : c < 20 ? 'Experto' : 'Maestro';
-  document.getElementById('playerLevelDisplay').textContent = lvl;
-  document.getElementById('playerStarsDisplay').textContent = '⭐ ' + c;
-}
-
-function updateDots() {
-  Object.keys(LEVELS).forEach(g => {
-    const c = document.getElementById(g + 'Levels');
-    if (!c) return;
-    c.innerHTML = '';
-    const l = LEVELS[g].length;
-    const d = progress[g] ? progress[g].length : 0;
-    for (let i = 0; i < l; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'level-dot';
-      if (i < d) dot.classList.add('completed');
-      else if (i === d) dot.classList.add('current');
-      c.appendChild(dot);
-    }
-  });
-}
-
-function resetProgress() {
-  if (confirm(getText('reset') + '?')) {
-    progress = { zoo: [], numbers: [], sofia: [], colors: [], music: [] };
-    saveProg();
-    updateProg();
-    updateDots();
-    playSound('tap');
-    hapticFeedback('medium');
-  }
-}
-
-// =============================================
-// AVATAR
-// =============================================
-function selectAvatar(a) {
-  avatar = a;
-  document.querySelectorAll('.avatar-option').forEach(o => o.classList.toggle('selected', o.dataset.avatar === a));
-  playSound('tap');
-  hapticFeedback('light');
-}
-
-// =============================================
-// AUDIO
-// =============================================
+// === AUDIO SYSTEM ===
 let audioCtx = null;
 let audioInitialized = false;
+let audioVolume = isMobile ? 0.06 : 0.1;
+const soundBuffers = {};
 
-function initAudio() {
-  if (audioInitialized) return;
-  try {
+function initAudio(){
+  if(audioInitialized) return;
+  try{
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
     audioInitialized = true;
-  } catch (e) { console.log('Audio no disponible'); }
+    preloadSounds();
+  }catch(e){ console.log('Audio no disponible'); }
 }
 
-function playSound(t) {
-  if (!audioInitialized) initAudio();
-  if (!audioCtx) return;
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  const ct = audioCtx.currentTime;
-  const vol = audioVolume;
-  
-  if (t === 'tap') {
-    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.setValueAtTime(600, ct);
-    g.gain.setValueAtTime(vol, ct);
-    g.gain.linearRampToValueAtTime(0, ct + 0.08);
-    o.start(ct); o.stop(ct + 0.08);
-  } else if (t === 'success') {
-    [523, 659, 783].forEach((f, i) => {
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.value = f;
-      g.gain.setValueAtTime(vol * 0.8, ct + i * 0.1);
-      g.gain.linearRampToValueAtTime(0, ct + i * 0.1 + 0.2);
-      o.start(ct + i * 0.1); o.stop(ct + i * 0.1 + 0.2);
-    });
-  }
+function preloadSounds(){
+  if(!audioCtx) return;
+  soundBuffers.tap = () => playOscillator(600, 0.08);
+  soundBuffers.success = () => playChord([523, 659, 783], 0.2);
+  soundBuffers.correct = () => playChord([523, 659], 0.15);
+  soundBuffers.wrong = () => playOscillator(200, 0.15, 'sawtooth');
+  soundBuffers.pop = () => playOscillator(800, 0.05);
 }
 
-function playNote(note, duration = 300) {
-  if (!audioInitialized) initAudio();
-  if (!audioCtx) return;
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  
-  const freq = NOTE_FREQUENCIES[note];
-  if (!freq) return;
-  
+function playOscillator(freq, duration, type = 'sine'){
+  if(!audioCtx || audioCtx.state === 'suspended') audioCtx?.resume();
+  if(!audioCtx) return;
   const ct = audioCtx.currentTime;
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
-  
-  o.type = 'sine';
-  o.connect(g);
-  g.connect(audioCtx.destination);
-  
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = type;
   o.frequency.setValueAtTime(freq, ct);
-  g.gain.setValueAtTime(audioVolume * 1.5, ct);
-  g.gain.exponentialRampToValueAtTime(0.001, ct + duration / 1000);
-  
-  o.start(ct);
-  o.stop(ct + duration / 1000);
-  
-  // Indicador de nota
-  const indicator = document.getElementById('noteIndicator');
-  indicator.textContent = NOTE_NAMES[lang][note] || note;
-  indicator.classList.add('show');
-  setTimeout(() => indicator.classList.remove('show'), 400);
+  g.gain.setValueAtTime(audioVolume, ct);
+  g.gain.linearRampToValueAtTime(0, ct + duration);
+  o.start(ct); o.stop(ct + duration);
 }
 
-function speak(w, audioLang = null) {
-  if (!window.speechSynthesis) return;
+function playChord(freqs, duration){
+  if(!audioCtx || audioCtx.state === 'suspended') audioCtx?.resume();
+  if(!audioCtx) return;
+  const ct = audioCtx.currentTime;
+  freqs.forEach((f, i) => {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = f;
+    g.gain.setValueAtTime(audioVolume * 0.6, ct + i * 0.08);
+    g.gain.linearRampToValueAtTime(0, ct + i * 0.08 + duration);
+    o.start(ct + i * 0.08); o.stop(ct + i * 0.08 + duration);
+  });
+}
+
+function playPianoNote(freq){
+  if(!audioCtx || audioCtx.state === 'suspended') audioCtx?.resume();
+  if(!audioCtx) return;
+  const ct = audioCtx.currentTime;
+  const o = audioCtx.createOscillator();
+  const o2 = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); o2.connect(g); g.connect(audioCtx.destination);
+  o.type = 'sine'; o2.type = 'triangle';
+  o.frequency.setValueAtTime(freq, ct);
+  o2.frequency.setValueAtTime(freq * 2, ct);
+  g.gain.setValueAtTime(audioVolume * 1.2, ct);
+  g.gain.exponentialRampToValueAtTime(0.001, ct + 0.8);
+  o.start(ct); o2.start(ct);
+  o.stop(ct + 0.8); o2.stop(ct + 0.8);
+}
+
+function playSound(t){
+  if(!audioInitialized) initAudio();
+  if(soundBuffers[t]) soundBuffers[t]();
+  else playOscillator(500, 0.1);
+  if(navigator.vibrate) navigator.vibrate(t === 'success' ? [30, 20, 30] : 15);
+}
+
+function speak(w, l='en-US'){
+  if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(w);
-  u.lang = audioLang || (lang === 'es' ? 'es-ES' : lang === 'ro' ? 'ro-RO' : 'en-US');
+  u.lang = l;
   u.rate = 0.85;
   u.pitch = 1.1;
   u.volume = isMobile ? 0.8 : 1;
   window.speechSynthesis.speak(u);
 }
 
-document.addEventListener('touchstart', initAudio, { once: true });
-document.addEventListener('click', initAudio, { once: true });
+document.addEventListener('touchstart', initAudio, {once:true});
+document.addEventListener('click', initAudio, {once:true});
 
-// =============================================
-// SISTEMA DE REFUERZO PEDAGÓGICO
-// =============================================
-function showReinforcement(englishWord) {
-  const popup = document.getElementById('reinforcePopup');
-  document.getElementById('reinforceText').textContent = getText('remember');
-  document.getElementById('reinforceEnglish').textContent = englishWord;
-  popup.classList.add('show');
-  speak(englishWord, 'en-US');
-  setTimeout(() => popup.classList.remove('show'), 2000);
-}
-
-function showVocab(emoji, native, english, romanian) {
-  const p = document.getElementById('vocabPopup');
-  document.getElementById('vocabEmoji').textContent = emoji;
-  document.getElementById('vocabWord').textContent = lang === 'es' ? native : lang === 'ro' ? romanian : english;
-  document.getElementById('vocabTranslation').textContent = english;
-  document.getElementById('vocabHint').textContent = getText('touchHear');
-  p.classList.add('show');
-  p.onclick = () => speak(english, 'en-US');
-  speak(english, 'en-US');
-  setTimeout(() => p.classList.remove('show'), 2200);
-  
-  // Añadir a cola de refuerzo
-  reinforceQueue.push({ english, time: Date.now() });
-}
-
-// =============================================
-// SELECCIÓN DE JUEGO
-// =============================================
-function openGameSelect(g) {
+// === GAME SELECT ===
+function openGameSelect(g){
   playSound('tap');
-  hapticFeedback('light');
   game = g;
-  const icons = { zoo: '🦁', numbers: '🔢', sofia: '✈️', colors: '🎨', music: '🎹' };
+  const icons = {zoo:'🦁',numbers:'🔢',sofia:'✈️',colors:'🎨',music:'🎹'};
+  const titles = {zoo:'El Gran Zoo',numbers:'Números',sofia:'El Mundo de Sofía',colors:'Los colores de Noa',music:'La Música de Noa'};
   document.getElementById('gameSelectIcon').textContent = icons[g];
-  document.getElementById('gameSelectTitle').textContent = getText('game' + g.charAt(0).toUpperCase() + g.slice(1));
+  document.getElementById('gameSelectTitle').textContent = titles[g];
   renderLevels();
   showScreen('game-select');
 }
 
-function renderLevels() {
+function renderLevels(){
   const c = document.getElementById('levelsGrid');
   c.innerHTML = '';
-  const names = getText('levelNames.' + game);
-  const descs = getText('levelDescs.' + game);
+  const names = {
+    zoo:['Memoria Fácil','Memoria Media','Memoria Difícil','Sonidos del Zoo','Safari Completo'],
+    numbers:['Conoce los Números','Contemos Juntos','¿Cuántos Hay?','Ordena los Números','Cuenta hasta 10'],
+    sofia:['España y Rumanía','Más Países','Por Europa','El Mundo','Viaje Global'],
+    colors:['Colores Básicos','Más Colores','Rosa y Blanco','Todos los Colores','Maestro de Colores'],
+    music:['Piano Libre','Simon: Martillo','Simon: Twinkle','Simon: Happy','Himno Barça']
+  };
+  const descs = {
+    zoo:['3 parejas','4 parejas','6 parejas','Más animales','Reto máximo'],
+    numbers:['1 al 3','Toca y cuenta','Adivina','Pon en orden','Hasta 10'],
+    sofia:['2 países','3 países','5 países','7 países','Todos'],
+    colors:['Principales','Más colores','Nuevos','Todos','Reto final'],
+    music:['¡Toca libre!','Añade notas','Añade notas','Añade notas','Himno Barça']
+  };
   const comp = progress[game] ? progress[game].length : 0;
-  
-  for (let i = 0; i < 5; i++) {
+  for(let i = 0; i < 5; i++){
     const card = document.createElement('div');
     card.className = 'level-card';
-    if (i < comp) card.classList.add('completed');
-    else if (i === comp) card.classList.add('current');
+    if(i < comp) card.classList.add('completed');
+    else if(i === comp) card.classList.add('current');
     else card.classList.add('locked');
-    
-    card.innerHTML = `
-      <div class="level-number">${i < comp ? '✓' : i + 1}</div>
-      <div class="level-info">
-        <div class="level-name">${names[i]}</div>
-        <div class="level-desc">${descs[i]}</div>
-      </div>
-      <div style="font-size:1.2rem">${i < comp ? '⭐' : i === comp ? '▶' : '🔒'}</div>
-    `;
-    
-    if (i <= comp) card.onclick = () => startLevel(i);
+    card.innerHTML = '<div class="level-number">'+(i < comp ? '✓' : i+1)+'</div><div class="level-info"><div class="level-name">'+names[game][i]+'</div><div class="level-desc">'+descs[game][i]+'</div></div><div class="level-status">'+(i < comp ? '⭐' : i === comp ? '▶' : '🔒')+'</div>';
+    if(i <= comp) card.onclick = () => startLevel(i);
     c.appendChild(card);
   }
 }
 
-// =============================================
-// JUEGO - INICIO
-// =============================================
-function startLevel(l) {
+// === GAME ===
+function startLevel(l){
   playSound('tap');
-  hapticFeedback('medium');
   level = l;
   score = 0;
   learned = [];
   flipped = [];
   locked = false;
   numIdx = 0;
-  melodyIdx = 0;
-  
-  document.getElementById('levelBadge').textContent = 'Nivel ' + (l + 1);
+  musicSequence = [];
+  musicUserSequence = [];
+  musicNoteIndex = 0;
+  musicPhase = 'idle';
+  musicRound = 0;
+  musicMaxNotes = 2;
+  document.getElementById('levelBadge').textContent = 'Nivel '+(l+1);
   document.getElementById('instructionPlayerName').textContent = playerName;
   document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
-  
   totalRounds = LEVELS[game][level].rounds;
   initStars();
   showScreen('game');
   
   setTimeout(() => {
-    if (game === 'zoo') startMemory();
-    else if (game === 'numbers') startNumbers();
-    else if (game === 'sofia') startSofia();
-    else if (game === 'colors') startColors();
-    else if (game === 'music') startMusic();
+    if(game === 'zoo') startMemory();
+    else if(game === 'numbers') startNumbers();
+    else if(game === 'sofia') startSofia();
+    else if(game === 'colors') startColors();
+    else if(game === 'music') startMusic();
   }, 200);
 }
 
-function initStars() {
+function initStars(){
   const c = document.getElementById('progressStars');
   c.innerHTML = '';
-  for (let i = 0; i < totalRounds; i++) {
+  for(let i = 0; i < totalRounds; i++){
     const s = document.createElement('div');
     s.className = 'progress-star';
     s.textContent = '⭐';
@@ -1837,62 +1698,59 @@ function initStars() {
   }
 }
 
-function addStar() {
+function addStar(){
   const stars = document.querySelectorAll('#progressStars .progress-star');
-  if (stars[score]) stars[score].classList.add('earned');
+  if(stars[score]) {
+    stars[score].classList.add('earned');
+    playSound('correct');
+  }
   score++;
-  hapticFeedback('success');
-  if (score >= totalRounds) setTimeout(completeLevel, 600);
+  if(score >= totalRounds) setTimeout(completeLevel, 600);
 }
 
-// =============================================
-// JUEGO 1: EL GRAN ZOO (MEMORIA)
-// =============================================
-function startMemory() {
+// === MEMORY ===
+function startMemory(){
   document.getElementById('memoryArea').classList.add('active');
-  document.getElementById('instructionText').textContent = getText('findPairs');
-  
+  document.getElementById('instructionText').textContent = '¡Encuentra las parejas!';
   const p = LEVELS.zoo[level].pairs;
   const grid = document.getElementById('memoryGrid');
   grid.innerHTML = '';
-  grid.style.gridTemplateColumns = 'repeat(' + (p <= 3 ? 3 : p <= 6 ? 4 : 4) + ', 1fr)';
-  
+  grid.style.gridTemplateColumns = 'repeat('+(p <= 3 ? 3 : 4)+',1fr)';
   const animals = [...ANIMALS].sort(() => Math.random() - 0.5).slice(0, p);
   const cards = [...animals, ...animals].sort(() => Math.random() - 0.5);
-  
-  cards.forEach(a => {
+  cards.forEach((a, idx) => {
     const card = document.createElement('div');
     card.className = 'memory-card';
     card.dataset.emoji = a.emoji;
     card.dataset.en = a.en;
     card.dataset.es = a.es;
-    card.dataset.ro = a.ro;
-    card.innerHTML = '<div class="card-face card-front"></div><div class="card-face card-back">' + a.emoji + '</div>';
+    card.style.animationDelay = (idx * 0.05) + 's';
+    card.innerHTML = '<div class="card-face card-front"></div><div class="card-face card-back">'+a.emoji+'</div>';
     card.onclick = () => flipCard(card);
     grid.appendChild(card);
   });
 }
 
-function flipCard(c) {
-  if (locked || c.classList.contains('flipped') || c.classList.contains('matched')) return;
+function flipCard(c){
+  if(locked || c.classList.contains('flipped') || c.classList.contains('matched')) return;
   c.classList.add('flipped');
-  hapticFeedback('light');
+  playSound('pop');
   flipped.push(c);
-  if (flipped.length === 2) { locked = true; checkMatch(); }
+  if(flipped.length === 2){ locked = true; checkMatch(); }
 }
 
-function checkMatch() {
-  const [a, b] = flipped;
-  if (a.dataset.emoji === b.dataset.emoji) {
+function checkMatch(){
+  const [a,b] = flipped;
+  if(a.dataset.emoji === b.dataset.emoji){
     a.classList.add('matched');
     b.classList.add('matched');
-    showVocab(a.dataset.emoji, a.dataset.es, a.dataset.en, a.dataset.ro);
-    learned.push({ emoji: a.dataset.emoji, es: a.dataset.es, en: a.dataset.en, ro: a.dataset.ro });
+    showVocab(a.dataset.emoji, a.dataset.es, a.dataset.en);
+    learned.push({emoji:a.dataset.emoji, es:a.dataset.es, en:a.dataset.en});
     playSound('success');
     addStar();
     flipped = [];
     locked = false;
-  } else {
+  }else{
     playSound('tap');
     setTimeout(() => {
       a.classList.remove('flipped');
@@ -1903,152 +1761,91 @@ function checkMatch() {
   }
 }
 
-// =============================================
-// JUEGO 2: NÚMEROS CON REFUERZO DE INGLÉS
-// =============================================
-function startNumbers() {
+function showVocab(emoji, es, en){
+  const p = document.getElementById('vocabPopup');
+  document.getElementById('vocabEmoji').textContent = emoji;
+  document.getElementById('vocabWord').textContent = es;
+  document.getElementById('vocabTranslation').textContent = en;
+  p.classList.add('show');
+  speak(en);
+  setTimeout(() => p.classList.remove('show'), 1800);
+}
+
+// === NUMBERS ===
+function startNumbers(){
   document.getElementById('numbersArea').classList.add('active');
-  document.getElementById('instructionText').textContent = getText('learnNumbers');
-  
+  document.getElementById('instructionText').textContent = '¡Aprende los números!';
   const cfg = LEVELS.numbers[level];
-  if (cfg.type === 'intro') runNumIntro(cfg.nums);
-  else if (cfg.type === 'count') runNumCount(cfg.max);
-  else if (cfg.type === 'select') runNumSelect(cfg.max);
+  if(cfg.type === 'intro') runNumIntro(cfg.nums);
+  else if(cfg.type === 'count') runNumCount(cfg.max);
+  else if(cfg.type === 'select') runNumSelect(cfg.max);
   else runNumOrder(cfg.seq);
 }
 
-function runNumIntro(nums) {
+function runNumIntro(nums){
   const n = nums[numIdx];
   const nd = NUMBERS.find(x => x.num === n);
   const c = document.getElementById('numbersContainer');
-  
-  c.innerHTML = `
-    <div class="number-intro-card" onclick="nextNumIntro()">
-      <div class="number-big">${n}</div>
-      <div class="number-objects">
-        ${Array(n).fill(0).map((_, i) => `<span class="number-object" style="--i:${i}">${COUNT_OBJS[Math.floor(Math.random() * COUNT_OBJS.length)]}</span>`).join('')}
-      </div>
-      <div style="font-size:0.9rem;color:var(--color-text-secondary);margin-top:10px">${getText('tapContinue')}</div>
-    </div>
-  `;
-  
-  // REINFORCEMENT: Hablar en inglés SIEMPRE
-  speak(nd.en, 'en-US');
-  showReinforcement(nd.en);
-  learned.push({ emoji: n.toString(), es: nd.es, en: nd.en, ro: nd.ro });
+  c.innerHTML = '<div class="number-intro-card" onclick="nextNumIntro()"><div class="number-big">'+n+'</div><div class="number-objects">'+Array(n).fill(0).map((_, i) => '<span class="number-object" style="animation-delay:'+(i*0.1)+'s">'+COUNT_OBJS[Math.floor(Math.random()*COUNT_OBJS.length)]+'</span>').join('')+'</div><div style="font-size:0.9rem;color:var(--color-text-secondary);margin-top:10px">¡Toca para continuar!</div></div>';
+  speak(nd.en);
+  learned.push({emoji:n.toString(), es:nd.es, en:nd.en});
   addStar();
 }
 
-function nextNumIntro() {
-  playSound('tap');
-  hapticFeedback('light');
-  numIdx++;
-  if (numIdx < LEVELS.numbers[level].nums.length) {
-    runNumIntro(LEVELS.numbers[level].nums);
-  } else {
-    completeLevel();
-  }
-}
+function nextNumIntro(){playSound('tap');numIdx++;if(numIdx < LEVELS.numbers[level].nums.length) runNumIntro(LEVELS.numbers[level].nums);else completeLevel();}
 
-function runNumCount(max) {
+function runNumCount(max){
   countAns = Math.floor(Math.random() * max) + 1;
+  countTouched = [];
   const obj = COUNT_OBJS[Math.floor(Math.random() * COUNT_OBJS.length)];
   const c = document.getElementById('numbersContainer');
-  
-  c.innerHTML = `
-    <p style="font-size:1rem;margin-bottom:10px;text-align:center">${getText('tapCount')}</p>
-    <div class="counting-objects">
-      ${Array(countAns).fill(0).map((_, i) => `<span class="counting-item" onclick="touchCountItem(this)">${obj}</span>`).join('')}
-    </div>
-    <p style="font-size:1rem;margin:12px 0;text-align:center">${getText('howMany')}</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-      ${[countAns, Math.max(1, countAns - 1), Math.min(max, countAns + 1), Math.min(max, countAns + 2)].sort(() => Math.random() - 0.5).map(n => `<div class="count-option" onclick="checkNumCount(${n},this)">${n}</div>`).join('')}
-    </div>
-  `;
+  c.innerHTML = '<p style="font-size:1rem;margin-bottom:10px;text-align:center">¡Toca cada objeto mientras cuentas!</p><div class="counting-objects">'+Array(countAns).fill(0).map((_,i) => '<span class="counting-item" onclick="touchCountItem(this,'+i+')">'+obj+'</span>').join('')+'</div><p style="font-size:1rem;margin:12px 0;text-align:center">¿Cuántos hay?</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+[countAns, Math.max(1,countAns-1), Math.min(max,countAns+1), Math.min(max,countAns+2)].sort(() => Math.random()-0.5).map(n => '<div class="count-option" onclick="checkNumCount('+n+',this)">'+n+'</div>').join('')+'</div>';
 }
 
-function touchCountItem(el) {
-  if (!el.classList.contains('touched')) {
+function touchCountItem(el, idx){
+  if(!countTouched.includes(idx)){
+    countTouched.push(idx);
     el.classList.add('touched');
-    playSound('tap');
-    hapticFeedback('light');
+    playSound('pop');
+    speak((countTouched.length).toString());
   }
 }
 
-function checkNumCount(n, el) {
-  if (n === countAns) {
+function checkNumCount(n, el){
+  if(n === countAns){
     el.classList.add('correct');
     playSound('success');
     const nd = NUMBERS.find(x => x.num === n);
-    if (nd) {
-      learned.push({ emoji: n.toString(), es: nd.es, en: nd.en, ro: nd.ro });
-      // REINFORCEMENT: Repetir en inglés
-      speak(nd.en, 'en-US');
-      showReinforcement(nd.en);
+    if(nd) {
+      learned.push({emoji:n.toString(), es:nd.es, en:nd.en});
+      speak(nd.en);
     }
     addStar();
-    setTimeout(() => runNumCount(LEVELS.numbers[level].max), 800);
-  } else {
+    setTimeout(() => runNumCount(LEVELS.numbers[level].max), 700);
+  }else{
     el.classList.add('wrong');
-    hapticFeedback('error');
+    playSound('wrong');
     setTimeout(() => el.classList.remove('wrong'), 400);
   }
 }
 
-function runNumSelect(max) {
+function runNumSelect(max){
   countAns = Math.floor(Math.random() * max) + 1;
   const obj = COUNT_OBJS[Math.floor(Math.random() * COUNT_OBJS.length)];
   const c = document.getElementById('numbersContainer');
-  
-  c.innerHTML = `
-    <div class="counting-objects">
-      ${Array(countAns).fill(0).map(() => `<span class="counting-item">${obj}</span>`).join('')}
-    </div>
-    <p style="font-size:1rem;margin:12px 0;text-align:center">${getText('howMany')}</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-      ${Array.from({ length: Math.min(max + 2, 10) }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 4).map(n => `<div class="count-option" onclick="checkNumSelect(${n},this)">${n}</div>`).join('')}
-    </div>
-  `;
+  c.innerHTML = '<div class="counting-objects">'+Array(countAns).fill(0).map(() => '<span class="counting-item">'+obj+'</span>').join('')+'</div><p style="font-size:1rem;margin:12px 0;text-align:center">¿Cuántos hay?</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+Array.from({length:Math.min(max+2,10)},(_,i)=>i+1).sort(() => Math.random()-0.5).slice(0,4).map(n => '<div class="count-option" onclick="checkNumCount('+n+',this)">'+n+'</div>').join('')+'</div>';
 }
 
-function checkNumSelect(n, el) {
-  if (n === countAns) {
-    el.classList.add('correct');
-    playSound('success');
-    const nd = NUMBERS.find(x => x.num === n);
-    if (nd) {
-      learned.push({ emoji: n.toString(), es: nd.es, en: nd.en, ro: nd.ro });
-      speak(nd.en, 'en-US');
-      showReinforcement(nd.en);
-    }
-    addStar();
-    setTimeout(() => runNumSelect(LEVELS.numbers[level].max), 800);
-  } else {
-    el.classList.add('wrong');
-    hapticFeedback('error');
-    setTimeout(() => el.classList.remove('wrong'), 400);
-  }
-}
-
-function runNumOrder(seq) {
+function runNumOrder(seq){
   const c = document.getElementById('numbersContainer');
-  c.innerHTML = `
-    <p style="font-size:1rem;margin-bottom:12px;text-align:center">${getText('putOrder')}</p>
-    <div class="order-slots" id="orderSlots" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      ${seq.map((_, i) => `<div class="order-slot" data-idx="${i}"></div>`).join('')}
-    </div>
-    <div class="order-items" id="orderItems" style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      ${seq.slice().sort(() => Math.random() - 0.5).map(n => `<div class="count-option" style="width:50px;height:50px;font-size:1.5rem" data-num="${n}" onclick="placeNum(${n},this)">${n}</div>`).join('')}
-    </div>
-  `;
+  c.innerHTML = '<p style="font-size:1rem;margin-bottom:12px;text-align:center">Pon los números en orden:</p><div class="order-slots" id="orderSlots" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+seq.map((_,i) => '<div class="order-slot" style="width:44px;height:44px;border:3px dashed #9ca3af;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:#9ca3af" data-idx="'+i+'"></div>').join('')+'</div><div class="order-items" id="orderItems" style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+seq.slice().sort(() => Math.random()-0.5).map(n => '<div class="count-option" style="width:50px;height:50px;font-size:1.5rem" data-num="'+n+'" onclick="placeNum('+n+',this)">'+n+'</div>').join('')+'</div>';
 }
 
-function placeNum(n, el) {
-  if (el.classList.contains('used')) return;
+function placeNum(n, el){
+  if(el.classList.contains('used')) return;
   const slots = document.querySelectorAll('#orderSlots .order-slot');
-  
-  for (const s of slots) {
-    if (!s.textContent) {
+  for(const s of slots){
+    if(!s.textContent){
       s.textContent = n;
       s.style.borderStyle = 'solid';
       s.style.borderColor = 'var(--color-success)';
@@ -2056,527 +1853,408 @@ function placeNum(n, el) {
       s.style.color = 'var(--color-text)';
       el.classList.add('used');
       el.style.visibility = 'hidden';
-      playSound('tap');
-      hapticFeedback('light');
+      playSound('pop');
+      speak(n.toString());
       break;
     }
   }
-  
   const filled = [...slots].every(s => s.textContent);
-  if (filled) {
+  if(filled){
     const seq = LEVELS.numbers[level].seq;
-    const correct = seq.every((n, i) => slots[i].textContent == n);
-    if (correct) {
+    const correct = seq.every((n,i) => slots[i].textContent == n);
+    if(correct){
       playSound('success');
-      // REINFORCEMENT: Decir secuencia en inglés
-      const seqEnglish = seq.map(n => NUMBERS.find(x => x.num === n)?.en).join(', ');
-      speak(seqEnglish, 'en-US');
       addStar();
-      setTimeout(() => runNumOrder(seq), 700);
-    } else {
-      hapticFeedback('error');
+      setTimeout(() => runNumOrder(seq), 600);
+    }else{
+      playSound('wrong');
       slots.forEach(s => s.style.background = '#fef2f2');
-      setTimeout(() => {
-        slots.forEach(s => {
-          s.style.background = '';
-          s.textContent = '';
-          s.style.borderStyle = 'dashed';
-          s.style.borderColor = '#9ca3af';
-          s.style.color = '#9ca3af';
-        });
-        document.querySelectorAll('#orderItems .count-option').forEach(o => {
-          o.classList.remove('used');
-          o.style.visibility = 'visible';
-        });
-      }, 500);
+      setTimeout(() => { slots.forEach(s => s.style.background = ''); }, 400);
     }
   }
 }
 
-// =============================================
-// JUEGO 3: EL MUNDO DE SOFÍA
-// =============================================
-function startSofia() {
+// === SOFIA ===
+function startSofia(){
   document.getElementById('sofiaArea').classList.add('active');
-  document.getElementById('instructionText').textContent = getText('guessCapitals');
-  
+  document.getElementById('instructionText').textContent = '¡Adivina las capitales!';
   sofiaData = [...COUNTRIES].sort(() => Math.random() - 0.5).slice(0, LEVELS.sofia[level].count);
   sofiaIdx = 0;
   runSofiaQ();
 }
 
-function runSofiaQ() {
+function runSofiaQ(){
   const country = sofiaData[sofiaIdx];
-  
-  // NO mostrar la respuesta
-  const correctCapital = country.capital;
-  const wrongCapitals = COUNTRIES
-    .filter(c => c.capital !== correctCapital)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 2)
-    .map(c => c.capital);
-  
-  const opts = [correctCapital, ...wrongCapitals].sort(() => Math.random() - 0.5);
-  
-  const countryName = lang === 'es' ? country.country : lang === 'ro' ? country.countryRo : country.countryEn;
-  const capitalEn = country.capitalEn;
-  const capitalRo = country.capitalRo;
-  
+  const wrongCapitals = COUNTRIES.filter(c => c.capital !== country.capital).sort(() => Math.random() - 0.5).slice(0, 2).map(c => c.capital);
+  const opts = [country.capital, ...wrongCapitals].sort(() => Math.random() - 0.5);
   const c = document.getElementById('sofiaContainer');
-  c.innerHTML = `
-    <div class="sofia-plane">✈️</div>
-    <div class="sofia-country-card">
-      <div class="sofia-flag">${country.flag}</div>
-      <div class="sofia-country-name">${countryName}</div>
-      <div style="font-size:0.85rem;color:var(--color-text-secondary)">${getText('whatCapital')}</div>
-    </div>
-    <div class="sofia-options">
-      ${opts.map(cap => `<button class="capital-btn" onclick="checkCapital('${cap}','${correctCapital}',this,'${capitalEn}','${capitalRo}')">${cap}</button>`).join('')}
-    </div>
-  `;
-  
-  learned.push({ emoji: country.flag, es: country.capital, en: capitalEn, ro: capitalRo });
+  c.innerHTML = '<div class="sofia-plane">✈️</div><div class="sofia-country-card"><div class="sofia-flag">'+country.flag+'</div><div class="sofia-country-name">'+country.country+'</div><div style="font-size:0.85rem;color:var(--color-text-secondary)">¿Cuál es su capital?</div></div><div class="sofia-options">'+opts.map(cap => '<button class="capital-btn" onclick="checkCapital(\''+cap+'\',\''+country.capital+'\',this,\''+country.capitalEn+'\')">'+cap+'</button>').join('')+'</div>';
+  learned.push({emoji:country.flag, es:country.capital, en:country.capitalEn});
 }
 
-function checkCapital(sel, correct, el, capEn, capRo) {
-  if (sel === correct) {
+function checkCapital(sel, correct, el, capEn){
+  if(sel === correct){
     el.classList.add('correct');
     playSound('success');
-    speak(capEn, 'en-US');
-    showReinforcement(capEn);
+    speak(capEn);
     addStar();
     sofiaIdx++;
-    if (sofiaIdx < sofiaData.length) setTimeout(runSofiaQ, 800);
-  } else {
+    if(sofiaIdx < sofiaData.length) setTimeout(runSofiaQ, 800);
+  }else{
     el.classList.add('wrong');
-    hapticFeedback('error');
+    playSound('wrong');
     setTimeout(() => el.classList.remove('wrong'), 400);
   }
 }
 
-// =============================================
-// JUEGO 4: LOS COLORES DE NOA
-// =============================================
-function startColors() {
+// === COLORS ===
+function startColors(){
   document.getElementById('colorsArea').classList.add('active');
-  document.getElementById('instructionText').textContent = getText('learnColors');
+  document.getElementById('instructionText').textContent = '¡Aprende los colores!';
   runColorQ();
 }
 
-function runColorQ() {
+function runColorQ(){
   const cfg = LEVELS.colors[level];
   let objs = cfg.colors ? COLORS_OBJ.filter(o => cfg.colors.includes(o.color)) : COLORS_OBJ;
   colorItem = objs[Math.floor(Math.random() * objs.length)];
-  
   let pals = cfg.colors ? COLORS_PAL.filter(c => cfg.colors.map(x => x.toUpperCase()).includes(c.name)) : COLORS_PAL;
   const correct = COLORS_PAL.find(c => c.name === colorItem.color.toUpperCase());
   const wrong = pals.filter(c => c.name !== correct.name).sort(() => Math.random() - 0.5).slice(0, 5);
   const opts = [correct, ...wrong].sort(() => Math.random() - 0.5);
-  
-  const colorName = lang === 'es' ? colorItem.color : lang === 'ro' ? colorItem.colorRo : colorItem.colorEn;
-  const correctEn = colorItem.colorEn;
-  const correctRo = COLORS_PAL.find(c => c.name === colorItem.color.toUpperCase())?.ro || correctEn;
-  
   const c = document.getElementById('colorsContainer');
-  c.innerHTML = `
-    <div class="color-target">
-      <span class="target-emoji">${colorItem.emoji}</span>
-      <p class="target-question">${getText('whatColor')} <span class="target-word">${colorName}</span>?</p>
-    </div>
-    <div class="color-palette">
-      ${opts.map(o => `<div class="color-btn" style="background:${o.hex}" onclick="checkColor('${o.name}',this,'${o.en}','${o.ro}')"></div>`).join('')}
-    </div>
-  `;
+  
+  c.innerHTML = '<div class="color-target"><span class="target-emoji">'+colorItem.emoji+'</span><p class="target-question">¿De qué color es <span class="target-word">'+colorItem.color+'</span>?</p><p class="target-hint">Toca el color correcto 👆</p></div><div class="color-palette">'+opts.map(o => '<div class="color-btn" style="background:'+o.hex+'" data-name="'+o.name+'" data-en="'+o.en+'" onclick="checkColor(\''+o.name+'\',this,\''+o.en+'\')"></div>').join('')+'</div>';
+  
+  setTimeout(() => {
+    document.querySelectorAll('.color-btn').forEach((btn, i) => {
+      btn.style.opacity = '0';
+      btn.style.transform = 'scale(0.5)';
+      setTimeout(() => {
+        btn.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        btn.style.opacity = '1';
+        btn.style.transform = 'scale(1)';
+      }, i * 60);
+    });
+  }, 100);
 }
 
-function checkColor(sel, el, en, ro) {
-  if (sel === colorItem.color.toUpperCase()) {
-    el.classList.add('selected');
+function checkColor(sel, el, en){
+  if(sel === colorItem.color.toUpperCase()){
+    el.classList.add('correct');
     playSound('success');
-    speak(en, 'en-US');
-    showReinforcement(en);
-    learned.push({ emoji: colorItem.emoji, es: colorItem.color, en: en, ro: ro });
+    speak(en);
+    learned.push({emoji:colorItem.emoji, es:colorItem.color, en:en});
     addStar();
-    setTimeout(runColorQ, 700);
-  } else {
-    el.style.transform = 'scale(0.9)';
-    hapticFeedback('error');
-    setTimeout(() => el.style.transform = '', 300);
+    
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      if(btn !== el) {
+        btn.style.opacity = '0.3';
+        btn.style.transform = 'scale(0.8)';
+      }
+    });
+    
+    setTimeout(runColorQ, 800);
+  }else{
+    el.classList.add('wrong');
+    playSound('wrong');
+    setTimeout(() => {
+      el.classList.remove('wrong');
+      el.style.transform = 'scale(0.9)';
+      setTimeout(() => el.style.transform = '', 200);
+    }, 400);
   }
 }
 
-// =============================================
-// JUEGO 5: LA MÚSICA DE NOA Y SOFÍA
-// =============================================
-function startMusic() {
+// === MUSIC GAME - SIMON SAYS PROGRESSION ===
+function startMusic(){
   document.getElementById('musicArea').classList.add('active');
-  document.getElementById('instructionText').textContent = getText('playPiano');
-  
+  document.getElementById('instructionText').textContent = '¡Toca las notas!';
   const cfg = LEVELS.music[level];
   
-  if (cfg.type === 'learn') runMusicLearn(cfg.notes);
-  else if (cfg.type === 'melody') runMusicMelody();
-  else if (cfg.type === 'barca') runMusicBarca();
-  else if (cfg.type === 'free') runMusicFree();
-  else if (cfg.type === 'concert') runMusicConcert();
-}
-
-function createPianoKeyboard(highlightNote = null) {
-  const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C5'];
-  return notes.map(n => `
-    <div class="piano-key ${n === highlightNote ? 'highlighted' : ''}" data-note="${n}" onclick="playPianoKey('${n}')">
-      ${NOTE_NAMES[lang][n] || n}
-    </div>
-  `).join('');
-}
-
-function playPianoKey(note) {
-  playNote(note, 400);
-  hapticFeedback('light');
-  
-  const key = document.querySelector(`.piano-key[data-note="${note}"]`);
-  if (key) {
-    key.classList.add('pressed');
-    setTimeout(() => key.classList.remove('pressed'), 200);
+  if(cfg.type === 'free'){
+    runMusicFree();
+  } else if(cfg.type === 'simon'){
+    runMusicSimon(cfg.song);
   }
 }
 
-// NIVEL 1: Aprender notas
-function runMusicLearn(notes) {
-  melodyIdx = 0;
-  const c = document.getElementById('pianoContainer');
-  c.innerHTML = `
-    <div class="piano-title-card">
-      <div class="piano-title-text">🎵 ${getText('levelNames.music')[0]}</div>
-      <div class="piano-subtitle">${getText('tapContinue')}</div>
-    </div>
-    <div class="piano-keyboard">
-      ${createPianoKeyboard(notes[melodyIdx])}
-    </div>
-    <div class="melody-progress">
-      ${notes.map((_, i) => `<div class="melody-dot ${i < melodyIdx ? 'completed' : ''} ${i === melodyIdx ? 'current' : ''}"></div>`).join('')}
-    </div>
-  `;
+function runMusicFree(){
+  const c = document.getElementById('musicContainer');
+  c.innerHTML = '<div class="music-header"><div class="music-level-title">🎹 Piano Libre</div><div class="music-instruction">¡Toca las teclas para hacer música!</div></div><div class="piano-container" id="pianoContainer"></div><div class="music-progress" id="musicProgress"></div>';
   
-  // Reproducir nota actual
-  setTimeout(() => playNote(notes[melodyIdx], 500), 300);
+  renderPiano();
   
-  // Escuchar clicks en teclas
-  document.querySelectorAll('.piano-key').forEach(key => {
-    key.onclick = () => {
-      if (key.dataset.note === notes[melodyIdx]) {
-        playPianoKey(notes[melodyIdx]);
-        key.classList.add('correct-hit');
-        setTimeout(() => key.classList.remove('correct-hit'), 300);
-        melodyIdx++;
-        addStar();
-        
-        if (melodyIdx < notes.length) {
-          setTimeout(() => runMusicLearn(notes), 500);
-        } else {
-          setTimeout(completeLevel, 500);
-        }
-      } else {
-        playPianoKey(key.dataset.note);
-        key.classList.add('wrong');
-        setTimeout(() => key.classList.remove('wrong'), 300);
-        hapticFeedback('error');
-      }
+  const progress = document.getElementById('musicProgress');
+  for(let i = 0; i < 5; i++){
+    const dot = document.createElement('div');
+    dot.className = 'music-dot';
+    dot.id = 'dot' + i;
+    progress.appendChild(dot);
+  }
+  
+  musicPhase = 'free';
+  let freePlayCount = 0;
+  window.onFreeNote = () => {
+    freePlayCount++;
+    const dotIdx = Math.floor(freePlayCount / 3);
+    if(dotIdx < 5) {
+      document.getElementById('dot' + dotIdx)?.classList.add('completed');
+    }
+    if(freePlayCount >= 15) {
+      setTimeout(completeLevel, 500);
+    }
+  };
+}
+
+function runMusicSimon(songName){
+  const fullSequence = SONG_PATTERNS[songName];
+  musicRound = 0;
+  musicMaxNotes = 2; // Start with 2 notes
+  musicPhase = 'idle';
+  
+  const c = document.getElementById('musicContainer');
+  c.innerHTML = '<div class="music-header"><div class="music-level-title">🎹 Simon: ' + songName.charAt(0).toUpperCase() + songName.slice(1) + '</div><div class="music-instruction" id="musicInstr">Escucha la secuencia...</div><div class="music-round-info" id="musicRoundInfo">Ronda 1 - 2 notas</div></div><div class="music-sequence" id="sequenceDisplay"></div><div class="piano-container" id="pianoContainer"></div><div class="music-progress" id="musicProgress"></div>';
+  
+  renderPiano();
+  
+  // Start first round
+  setTimeout(() => startSimonRound(fullSequence), 1000);
+}
+
+function startSimonRound(fullSequence){
+  // Get the sequence for this round (progressive: 2, 3, 4, 5... notes)
+  musicSequence = fullSequence.slice(0, musicMaxNotes);
+  musicUserSequence = [];
+  musicNoteIndex = 0;
+  musicPhase = 'listen';
+  
+  // Update round info
+  const roundInfo = document.getElementById('musicRoundInfo');
+  if(roundInfo) {
+    roundInfo.textContent = 'Ronda ' + (musicRound + 1) + ' - ' + musicMaxNotes + ' notas';
+  }
+  
+  // Update instruction
+  const instr = document.getElementById('musicInstr');
+  if(instr) instr.textContent = 'Escucha la secuencia...';
+  
+  // Render sequence display
+  const seqDisplay = document.getElementById('sequenceDisplay');
+  seqDisplay.innerHTML = '';
+  musicSequence.forEach((note, i) => {
+    const noteEl = document.createElement('div');
+    noteEl.className = 'sequence-note';
+    noteEl.id = 'seqNote' + i;
+    noteEl.style.backgroundColor = PIANO_NOTES.find(n => n.note === note).color;
+    noteEl.textContent = PIANO_NOTES.find(n => n.note === note).label;
+    seqDisplay.appendChild(noteEl);
+  });
+  
+  // Update progress dots
+  const progress = document.getElementById('musicProgress');
+  progress.innerHTML = '';
+  for(let i = 0; i < totalRounds; i++){
+    const dot = document.createElement('div');
+    dot.className = 'music-dot';
+    if(i < musicRound) dot.classList.add('completed');
+    else if(i === musicRound) dot.classList.add('current');
+    progress.appendChild(dot);
+  }
+  
+  // Play sequence
+  setTimeout(() => playSimonSequence(), 500);
+}
+
+function playSimonSequence(){
+  musicNoteIndex = 0;
+  playNextSimonNote();
+}
+
+function playNextSimonNote(){
+  if(musicNoteIndex >= musicSequence.length){
+    // Finished playing, user's turn
+    musicPhase = 'repeat';
+    musicNoteIndex = 0;
+    musicUserSequence = [];
+    const instr = document.getElementById('musicInstr');
+    if(instr) instr.textContent = '¡Tu turno! Repite la secuencia';
+    
+    // Reset sequence display
+    document.querySelectorAll('.sequence-note').forEach(el => {
+      el.classList.remove('active', 'played');
+    });
+    return;
+  }
+  
+  const note = musicSequence[musicNoteIndex];
+  const noteData = PIANO_NOTES.find(n => n.note === note);
+  
+  // Highlight sequence note
+  const seqNote = document.getElementById('seqNote' + musicNoteIndex);
+  if(seqNote){
+    seqNote.classList.add('active');
+    setTimeout(() => seqNote.classList.remove('active'), 400);
+  }
+  
+  // Play sound
+  playPianoNote(noteData.freq);
+  
+  // Highlight piano key
+  const keys = document.querySelectorAll('.piano-key');
+  keys.forEach(k => {
+    if(k.dataset.note === note){
+      k.classList.add('pressed');
+      setTimeout(() => k.classList.remove('pressed'), 300);
+    }
+  });
+  
+  musicNoteIndex++;
+  setTimeout(playNextSimonNote, 600);
+}
+
+function renderPiano(){
+  const container = document.getElementById('pianoContainer');
+  container.innerHTML = '';
+  
+  PIANO_NOTES.forEach(note => {
+    const key = document.createElement('div');
+    key.className = 'piano-key';
+    key.dataset.note = note.note;
+    key.dataset.freq = note.freq;
+    key.innerHTML = '<span class="note-label">'+note.label+'</span>';
+    key.style.borderBottom = '4px solid ' + note.color;
+    
+    key.onclick = () => handlePianoKey(key, note);
+    key.ontouchstart = (e) => {
+      e.preventDefault();
+      handlePianoKey(key, note);
     };
+    
+    container.appendChild(key);
   });
 }
 
-// NIVEL 2: Melodía simple
-function runMusicMelody() {
-  melodyIdx = 0;
-  const c = document.getElementById('pianoContainer');
-  c.innerHTML = `
-    <div class="piano-title-card">
-      <div class="piano-title-text">🎵 ${getText('levelNames.music')[1]}</div>
-      <div class="piano-subtitle">Sigue la melodía</div>
-    </div>
-    <div class="piano-keyboard">
-      ${createPianoKeyboard()}
-    </div>
-    <div class="melody-progress">
-      ${SIMPLE_MELODY.map((_, i) => `<div class="melody-dot ${i < melodyIdx ? 'completed' : ''} ${i === melodyIdx ? 'current' : ''}"></div>`).join('')}
-    </div>
-    <div class="piano-songs">
-      <div class="song-btn" onclick="playMelody()">
-        <div class="song-info">
-          <span class="song-title">🎶 Escuchar melodía</span>
-        </div>
-        <span class="song-icon">▶️</span>
-      </div>
-    </div>
-  `;
+function handlePianoKey(keyEl, note){
+  playPianoNote(note.freq);
+  keyEl.classList.add('pressed');
+  setTimeout(() => keyEl.classList.remove('pressed'), 200);
   
-  // Escuchar clicks
-  document.querySelectorAll('.piano-key').forEach(key => {
-    key.onclick = () => {
-      if (melodyIdx < SIMPLE_MELODY.length && key.dataset.note === SIMPLE_MELODY[melodyIdx].note) {
-        playPianoKey(SIMPLE_MELODY[melodyIdx].note);
-        key.classList.add('correct-hit');
-        melodyIdx++;
-        
-        // Actualizar progreso
-        document.querySelectorAll('.melody-dot').forEach((dot, i) => {
-          dot.classList.toggle('completed', i < melodyIdx);
-          dot.classList.toggle('current', i === melodyIdx);
-        });
-        
-        if (melodyIdx >= SIMPLE_MELODY.length) {
-          addStar();
-          setTimeout(completeLevel, 500);
-        }
-      } else {
-        playPianoKey(key.dataset.note);
-        hapticFeedback('error');
-      }
-    };
-  });
-}
-
-function playMelody() {
-  let i = 0;
-  const notes = SIMPLE_MELODY;
-  
-  function playNext() {
-    if (i < notes.length) {
-      const { note, dur } = notes[i];
-      playNote(note, dur);
-      const key = document.querySelector(`.piano-key[data-note="${note}"]`);
-      if (key) {
-        key.classList.add('pressed');
-        setTimeout(() => key.classList.remove('pressed'), dur * 0.8);
-      }
-      i++;
-      currentSongTimeout = setTimeout(playNext, dur);
-    }
+  if(musicPhase === 'free' && window.onFreeNote){
+    window.onFreeNote();
+  } else if(musicPhase === 'repeat'){
+    checkSimonNote(note.note, keyEl);
   }
-  playNext();
 }
 
-// NIVEL 3: HIMNO DEL BARÇA
-function runMusicBarca() {
-  melodyIdx = 0;
-  const c = document.getElementById('pianoContainer');
-  c.innerHTML = `
-    <div class="piano-title-card">
-      <div class="piano-title-text">💙❤️ HIMNO DEL BARÇA ❤️💙</div>
-      <div class="piano-subtitle">Cant del Barça - El himno oficial</div>
-    </div>
-    <div class="piano-keyboard">
-      ${createPianoKeyboard()}
-    </div>
-    <div class="melody-progress">
-      ${Array(Math.min(10, BARCA_ANTHEM.length)).fill(0).map((_, i) => `<div class="melody-dot"></div>`).join('')}
-    </div>
-    <div class="piano-songs">
-      <div class="song-btn" id="barcaBtn" onclick="playBarcaAnthem()">
-        <div class="song-info">
-          <span class="song-title">⚽ Cant del Barça</span>
-          <div class="song-hint">El himno oficial del FC Barcelona</div>
-        </div>
-        <span class="song-icon">🎵</span>
-      </div>
-    </div>
-  `;
+function checkSimonNote(playedNote, keyEl){
+  const expectedNote = musicSequence[musicNoteIndex];
   
-  // Completar nivel después de escuchar
-  setTimeout(() => {
-    addStar();
-    setTimeout(completeLevel, 500);
-  }, 3000);
-}
-
-function playBarcaAnthem() {
-  const btn = document.getElementById('barcaBtn');
-  if (btn.classList.contains('playing')) return;
+  // Mark sequence note as played
+  const seqNote = document.getElementById('seqNote' + musicNoteIndex);
+  if(seqNote) seqNote.classList.add('played');
   
-  btn.classList.add('playing');
-  btn.querySelector('.song-icon').textContent = '🔊';
-  
-  let i = 0;
-  const dots = document.querySelectorAll('.melody-dot');
-  
-  function playNext() {
-    if (i < BARCA_ANTHEM.length) {
-      const { note, dur } = BARCA_ANTHEM[i];
-      playNote(note, dur);
+  if(playedNote === expectedNote){
+    keyEl.classList.add('correct');
+    setTimeout(() => keyEl.classList.remove('correct'), 300);
+    
+    playSound('correct');
+    musicNoteIndex++;
+    musicUserSequence.push(playedNote);
+    
+    // Check if sequence complete for this round
+    if(musicUserSequence.length === musicSequence.length){
+      playSound('success');
+      addStar();
       
-      const key = document.querySelector(`.piano-key[data-note="${note}"]`);
-      if (key) {
-        key.classList.add('pressed');
-        setTimeout(() => key.classList.remove('pressed'), dur * 0.8);
-      }
+      musicRound++;
       
-      // Actualizar dots cada ~4 notas
-      const dotIdx = Math.floor(i / 4);
-      if (dots[dotIdx]) dots[dotIdx].classList.add('completed');
-      
-      i++;
-      currentSongTimeout = setTimeout(playNext, dur);
-    } else {
-      btn.classList.remove('playing');
-      btn.querySelector('.song-icon').textContent = '🎵';
-      currentSongTimeout = null;
-    }
-  }
-  playNext();
-}
-
-// NIVEL 4: Modo libre
-function runMusicFree() {
-  const c = document.getElementById('pianoContainer');
-  c.innerHTML = `
-    <div class="piano-title-card">
-      <div class="piano-title-text">🎹 ${getText('levelNames.music')[3]}</div>
-      <div class="piano-subtitle">¡Toca las notas que quieras!</div>
-    </div>
-    <div class="piano-keyboard">
-      ${createPianoKeyboard()}
-    </div>
-  `;
-  
-  let noteCount = 0;
-  document.querySelectorAll('.piano-key').forEach(key => {
-    key.onclick = () => {
-      playPianoKey(key.dataset.note);
-      noteCount++;
-      if (noteCount >= 5 && score < totalRounds) {
-        addStar();
+      // Check if game complete
+      if(musicRound >= totalRounds){
         setTimeout(completeLevel, 500);
+      } else {
+        // Next round: add one more note
+        musicMaxNotes++;
+        
+        const fullSequence = SONG_PATTERNS[LEVELS.music[level].song];
+        
+        // Check if we've used all notes in the song
+        if(musicMaxNotes > fullSequence.length) {
+          musicMaxNotes = fullSequence.length;
+        }
+        
+        setTimeout(() => startSimonRound(fullSequence), 800);
       }
-    };
-  });
+    }
+  } else {
+    keyEl.classList.add('wrong');
+    setTimeout(() => keyEl.classList.remove('wrong'), 300);
+    playSound('wrong');
+    
+    // Replay the same sequence
+    setTimeout(() => {
+      musicNoteIndex = 0;
+      musicUserSequence = [];
+      musicPhase = 'listen';
+      const instr = document.getElementById('musicInstr');
+      if(instr) instr.textContent = 'Escucha de nuevo...';
+      
+      // Reset sequence display
+      document.querySelectorAll('.sequence-note').forEach(n => n.classList.remove('played'));
+      
+      setTimeout(playSimonSequence, 500);
+    }, 500);
+  }
 }
 
-// NIVEL 5: Concierto final
-function runMusicConcert() {
-  const c = document.getElementById('pianoContainer');
-  c.innerHTML = `
-    <div class="piano-title-card">
-      <div class="piano-title-text">🎭 ${getText('levelNames.music')[4]}</div>
-      <div class="piano-subtitle">¡El gran final!</div>
-    </div>
-    <div class="piano-keyboard">
-      ${createPianoKeyboard()}
-    </div>
-    <div class="piano-songs">
-      <div class="song-btn" onclick="playBarcaAnthemConcert()">
-        <div class="song-info">
-          <span class="song-title">⚽ Himno del Barça completo</span>
-          <div class="song-hint">¡El Camp Nou canta!</div>
-        </div>
-        <span class="song-icon">🎵</span>
-      </div>
-    </div>
-  `;
-  
-  addStar();
-}
-
-function playBarcaAnthemConcert() {
-  playBarcaAnthem();
-}
-
-// =============================================
-// COMPLETAR NIVEL
-// =============================================
-function completeLevel() {
+// === COMPLETE ===
+function completeLevel(){
   playSound('success');
-  if (!progress[game]) progress[game] = [];
-  if (!progress[game].includes(level)) {
+  if(!progress[game]) progress[game] = [];
+  if(!progress[game].includes(level)){
     progress[game].push(level);
     saveProg();
   }
-  
-  document.getElementById('completeMascot').innerHTML = '<img src="' + AVATARS[avatar] + '" style="width:60px;height:60px">';
-  document.getElementById('completeTitle').textContent = getText('levelComplete').replace('{name}', playerName);
-  document.getElementById('completeSubtitle').textContent = getText('levelSubtitle');
-  
-  document.getElementById('completeStars').innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const star = document.createElement('span');
-    star.className = 'complete-star earned';
-    star.textContent = '⭐';
-    star.style.animationDelay = (i * 0.15) + 's';
-    document.getElementById('completeStars').appendChild(star);
-  }
-  
+  document.getElementById('completeMascot').innerHTML = '<img src="'+AVATARS[avatar]+'" style="width:60px;height:60px">';
+  document.getElementById('completeTitle').textContent = '¡Lo lograste, '+playerName+'!';
+  document.getElementById('completeSubtitle').textContent = 'Completaste el nivel';
+  document.getElementById('completeStars').innerHTML = '<span class="complete-star earned" style="animation-delay:0s">⭐</span><span class="complete-star earned" style="animation-delay:0.2s">⭐</span><span class="complete-star earned" style="animation-delay:0.4s">⭐</span>';
   const wg = document.getElementById('wordsGrid');
   wg.innerHTML = '';
-  learned.slice(0, 6).forEach(w => {
+  learned.slice(0,6).forEach(w => {
     const chip = document.createElement('div');
     chip.className = 'word-chip';
-    chip.innerHTML = `
-      <span class="word-emoji">${w.emoji}</span>
-      <span class="word-es">${w.es}</span>
-      <span class="word-en">${w.en}</span>
-    `;
-    chip.onclick = () => {
-      speak(w.en, 'en-US');
-      hapticFeedback('light');
-    };
+    chip.innerHTML = '<span class="word-emoji">'+w.emoji+'</span><span class="word-es">'+w.es+'</span><span class="word-en">'+w.en+'</span>';
+    chip.onclick = () => speak(w.en);
     wg.appendChild(chip);
   });
-  
   document.querySelector('.complete-btn.primary').style.display = level < 4 ? 'flex' : 'none';
   createConfetti();
   showScreen('level-complete');
 }
 
-function nextLevel() {
-  playSound('tap');
-  hapticFeedback('light');
-  level++;
-  startLevel(level);
-}
+function nextLevel(){playSound('tap');level++;startLevel(level);}
+function exitGame(){playSound('tap');showScreen('game-select');}
 
-function exitGame() {
-  playSound('tap');
-  hapticFeedback('light');
-  if (currentSongTimeout) {
-    clearTimeout(currentSongTimeout);
-    currentSongTimeout = null;
-  }
-  showScreen('game-select');
-}
-
-// =============================================
-// CONFETTI
-// =============================================
-function createConfetti() {
+// === CONFETTI ===
+function createConfetti(){
   const c = document.getElementById('confettiContainer');
   c.innerHTML = '';
-  const colors = ['#004D98', '#A50044', '#D4AF37', '#fef3c7', '#22c55e', '#fbbf24', '#ec4899'];
-  
-  for (let i = 0; i < 50; i++) {
+  const colors = ['#004D98','#A50044','#fef3c7','#22c55e','#fbbf24','#ec4899'];
+  for(let i = 0; i < 50; i++){
     const conf = document.createElement('div');
     conf.className = 'confetti';
     conf.style.left = Math.random() * 100 + '%';
     conf.style.background = colors[Math.floor(Math.random() * colors.length)];
     conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
-    conf.style.animationDelay = Math.random() * 0.5 + 's';
+    conf.style.animationDelay = (Math.random() * 0.5) + 's';
     c.appendChild(conf);
   }
-  
-  setTimeout(() => c.innerHTML = '', 4000);
+  setTimeout(() => c.innerHTML = '', 3500);
 }
 
-// =============================================
-// INICIALIZACIÓN
-// =============================================
+// === INIT ===
 loadProg();
-updateAllText();
-if (playerName) {
-  document.getElementById('playerNameInput').value = playerName;
-}
-
-document.querySelectorAll('.lang-btn').forEach((b, i) => {
-  b.classList.toggle('active', (lang === 'es' && i === 0) || (lang === 'en' && i === 1) || (lang === 'ro' && i === 2));
-});
+if(playerName){document.getElementById('playerNameInput').value = playerName;}
 </script>
 </body>
-</html
