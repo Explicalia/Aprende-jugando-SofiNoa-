@@ -2,31 +2,36 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="theme-color" content="#faf5ff">
 <title>Sofía y Noa - Aprende Jugando</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --color-primary: #6366f1;
-  --color-primary-dark: #4f46e5;
+  --color-primary: #007AFF;
+  --color-primary-dark: #0056CC;
   --color-secondary: #f97316;
   --color-accent: #10b981;
   --color-warning: #fbbf24;
-  --color-error: #ef4444;
-  --color-success: #22c55e;
+  --color-error: #FF3B30;
+  --color-success: #34C759;
   --color-pink: #ec4899;
   --color-bg: #faf5ff;
   --color-surface: #ffffff;
   --color-text: #1e1b4b;
   --color-text-secondary: #475569;
-  --glass-bg: rgba(255,255,255,0.9);
+  --glass-bg: rgba(255,255,255,0.85);
   --glass-border: rgba(255,255,255,0.7);
-  --font-family: 'Nunito', sans-serif;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Nunito', sans-serif;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+  --shadow-ios: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
   --barca-blue: #004D98;
   --barca-red: #A50044;
   --barca-blue-light: #3d7dc7;
@@ -34,6 +39,7 @@
   --explicalia-black: #0a0a0a;
   --explicalia-gold: #D4AF37;
   --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ios-transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { height: 100%; }
@@ -48,6 +54,8 @@ body {
   -webkit-touch-callout: none;
   min-height: 100%;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* INTRO VIDEO */
@@ -132,7 +140,7 @@ body {
   align-items: center;
   z-index: 10;
   padding: 16px;
-  padding-bottom: 32px;
+  padding-bottom: 70px;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -140,6 +148,19 @@ body {
 }
 .screen.active { display: flex; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* NOTE PARTICLES - Apple-style particle effects for music game */
+.note-particle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
+  font-size: 1.5rem;
+  animation: floatUp 1.2s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-80px) scale(0.5); }
+}
 
 /* BOMBILLA ELEGANTE */
 .easter-egg-trigger {
@@ -209,17 +230,17 @@ body {
   border: none;
   border-radius: 50%;
   padding: 0;
-  transition: transform 0.3s var(--spring-bounce);
+  transition: var(--ios-transition);
   touch-action: manipulation;
-  box-shadow: 0 4px 15px rgba(165, 0, 68, 0.4);
+  box-shadow: 0 2px 8px rgba(165, 0, 68, 0.3);
 }
 .music-trigger:hover { transform: scale(1.1); }
-.music-trigger:active { transform: scale(0.9); }
+.music-trigger:active { transform: scale(0.9); opacity: 0.8; }
 .music-trigger.playing { animation: musicPulse 1s ease-in-out infinite; }
 .music-trigger svg { width: 22px; height: 22px; fill: white; }
 @keyframes musicPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(165, 0, 68, 0.4); }
-  50% { transform: scale(1.08); box-shadow: 0 6px 25px rgba(165, 0, 68, 0.6); }
+  0%, 100% { transform: scale(1); box-shadow: 0 2px 8px rgba(165, 0, 68, 0.3); }
+  50% { transform: scale(1.08); box-shadow: 0 4px 16px rgba(165, 0, 68, 0.5); }
 }
 
 /* WELCOME */
@@ -239,14 +260,16 @@ body {
   border: 2px solid transparent;
   border-radius: var(--radius-2xl);
   background: var(--color-surface);
-  box-shadow: var(--shadow-md);
-  transition: all 0.2s;
+  box-shadow: var(--shadow-ios);
+  transition: var(--ios-transition);
 }
-.name-input:focus { outline: none; border-color: var(--color-primary); transform: scale(1.02); }
+.name-input:focus { outline: none; border-color: var(--color-primary); transform: scale(1.02); box-shadow: 0 0 0 4px rgba(0,122,255,0.15); }
 
 .avatar-select {
   padding: 14px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   width: 100%;
@@ -259,7 +282,7 @@ body {
   border: 3px solid transparent;
   border-radius: var(--radius-xl);
   cursor: pointer;
-  transition: all 0.3s var(--spring-bounce);
+  transition: var(--ios-transition);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,6 +291,7 @@ body {
   flex-shrink: 0;
 }
 .avatar-option.selected { border-color: var(--color-primary); transform: scale(1.15); }
+.avatar-option:active { opacity: 0.7; }
 .avatar-option img { width: 36px; height: 36px; }
 
 .start-btn {
@@ -282,17 +306,17 @@ body {
   border: none;
   border-radius: var(--radius-2xl);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+  box-shadow: 0 2px 12px rgba(0,122,255,0.3);
   min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   touch-action: manipulation;
   flex-shrink: 0;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
-.start-btn:hover { transform: translateY(-3px) scale(1.02); }
-.start-btn:active { transform: translateY(0) scale(0.98); }
+.start-btn:hover { transform: translateY(-2px) scale(1.02); }
+.start-btn:active { transform: translateY(0) scale(0.98); opacity: 0.9; }
 
 /* MENU */
 #menu { gap: 14px; position: relative; }
@@ -334,6 +358,8 @@ body {
   max-width: 360px;
   padding: 14px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   flex-shrink: 0;
@@ -348,10 +374,12 @@ body {
 .game-card {
   padding: 14px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   cursor: pointer;
-  transition: all 0.3s var(--spring-bounce);
+  transition: var(--ios-transition);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -360,7 +388,7 @@ body {
   flex-shrink: 0;
 }
 .game-card:hover { transform: translateY(-4px) scale(1.03); box-shadow: var(--shadow-lg); }
-.game-card:active { transform: translateY(0) scale(0.97); }
+.game-card:active { transform: translateY(0) scale(0.97); opacity: 0.9; }
 .game-icon { font-size: 2rem; margin-bottom: 6px; transition: transform 0.3s var(--spring-bounce); }
 .game-card:hover .game-icon { transform: scale(1.2); }
 .game-title { font-size: 0.95rem; font-weight: 800; text-align: center; width: 100%; display: flex; align-items: center; justify-content: center; line-height: 1.2; }
@@ -373,6 +401,8 @@ body {
 .language-selector {
   padding: 12px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   text-align: center;
@@ -391,15 +421,15 @@ body {
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   cursor: pointer;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
   display: flex;
   align-items: center;
   justify-content: center;
   touch-action: manipulation;
 }
 .lang-btn:hover { transform: scale(1.05); }
-.lang-btn:active { transform: scale(0.95); }
-.lang-btn.active { background: var(--barca-blue); color: white; border-color: var(--barca-blue); }
+.lang-btn:active { transform: scale(0.95); opacity: 0.8; }
+.lang-btn.active { background: var(--color-primary); color: white; border-color: var(--color-primary); }
 .settings-row { display: flex; gap: 8px; margin-top: 6px; justify-content: center; flex-wrap: wrap; }
 .settings-btn {
   padding: 10px 16px;
@@ -414,10 +444,10 @@ body {
   align-items: center;
   justify-content: center;
   touch-action: manipulation;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .settings-btn:hover { transform: scale(1.03); }
-.settings-btn:active { transform: scale(0.97); }
+.settings-btn:active { transform: scale(0.97); opacity: 0.8; }
 
 /* GAME SELECT */
 #game-select { gap: 14px; position: relative; }
@@ -431,16 +461,18 @@ body {
   gap: 12px;
   padding: 14px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   cursor: pointer;
   min-height: 56px;
   touch-action: manipulation;
   flex-shrink: 0;
-  transition: all 0.25s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .level-card:hover { transform: scale(1.02) translateX(4px); }
-.level-card:active { transform: scale(0.98); }
+.level-card:active { transform: scale(0.98); opacity: 0.9; }
 .level-card.locked { opacity: 0.5; cursor: not-allowed; }
 .level-number {
   width: 40px;
@@ -469,15 +501,17 @@ body {
   justify-content: center;
   font-size: 1.3rem;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 2px solid var(--glass-border);
   border-radius: var(--radius-lg);
   cursor: pointer;
   touch-action: manipulation;
   flex-shrink: 0;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .back-btn:hover { transform: scale(1.1); }
-.back-btn:active { transform: scale(0.9); }
+.back-btn:active { transform: scale(0.9); opacity: 0.8; }
 
 /* GAME */
 #game { gap: 10px; position: relative; }
@@ -505,10 +539,10 @@ body {
   cursor: pointer;
   min-height: 44px;
   touch-action: manipulation;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .menu-btn:hover { transform: scale(1.05); }
-.menu-btn:active { transform: scale(0.95); }
+.menu-btn:active { transform: scale(0.95); opacity: 0.9; }
 .game-level-badge { font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); }
 .progress-stars { display: flex; gap: 3px; }
 .progress-star { font-size: 1.1rem; color: #e5e7eb; transition: all 0.4s var(--spring-bounce); }
@@ -521,6 +555,8 @@ body {
   padding: 12px;
   text-align: center;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   flex-shrink: 0;
@@ -542,62 +578,181 @@ body {
 }
 .game-area.active { display: flex; }
 
-/* MEMORY */
-.memory-grid { display: grid; gap: 8px; padding: 8px; max-width: 380px; }
+/* MEMORY - ZOO GAME - APPLE STYLE */
+.memory-grid { 
+  display: grid; 
+  gap: 12px; 
+  padding: 12px; 
+  max-width: 400px; 
+  width: 100%;
+}
 .memory-card {
   aspect-ratio: 1;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.5s var(--spring-bounce);
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease,
+              filter 0.3s ease;
   cursor: pointer;
-  min-width: 55px;
+  min-width: 80px;
+  min-height: 80px;
   touch-action: manipulation;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
-.memory-card.flipped { transform: rotateY(180deg); }
+/* Touch feedback - scale down on press but preserve rotation */
+.memory-card:not(.flipped):not(.matched):active {
+  transform: scale(0.95) rotateY(0deg);
+  filter: brightness(0.95);
+}
+.memory-card.flipped:active {
+  transform: scale(0.95) rotateY(180deg);
+  filter: brightness(0.95);
+}
+.memory-card.flipped { 
+  transform: rotateY(180deg); 
+}
+.memory-card.matched { 
+  animation: matchCelebrate 0.6s ease forwards;
+}
+@keyframes matchCelebrate {
+  0% { transform: rotateY(180deg) scale(1); }
+  30% { transform: rotateY(180deg) scale(1.15); }
+  60% { transform: rotateY(180deg) scale(0.95); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
 .card-face {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
-  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-  border: 3px solid var(--barca-blue);
+  font-size: 3.5rem;
+  background: linear-gradient(145deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+  border: 4px solid var(--barca-blue);
+  box-shadow: 0 4px 15px rgba(0, 77, 152, 0.2), 
+              inset 0 2px 10px rgba(255,255,255,0.5);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
-.card-front::after { content: '?'; font-size: 1.3rem; font-weight: 800; color: var(--barca-blue); }
-.card-back { transform: rotateY(180deg); background: var(--color-surface); border-color: var(--color-accent); }
-.memory-card.matched .card-back { background: #fef3c7; border-color: var(--color-warning); animation: matchPop 0.4s ease; }
-@keyframes matchPop { 0%, 100% { transform: rotateY(180deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.1); } }
+.card-front {
+  background: linear-gradient(145deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+}
+.card-front::before {
+  content: '?';
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--barca-blue);
+  text-shadow: 0 2px 8px rgba(0, 77, 152, 0.3);
+  animation: questionPulse 2s ease-in-out infinite;
+}
+@keyframes questionPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+.card-back { 
+  transform: rotateY(180deg); 
+  background: linear-gradient(145deg, #fefce8 0%, #fef3c7 50%, #fde68a 100%); 
+  border-color: var(--color-warning); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.card-back .animal-emoji {
+  font-size: 3.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  animation: animalAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes animalAppear {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.card-back .animal-name {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--barca-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: nameAppear 0.4s ease 0.1s backwards;
+}
+@keyframes nameAppear {
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.memory-card.matched .card-back { 
+  background: linear-gradient(145deg, #dcfce7 0%, #bbf7d0 50%, #86efac 100%);
+  border-color: var(--color-success); 
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.5), 
+              0 4px 15px rgba(0,0,0,0.1);
+}
+.memory-card.wrong {
+  animation: cardShake 0.5s ease;
+}
+@keyframes cardShake {
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  15% { transform: rotateY(180deg) translateX(-10px) rotate(-2deg); }
+  30% { transform: rotateY(180deg) translateX(10px) rotate(2deg); }
+  45% { transform: rotateY(180deg) translateX(-6px) rotate(-1deg); }
+  60% { transform: rotateY(180deg) translateX(6px) rotate(1deg); }
+  75% { transform: rotateY(180deg) translateX(-3px); }
+  90% { transform: rotateY(180deg) translateX(3px); }
+}
+/* Hover glow effect */
+.memory-card:not(.flipped):not(.matched):hover {
+  box-shadow: 0 8px 25px rgba(0, 77, 152, 0.3);
+}
+/* Sparkle effect on match */
+.memory-card.matched::after {
+  content: '✨';
+  position: absolute;
+  font-size: 1.8rem;
+  top: 8px;
+  right: 8px;
+  animation: sparkleAppear 0.6s ease forwards;
+  z-index: 10;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+@keyframes sparkleAppear {
+  0% { transform: scale(0) rotate(0); opacity: 0; }
+  50% { transform: scale(1.4) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
 
 /* NUMBERS */
 .numbers-container { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 360px; width: 100%; }
 .number-intro-card {
   padding: 20px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   border: 2px solid var(--glass-border);
   text-align: center;
   cursor: pointer;
   touch-action: manipulation;
   width: 100%;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .number-intro-card:hover { transform: scale(1.02); }
-.number-intro-card:active { transform: scale(0.98); }
+.number-intro-card:active { transform: scale(0.98); opacity: 0.9; }
 .number-big { font-size: 4.5rem; font-weight: 900; color: var(--barca-blue); }
 .number-objects { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
 .number-object { font-size: 2.2rem; animation: objectBounce 0.5s ease backwards; }
 @keyframes objectBounce { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.counting-objects { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 16px; background: var(--glass-bg); border-radius: var(--radius-2xl); }
+.counting-objects { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 16px; background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: var(--radius-2xl); }
 .counting-item { 
   font-size: 2.2rem; 
   padding: 8px; 
   border-radius: var(--radius-lg); 
   cursor: pointer; 
   touch-action: manipulation;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .counting-item.touched { 
   background: #dcfce7; 
@@ -616,10 +771,10 @@ body {
   border-radius: var(--radius-xl);
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .count-option:hover { transform: scale(1.1); }
-.count-option:active { transform: scale(0.9); }
+.count-option:active { transform: scale(0.9); opacity: 0.8; }
 .count-option.correct { background: #dcfce7; border-color: var(--color-success); animation: correctPop 0.4s ease; }
 @keyframes correctPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 .count-option.wrong { animation: shake 0.4s; border-color: var(--color-error); }
@@ -629,7 +784,7 @@ body {
 .sofia-container { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 360px; width: 100%; }
 .sofia-plane { font-size: 3rem; animation: fly 3s ease-in-out infinite; }
 @keyframes fly { 0%, 100% { transform: translateX(-15px) rotate(-8deg); } 50% { transform: translateX(15px) rotate(8deg); } }
-.sofia-country-card { text-align: center; padding: 16px; background: var(--glass-bg); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); width: 100%; }
+.sofia-country-card { text-align: center; padding: 16px; background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: var(--radius-2xl); border: 2px solid var(--glass-border); width: 100%; }
 .sofia-flag { font-size: 3.5rem; }
 .sofia-country-name { font-size: 1.2rem; font-weight: 900; margin: 6px 0; }
 .sofia-options { width: 100%; display: flex; flex-direction: column; gap: 8px; }
@@ -641,6 +796,8 @@ body {
   font-weight: 800;
   text-align: center;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 3px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   cursor: pointer;
@@ -650,10 +807,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .capital-btn:hover { transform: scale(1.03); }
-.capital-btn:active { transform: scale(0.97); }
+.capital-btn:active { transform: scale(0.97); opacity: 0.8; }
 .capital-btn.correct { background: #dcfce7; border-color: var(--color-success); }
 .capital-btn.wrong { background: #fef2f2; border-color: var(--color-error); }
 
@@ -663,6 +820,8 @@ body {
   text-align: center;
   padding: 20px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   width: 100%;
   position: relative;
@@ -703,7 +862,7 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   touch-action: manipulation;
-  transition: all 0.25s var(--spring-bounce);
+  transition: var(--ios-transition);
   position: relative;
 }
 .color-btn::after {
@@ -715,7 +874,7 @@ body {
   transition: all 0.2s;
 }
 .color-btn:hover { transform: scale(1.15) translateY(-4px); }
-.color-btn:active { transform: scale(0.9); }
+.color-btn:active { transform: scale(0.9); opacity: 0.8; }
 .color-btn.selected::after { border-color: var(--color-success); }
 .color-btn.correct { 
   animation: colorCorrect 0.5s ease;
@@ -740,11 +899,13 @@ body {
 }
 
 /* MUSIC GAME */
-.music-container { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 360px; width: 100%; }
+.music-container { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 360px; width: 100%; position: relative; }
 .music-header {
   text-align: center;
   padding: 16px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-2xl);
   width: 100%;
 }
@@ -794,6 +955,7 @@ body {
   background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
   border-radius: var(--radius-2xl);
   width: 100%;
+  position: relative;
 }
 .piano-key {
   width: 42px;
@@ -849,25 +1011,214 @@ body {
 .music-dot.completed { background: var(--color-success); transform: scale(1.2); }
 .music-dot.current { background: var(--color-warning); animation: dotPulse 1s ease-in-out infinite; }
 
-/* VOCAB POPUP */
-.vocab-popup {
+/* PEDAGOGICAL POPUP */
+.pedagogical-popup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--color-surface);
-  padding: 20px 28px;
+  padding: 24px 20px;
   border-radius: var(--radius-2xl);
   text-align: center;
   box-shadow: var(--shadow-lg);
-  z-index: 100;
+  z-index: 500;
   display: none;
+  max-width: 320px;
+  width: 90%;
 }
-.vocab-popup.show { display: block; animation: popIn 0.4s var(--spring-bounce); }
-@keyframes popIn { from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
-.vocab-emoji { font-size: 3rem; }
-.vocab-word { font-size: 1.2rem; font-weight: 800; color: var(--barca-blue); }
-.vocab-translation { font-size: 1rem; color: var(--color-accent); font-weight: 700; }
+.pedagogical-popup.show { display: block; animation: popIn 0.4s var(--spring-bounce); }
+.pedagogical-popup h3 { font-size: 1.1rem; font-weight: 800; color: var(--barca-blue); margin-bottom: 8px; }
+.pedagogical-popup p { font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 12px; line-height: 1.5; }
+.pedagogical-popup button {
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--barca-blue), var(--barca-red));
+  color: white;
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: var(--ios-transition);
+}
+.pedagogical-popup button:active { transform: scale(0.95); }
+
+/* VOCAB POPUP - IMPROVED */
+.vocab-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: var(--color-surface);
+  padding: 24px 32px;
+  border-radius: var(--radius-2xl);
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 400;
+  opacity: 0;
+  transition: all 0.3s var(--spring-bounce);
+  min-width: 200px;
+}
+.vocab-popup.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.vocab-emoji {
+  font-size: 4rem;
+  animation: vocabEmojiPop 0.5s var(--spring-bounce);
+}
+@keyframes vocabEmojiPop {
+  0% { transform: scale(0) rotate(-180deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.vocab-word-container {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(0, 77, 152, 0.08) 0%, rgba(165, 0, 68, 0.08) 100%);
+  border-radius: var(--radius-xl);
+}
+.vocab-word {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--barca-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.vocab-divider {
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--barca-blue), transparent);
+  margin: 6px auto;
+}
+.vocab-translation {
+  font-size: 1.1rem;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* COLOR FEEDBACK POPUP - NEW */
+.color-feedback-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: var(--color-surface);
+  padding: 24px 32px;
+  border-radius: var(--radius-2xl);
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 400;
+  opacity: 0;
+  transition: all 0.3s var(--spring-bounce);
+  border: 4px solid transparent;
+}
+.color-feedback-popup.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.color-feedback-popup.correct {
+  border-color: var(--color-success);
+  background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%);
+}
+.color-feedback-popup.wrong {
+  border-color: var(--color-error);
+  background: linear-gradient(145deg, #fef2f2 0%, #fee2e2 100%);
+}
+.feedback-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+  animation: feedbackIconPop 0.4s var(--spring-bounce);
+}
+@keyframes feedbackIconPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.feedback-text {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.feedback-color-name {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-top: 8px;
+  padding: 8px 20px;
+  border-radius: var(--radius-xl);
+  color: white;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: colorNamePop 0.4s var(--spring-bounce);
+}
+@keyframes colorNamePop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.feedback-bilingual {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* MASCOT THEME COLORS - AMBIENTACIÓN */
+:root {
+  --mascot-primary: #faf5ff;
+  --mascot-secondary: rgba(250, 245, 255, 0.8);
+  --mascot-accent: #a855f7;
+}
+body.mascot-teddy {
+  --mascot-primary: #fff7ed;
+  --mascot-secondary: rgba(255, 247, 237, 0.9);
+  --mascot-accent: #f97316;
+  --color-bg: #fff7ed;
+}
+body.mascot-bunny {
+  --mascot-primary: #fdf2f8;
+  --mascot-secondary: rgba(253, 242, 248, 0.9);
+  --mascot-accent: #ec4899;
+  --color-bg: #fdf2f8;
+}
+body.mascot-fox {
+  --mascot-primary: #fffbeb;
+  --mascot-secondary: rgba(255, 251, 235, 0.9);
+  --mascot-accent: #f59e0b;
+  --color-bg: #fffbeb;
+}
+body.mascot-cat {
+  --mascot-primary: #f0fdf4;
+  --mascot-secondary: rgba(240, 253, 244, 0.9);
+  --mascot-accent: #22c55e;
+  --color-bg: #f0fdf4;
+}
+.bg-layer-mascot {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+body.mascot-teddy .bg-layer-mascot {
+  background: radial-gradient(ellipse at 20% 0%, rgba(249, 115, 22, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(234, 88, 12, 0.1) 0%, transparent 50%),
+              var(--mascot-primary);
+}
+body.mascot-bunny .bg-layer-mascot {
+  background: radial-gradient(ellipse at 20% 0%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(219, 39, 119, 0.1) 0%, transparent 50%),
+              var(--mascot-primary);
+}
+body.mascot-fox .bg-layer-mascot {
+  background: radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(217, 119, 6, 0.1) 0%, transparent 50%),
+              var(--mascot-primary);
+}
+body.mascot-cat .bg-layer-mascot {
+  background: radial-gradient(ellipse at 20% 0%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(22, 163, 74, 0.1) 0%, transparent 50%),
+              var(--mascot-primary);
+}
 
 /* LEVEL COMPLETE */
 #level-complete { justify-content: center; gap: 16px; text-align: center; position: relative; }
@@ -886,13 +1237,14 @@ body {
 .word-chip {
   padding: 8px;
   background: var(--glass-bg);
+  backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .word-chip:hover { transform: scale(1.1); }
-.word-chip:active { transform: scale(0.95); }
+.word-chip:active { transform: scale(0.95); opacity: 0.8; }
 .word-emoji { font-size: 1.6rem; }
 .word-es { font-size: 0.7rem; font-weight: 800; color: var(--barca-blue); }
 .word-en { font-size: 0.65rem; color: var(--color-accent); }
@@ -913,12 +1265,12 @@ body {
   justify-content: center;
   touch-action: manipulation;
   flex-shrink: 0;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .complete-btn:hover { transform: scale(1.03); }
-.complete-btn:active { transform: scale(0.97); }
+.complete-btn:active { transform: scale(0.97); opacity: 0.9; }
 .complete-btn.primary { background: linear-gradient(135deg, var(--barca-blue), var(--barca-red)); color: white; box-shadow: 0 4px 16px rgba(0,77,152,0.3); }
-.complete-btn.secondary { background: var(--glass-bg); border: 2px solid var(--glass-border); }
+.complete-btn.secondary { background: var(--glass-bg); backdrop-filter: blur(10px); border: 2px solid var(--glass-border); }
 
 /* CONFETTI */
 .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden; }
@@ -930,6 +1282,8 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   display: none;
   align-items: center;
@@ -971,6 +1325,7 @@ body {
   touch-action: manipulation;
 }
 .easter-egg-option:hover { border-color: var(--explicalia-gold); transform: scale(1.02); }
+.easter-egg-option:active { opacity: 0.8; }
 .easter-egg-option.correct { background: rgba(212, 175, 55, 0.2); border-color: var(--explicalia-gold); }
 .easter-egg-option.wrong { background: rgba(165,0,68,0.2); border-color: var(--barca-red); }
 .easter-egg-btn {
@@ -983,9 +1338,10 @@ body {
   font-weight: 700;
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .easter-egg-btn:hover { transform: scale(1.05); }
+.easter-egg-btn:active { transform: scale(0.95); opacity: 0.9; }
 .deco-bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; margin-top: 14px; }
 .deco-bar span { flex: 1; }
 .barca-blue-bar { background: var(--barca-blue); }
@@ -1020,6 +1376,8 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1500;
   display: none;
   align-items: center;
@@ -1043,9 +1401,32 @@ body {
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s var(--spring-bounce);
+  transition: var(--ios-transition);
 }
 .song-close:hover { transform: scale(1.05); }
+.song-close:active { transform: scale(0.95); opacity: 0.9; }
+
+/* EXPLICALIA FOOTER */
+.explicalia-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+  background: linear-gradient(to top, var(--color-bg), transparent);
+  z-index: 5;
+  pointer-events: none;
+}
+.explicalia-footer a {
+  color: var(--explicalia-gold);
+  text-decoration: none;
+  font-weight: 600;
+  pointer-events: auto;
+}
 
 /* RESPONSIVE */
 @media (max-width: 360px) {
@@ -1075,6 +1456,516 @@ body {
   .color-btn { width: 60px; height: 60px; }
   .avatar-option { width: 56px; height: 56px; }
 }
+
+/* ==========================================
+   APPLE-STYLE ENHANCED FEEDBACK - ALL GAMES
+   ========================================== */
+
+/* Global Button Feedback - Apple Style */
+.start-btn, .complete-btn, .menu-btn, .lang-btn, .settings-btn, .back-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.start-btn::after, .complete-btn::after, .menu-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+.start-btn:active, .complete-btn:active, .menu-btn:active {
+  transform: scale(0.97);
+  filter: brightness(0.9);
+}
+
+/* Ripple Effect for All Clickable Elements */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+.ripple-effect:active::before {
+  width: 200%;
+  height: 200%;
+}
+
+/* Game Cards - Enhanced Apple Style */
+.game-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+}
+.game-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+.game-card:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  filter: brightness(0.95);
+}
+.game-card:hover .game-icon {
+  animation: iconBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes iconBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2) rotate(-5deg); }
+  100% { transform: scale(1.1); }
+}
+
+/* Avatar Selection - Apple Style */
+.avatar-option {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.avatar-option::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+.avatar-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(0,122,255,0.25);
+}
+.avatar-option:active {
+  transform: scale(0.95);
+}
+.avatar-option.selected {
+  animation: selectedPulse 1s ease-in-out infinite;
+}
+@keyframes selectedPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,122,255,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(0,122,255,0.2); }
+}
+
+/* Level Cards - Apple Style */
+.level-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.level-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  pointer-events: none;
+}
+.level-card:hover {
+  transform: translateX(6px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.level-card:active {
+  transform: translateX(2px) scale(0.98);
+  filter: brightness(0.95);
+}
+
+/* Capital Buttons - Apple Style */
+.capital-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.capital-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+  pointer-events: none;
+}
+.capital-btn:hover {
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+.capital-btn:active {
+  transform: scale(0.97);
+  filter: brightness(0.9);
+}
+.capital-btn.correct {
+  animation: correctCelebrate 0.6s ease;
+}
+@keyframes correctCelebrate {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); background: #dcfce7; }
+  60% { transform: scale(0.98); }
+  100% { transform: scale(1); background: #dcfce7; }
+}
+
+/* Color Buttons - Enhanced Apple Style */
+.color-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.color-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.color-btn:hover {
+  transform: scale(1.15) translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.color-btn:active {
+  transform: scale(0.9);
+  filter: brightness(0.85);
+}
+
+/* Count Options - Apple Style */
+.count-option {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.count-option::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.count-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.count-option:active {
+  transform: scale(0.9);
+  filter: brightness(0.9);
+}
+
+/* Piano Keys - Enhanced */
+.piano-key {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.15s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.piano-key::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%);
+  pointer-events: none;
+}
+.piano-key:active {
+  transform: translateY(4px);
+  filter: brightness(0.9);
+}
+
+/* Back Button - Apple Style */
+.back-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.back-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.back-btn:hover {
+  transform: scale(1.1);
+}
+.back-btn:active {
+  transform: scale(0.9);
+  filter: brightness(0.9);
+}
+
+/* Screen Transitions - Apple Style */
+.screen {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.screen.active {
+  animation: screenSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes screenSlideIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Vocab Popup - Enhanced Animation */
+.vocab-popup {
+  animation: vocabPopEnhanced 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes vocabPopEnhanced {
+  0% { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
+  70% { transform: translate(-50%, -50%) scale(1.05) rotate(2deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+}
+
+/* Touch Feedback Glow */
+@keyframes touchGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4); }
+  100% { box-shadow: 0 0 0 15px rgba(0, 122, 255, 0); }
+}
+
+/* Language Buttons - Apple Style */
+.lang-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.lang-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.lang-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.lang-btn:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
+}
+.lang-btn.active {
+  animation: activeBtnPulse 2s ease-in-out infinite;
+}
+@keyframes activeBtnPulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0,122,255,0.3); }
+  50% { box-shadow: 0 2px 16px rgba(0,122,255,0.5); }
+}
+
+/* Welcome Mascot Animation */
+.welcome-mascot {
+  animation: welcomeFloat 3s ease-in-out infinite;
+}
+@keyframes welcomeFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
+}
+
+/* Player Avatar Mascot */
+.avatar-mascot {
+  animation: avatarBounce 2s ease-in-out infinite;
+}
+@keyframes avatarBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Sofia Plane Animation Enhanced */
+.sofia-plane {
+  animation: flyEnhanced 4s ease-in-out infinite;
+}
+@keyframes flyEnhanced {
+  0%, 100% { transform: translateX(-20px) rotate(-10deg); }
+  50% { transform: translateX(20px) rotate(10deg); }
+}
+
+/* Success Overlay Enhanced */
+.success-overlay {
+  animation: successFlash 0.5s ease;
+}
+@keyframes successFlash {
+  0% { opacity: 0; background: rgba(52, 199, 89, 0); }
+  30% { opacity: 1; background: rgba(52, 199, 89, 0.3); }
+  100% { opacity: 0; background: rgba(52, 199, 89, 0); }
+}
+
+/* Confetti Enhancement */
+.confetti {
+  animation: confettiFallEnhanced 3s ease-out forwards !important;
+}
+@keyframes confettiFallEnhanced {
+  0% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
+}
+
+/* Number Objects Animation */
+.number-object {
+  animation: numberPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+@keyframes numberPop {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* Flag Wave Enhanced */
+.sofia-flag {
+  animation: flagWaveEnhanced 2s ease-in-out infinite;
+}
+@keyframes flagWaveEnhanced {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.05); }
+}
+
+/* Target Emoji Float */
+.target-emoji {
+  animation: targetFloat 3s ease-in-out infinite;
+}
+@keyframes targetFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.05); }
+}
+
+/* Complete Mascot */
+.complete-mascot {
+  animation: completeCelebrate 1s ease;
+}
+@keyframes completeCelebrate {
+  0% { transform: scale(0) rotate(-180deg); }
+  50% { transform: scale(1.3) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Hint Button */
+.hint-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hint-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.hint-btn:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
+}
+
+/* SONG PLAYER SCREEN */
+.song-player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  max-width: 360px;
+  width: 100%;
+}
+.song-cover-art {
+  width: 200px;
+  height: 200px;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(0, 77, 152, 0.3)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(165, 0, 68, 0.5)); }
+}
+.song-player-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-align: center;
+  background: linear-gradient(90deg, var(--barca-blue), var(--barca-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.song-player-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.song-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+.song-control-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  cursor: pointer;
+  transition: var(--ios-transition);
+  min-width: 90px;
+  touch-action: manipulation;
+}
+.song-control-btn:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+.song-control-btn:active {
+  transform: scale(0.95);
+  opacity: 0.9;
+}
+.song-control-btn span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.song-control-btn.stop-btn {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  border-color: var(--color-error);
+}
+.song-progress-container {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.song-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--barca-blue), var(--barca-red));
+  width: 0%;
+  transition: width 0.1s linear;
+}
 </style>
 </head>
 <body>
@@ -1089,15 +1980,14 @@ body {
     <div class="intro-fallback-title">Sofía y Noa</div>
     <div class="intro-fallback-subtitle">Aprende Jugando</div>
   </div>
-  <div class="intro-tap-hint" id="introHint">Toca para comenzar</div>
+  <div class="intro-tap-hint" id="introHint" data-key="tap-to-start">Toca para comenzar</div>
 </div>
 
-<!-- SONG MODAL -->
-<div class="song-modal" id="songModal">
-  <video id="songVideo" controls>
+<!-- SONG MODAL - REMOVED, NOW USING DEDICATED SONG PLAYER SCREEN -->
+<div class="song-modal" id="songModal" style="display:none;">
+  <video id="songVideo" style="display:none;">
     <source src="gemini_generated_video_6CE8FA43.mp4" type="video/mp4">
   </video>
-  <button class="song-close" onclick="closeSongModal()">Cerrar</button>
 </div>
 
 <div class="bg-layer"></div>
@@ -1138,19 +2028,13 @@ body {
     </svg>
   </button>
   
-  <button class="music-trigger" id="musicBtn" onclick="toggleSong()" aria-label="La canción de Sofía y Noa" title="La canción de Sofía y Noa">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-    </svg>
-  </button>
-  
   <div class="welcome-mascot">🌟</div>
-  <h1 class="welcome-title">¡Hola, pequeño/a!</h1>
-  <p class="welcome-subtitle">¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre</p>
+  <h1 class="welcome-title" data-key="welcome-title">¡Hola, pequeño/a!</h1>
+  <p class="welcome-subtitle" data-key="welcome-subtitle">¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre</p>
   <form class="welcome-form" onsubmit="return startGame(event)">
-    <input type="text" class="name-input" id="playerNameInput" placeholder="Tu nombre..." maxlength="12" required>
+    <input type="text" class="name-input" id="playerNameInput" data-placeholder="your-name" placeholder="Tu nombre..." maxlength="12" required>
     <div class="avatar-select">
-      <div class="avatar-select-label">Elige tu mascota:</div>
+      <div class="avatar-select-label" data-key="choose-mascot">Elige tu mascota:</div>
       <div class="avatar-options">
         <div class="avatar-option selected" data-avatar="teddy" onclick="selectAvatar('teddy')">
           <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f9f8.svg" alt="oso">
@@ -1166,7 +2050,7 @@ body {
         </div>
       </div>
     </div>
-    <button type="submit" class="start-btn">Comenzar aventura</button>
+    <button type="submit" class="start-btn" data-key="start-adventure">Comenzar aventura</button>
   </form>
 </div>
 
@@ -1196,15 +2080,9 @@ body {
     </svg>
   </button>
   
-  <button class="music-trigger" id="musicBtn2" onclick="toggleSong()" aria-label="La canción de Sofía y Noa" title="La canción de Sofía y Noa">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-    </svg>
-  </button>
-  
   <div class="menu-header">
-    <div class="greeting">Bienvenido/a de nuevo</div>
-    <h1 class="menu-title">¿Qué quieres aprender hoy?</h1>
+    <div class="greeting" data-key="welcome-back">Bienvenido/a de nuevo</div>
+    <h1 class="menu-title" data-key="what-learn">¿Qué quieres aprender hoy?</h1>
     <div class="player-avatar">
       <div class="avatar-mascot" id="menuMascot">🧸</div>
       <div class="player-stats">
@@ -1216,7 +2094,7 @@ body {
   </div>
   <div class="progress-overview">
     <div class="progress-header">
-      <span class="progress-title">Progreso total</span>
+      <span class="progress-title" data-key="total-progress">Progreso total</span>
       <span class="progress-value" id="totalProgress">0%</span>
     </div>
     <div class="progress-bar-bg">
@@ -1226,41 +2104,49 @@ body {
   <div class="games-grid">
     <div class="game-card" onclick="openGameSelect('zoo')">
       <div class="game-icon">🦁</div>
-      <div class="game-title">El Gran Zoo</div>
+      <div class="game-title" data-key="game-zoo">El Gran Zoo</div>
       <div class="game-levels" id="zooLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('numbers')">
       <div class="game-icon">🔢</div>
-      <div class="game-title">Números</div>
+      <div class="game-title" data-key="game-numbers">Números</div>
       <div class="game-levels" id="numbersLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('sofia')">
       <div class="game-icon">✈️</div>
-      <div class="game-title">El Mundo de Sofía</div>
+      <div class="game-title" data-key="game-sofia">El Mundo de Sofía</div>
       <div class="game-levels" id="sofiaLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('colors')">
       <div class="game-icon">🎨</div>
-      <div class="game-title">Los colores de Noa</div>
+      <div class="game-title" data-key="game-colors">Los colores de Noa</div>
       <div class="game-levels" id="colorsLevels"></div>
     </div>
     <div class="game-card" onclick="openGameSelect('music')">
       <div class="game-icon">🎹</div>
-      <div class="game-title">La Música de Noa</div>
+      <div class="game-title" data-key="game-music">La música de Sofía y Noa</div>
       <div class="game-levels" id="musicLevels"></div>
+    </div>
+    <div class="game-card" onclick="openSongPlayer()">
+      <div class="game-icon">🎵</div>
+      <div class="game-title" data-key="game-song">La canción de SofiNoa</div>
+      <div class="game-levels"></div>
     </div>
   </div>
   <div class="language-selector">
-    <div class="language-label">Idioma / Language:</div>
+    <div class="language-label" data-key="language">Idioma / Language:</div>
     <div class="language-buttons">
       <button class="lang-btn active" onclick="setLanguage('es')">🇪🇸 ES</button>
       <button class="lang-btn" onclick="setLanguage('en')">🇬🇧 EN</button>
       <button class="lang-btn" onclick="setLanguage('ro')">🇷🇴 RO</button>
+      <button class="lang-btn" onclick="setLanguage('fr')">🇫🇷 FR</button>
+      <button class="lang-btn" onclick="setLanguage('it')">🇮🇹 IT</button>
+      <button class="lang-btn" onclick="setLanguage('ca')">🐱 CA</button>
     </div>
   </div>
   <div class="settings-row">
-    <button class="settings-btn" onclick="changeName()">Cambiar nombre</button>
-    <button class="settings-btn" onclick="resetProgress()">Reiniciar</button>
+    <button class="settings-btn" onclick="changeName()" data-key="change-name">Cambiar nombre</button>
+    <button class="settings-btn" onclick="resetProgress()" data-key="reset">Reiniciar</button>
   </div>
 </div>
 
@@ -1278,12 +2164,12 @@ body {
 <div id="game" class="screen">
   <div class="game-top-bar">
     <button class="back-btn" onclick="exitGame()">←</button>
-    <button class="menu-btn" onclick="goToMenu()">🏠 Menú</button>
+    <button class="menu-btn" onclick="goToMenu()">🏠 <span data-key="menu">Menú</span></button>
     <div class="game-level-badge" id="levelBadge">Nivel 1</div>
     <div class="progress-stars" id="progressStars"></div>
   </div>
   <div class="game-instruction">
-    <p class="instruction-text"><span id="instructionPlayerName">Sofía</span>, <span id="instructionText">¡Encuentra las parejas!</span></p>
+    <p class="instruction-text"><span id="instructionPlayerName">Sofía</span>, <span id="instructionText" data-key="find-pairs">¡Encuentra las parejas!</span></p>
   </div>
   <div class="game-area" id="memoryArea"><div class="memory-grid" id="memoryGrid"></div></div>
   <div class="game-area" id="numbersArea"><div class="numbers-container" id="numbersContainer"></div></div>
@@ -1292,38 +2178,202 @@ body {
   <div class="game-area" id="musicArea"><div class="music-container" id="musicContainer"></div></div>
 </div>
 
-<!-- VOCAB POPUP -->
+<!-- PEDAGOGICAL POPUP -->
+<div class="pedagogical-popup" id="pedagogicalPopup">
+  <h3 id="pedagogicalTitle">🎵 Aprende Música</h3>
+  <p id="pedagogicalText">Vamos a tocar las notas del piano. ¡Escucha y repite!</p>
+  <button onclick="closePedagogicalPopup()" data-key="lets-play">¡Vamos a jugar!</button>
+</div>
+
+<!-- VOCAB POPUP - IMPROVED -->
 <div class="vocab-popup" id="vocabPopup">
   <div class="vocab-emoji" id="vocabEmoji"></div>
-  <div class="vocab-word" id="vocabWord"></div>
-  <div class="vocab-translation" id="vocabTranslation"></div>
+  <div class="vocab-word-container">
+    <div class="vocab-word" id="vocabWord"></div>
+    <div class="vocab-divider"></div>
+    <div class="vocab-translation" id="vocabTranslation"></div>
+  </div>
 </div>
+
+<!-- BG LAYER FOR MASCOT THEME -->
+<div class="bg-layer-mascot"></div>
 
 <!-- LEVEL COMPLETE -->
 <div id="level-complete" class="screen">
   <div class="complete-mascot" id="completeMascot">🧸</div>
   <h1 class="complete-title" id="completeTitle">¡Lo lograste!</h1>
-  <p class="complete-subtitle" id="completeSubtitle">Completaste el nivel</p>
+  <p class="complete-subtitle" id="completeSubtitle" data-key="level-complete">Completaste el nivel</p>
   <div class="complete-stars" id="completeStars"></div>
   <div class="words-learned">
-    <div class="words-title">📚 Palabras aprendidas</div>
+    <div class="words-title" data-key="words-learned">📚 Palabras aprendidas</div>
     <div class="words-grid" id="wordsGrid"></div>
   </div>
   <div class="complete-actions">
-    <button class="complete-btn primary" onclick="nextLevel()">Siguiente nivel</button>
-    <button class="complete-btn secondary" onclick="goToMenu()">Volver al menú</button>
+    <button class="complete-btn primary" onclick="nextLevel()" data-key="next-level">Siguiente nivel</button>
+    <button class="complete-btn secondary" onclick="goToMenu()" data-key="back-menu">Volver al menú</button>
   </div>
 </div>
 
 <!-- CONFETTI -->
 <div class="confetti-container" id="confettiContainer"></div>
 
+<!-- SONG PLAYER SCREEN -->
+<div id="song-player" class="screen">
+  <div class="song-player-container">
+    <div class="song-cover-art">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" fill="url(#songGradient)"/>
+        <defs>
+          <linearGradient id="songGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#004D98"/>
+            <stop offset="100%" style="stop-color:#A50044"/>
+          </linearGradient>
+        </defs>
+        <text x="30" y="50" font-size="28" fill="white" opacity="0.8">🎵</text>
+        <text x="150" y="40" font-size="24" fill="white" opacity="0.7">🎶</text>
+        <text x="160" y="180" font-size="22" fill="white" opacity="0.6">🎵</text>
+        <text x="20" y="170" font-size="26" fill="white" opacity="0.7">🎶</text>
+        <circle cx="70" cy="100" r="28" fill="#fef3c7"/>
+        <circle cx="70" cy="85" r="20" fill="#fde68a"/>
+        <circle cx="63" cy="82" r="3" fill="#1e1b4b"/>
+        <circle cx="77" cy="82" r="3" fill="#1e1b4b"/>
+        <path d="M65 90 Q70 95 75 90" stroke="#1e1b4b" stroke-width="2" fill="none"/>
+        <circle cx="130" cy="100" r="28" fill="#dcfce7"/>
+        <circle cx="130" cy="85" r="20" fill="#bbf7d0"/>
+        <circle cx="123" cy="82" r="3" fill="#1e1b4b"/>
+        <circle cx="137" cy="82" r="3" fill="#1e1b4b"/>
+        <path d="M125 90 Q130 95 135 90" stroke="#1e1b4b" stroke-width="2" fill="none"/>
+        <rect x="95" y="110" width="10" height="25" rx="5" fill="#6b7280"/>
+        <ellipse cx="100" cy="108" rx="12" ry="10" fill="#374151"/>
+        <text x="100" y="155" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Sofía y Noa</text>
+      </svg>
+    </div>
+    <h2 class="song-player-title" data-key="game-song">La canción de SofiNoa</h2>
+    <p class="song-player-subtitle" data-key="listen-song">¡Escucha nuestra canción!</p>
+    <div class="song-controls">
+      <button class="song-control-btn" id="songPlayBtn" onclick="playSongVideo()">
+        <svg viewBox="0 0 24 24" width="32" height="32"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        <span data-key="play">Reproducir</span>
+      </button>
+      <button class="song-control-btn stop-btn" onclick="stopSongVideo()">
+        <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6 6h12v12H6z" fill="currentColor"/></svg>
+        <span data-key="stop">Detener</span>
+      </button>
+    </div>
+    <div class="song-progress-container">
+      <div class="song-progress-bar" id="songProgressBar"></div>
+    </div>
+    <button class="back-btn" onclick="goToMenu()" style="margin-top: 20px;">←</button>
+  </div>
+  <video id="songVideoPlayer" style="display:none;">
+    <source src="gemini_generated_video_6CE8FA43.mp4" type="video/mp4">
+  </video>
+</div>
+
 <!-- EASTER EGG -->
 <div class="easter-egg-overlay" id="easterEggOverlay" onclick="closeEasterEgg(event)">
   <div class="easter-egg-card" id="easterEggCard" onclick="event.stopPropagation()"></div>
 </div>
 
+<!-- EXPLICALIA FOOTER -->
+<div class="explicalia-footer">
+  Powered by <a href="https://www.explicalia.com" target="_blank">Explicalia System</a>
+</div>
+
 <script>
+// === TRANSLATIONS SYSTEM ===
+const TRANSLATIONS = {
+  // Welcome screen
+  'welcome-title': { es: '¡Hola, pequeño/a!', en: 'Hello, little one!', ro: 'Bună, micuțule/a!', fr: 'Bonjour, petit/e !', it: 'Ciao, piccolo/a!', ca: 'Hola, petit/a!' },
+  'welcome-subtitle': { es: '¿Cómo te llamas? Tu papá o mamá puede escribir tu nombre', en: 'What is your name? Your mom or dad can write it', ro: 'Cum te numești? Mami sau tati poate să scrie numele tău', fr: 'Comment t\'appelles-tu ? Ton papa ou ta maman peut écrire ton nom', it: 'Come ti chiami? Il tuo papà o la tua mamma può scrivere il tuo nome', ca: 'Com et dius? El teu pare o mare pot escriure el teu nom' },
+  'choose-mascot': { es: 'Elige tu mascota:', en: 'Choose your mascot:', ro: 'Alege-ți mascotă:', fr: 'Choisis ta mascotte :', it: 'Scegli la tua mascotte:', ca: 'Tria la teva mascota:' },
+  'start-adventure': { es: '¡Comenzar aventura!', en: 'Start adventure!', ro: 'Începe aventura!', fr: 'Commencer l\'aventure !', it: 'Inizia l\'avventura!', ca: 'Comença l\'aventura!' },
+  'welcome-back': { es: '¡Bienvenido/a de nuevo!', en: 'Welcome back!', ro: 'Bine ai revenit!', fr: 'Bienvenue à nouveau !', it: 'Bentornato/a!', ca: 'Benvingut/da de nou!' },
+  'what-learn': { es: '¿Qué quieres aprender hoy?', en: 'What do you want to learn today?', ro: 'Ce vrei să înveți azi?', fr: 'Que veux-tu apprendre aujourd\'hui ?', it: 'Cosa vuoi imparare oggi?', ca: 'Què vols aprendre avui?' },
+  'total-progress': { es: 'Progreso total', en: 'Total progress', ro: 'Progres total', fr: 'Progression totale', it: 'Progresso totale', ca: 'Progrés total' },
+  'language': { es: 'Idioma / Language:', en: 'Language / Langue:', ro: 'Limbă / Language:', fr: 'Langue / Language:', it: 'Lingua / Language:', ca: 'Idioma / Language:' },
+  'change-name': { es: 'Cambiar nombre', en: 'Change name', ro: 'Schimbă numele', fr: 'Changer le nom', it: 'Cambia nome', ca: 'Canvia el nom' },
+  'reset': { es: 'Reiniciar', en: 'Reset', ro: 'Resetare', fr: 'Réinitialiser', it: 'Ricomincia', ca: 'Reinicia' },
+  'menu': { es: 'Menú', en: 'Menu', ro: 'Meniu', fr: 'Menu', it: 'Menu', ca: 'Menú' },
+  'find-pairs': { es: '¡Encuentra las parejas!', en: 'Find the pairs!', ro: 'Găsește perechile!', fr: 'Trouve les paires !', it: 'Trova le coppie!', ca: 'Troba les parelles!' },
+  'level-complete': { es: '¡Completaste el nivel!', en: 'You completed the level!', ro: 'Ai completat nivelul!', fr: 'Tu as complété le niveau !', it: 'Hai completato il livello!', ca: 'Has completat el nivell!' },
+  'words-learned': { es: '📚 Palabras aprendidas', en: '📚 Words learned', ro: '📚 Cuvinte învățate', fr: '📚 Mots appris', it: '📚 Parole imparate', ca: '📚 Paraules apreses' },
+  'next-level': { es: 'Siguiente nivel', en: 'Next level', ro: 'Nivelul următor', fr: 'Niveau suivant', it: 'Livello successivo', ca: 'Nivell següent' },
+  'back-menu': { es: 'Volver al menú', en: 'Back to menu', ro: 'Înapoi la meniu', fr: 'Retour au menu', it: 'Torna al menu', ca: 'Torna al menú' },
+  'lets-play': { es: '¡Vamos a jugar!', en: 'Let\'s play!', ro: 'Să jucăm!', fr: 'Jouons !', it: 'Giochiamo!', ca: 'Juguem!' },
+  'tap-to-start': { es: 'Toca para comenzar', en: 'Tap to start', ro: 'Atinge pentru a începe', fr: 'Touche pour commencer', it: 'Tocca per iniziare', ca: 'Toca per començar' },
+  'close': { es: 'Cerrar', en: 'Close', ro: 'Închide', fr: 'Fermer', it: 'Chiudi', ca: 'Tanca' },
+  'your-name': { es: 'Tu nombre...', en: 'Your name...', ro: 'Numele tău...', fr: 'Ton nom...', it: 'Il tuo nome...', ca: 'El teu nom...' },
+  // Game titles
+  'game-zoo': { es: 'El Gran Zoo', en: 'The Big Zoo', ro: 'Marea Grădină Zoologică', fr: 'Le Grand Zoo', it: 'Il Grande Zoo', ca: 'El Gran Zoo' },
+  'game-numbers': { es: 'Números', en: 'Numbers', ro: 'Numere', fr: 'Nombres', it: 'Numeri', ca: 'Números' },
+  'game-sofia': { es: 'El Mundo de Sofía', en: "Sofia's World", ro: 'Lumea Sofiei', fr: 'Le Monde de Sofía', it: 'Il Mondo di Sofia', ca: 'El Món de Sofia' },
+  'game-colors': { es: 'Los colores de Noa', en: "Noa's Colors", ro: 'Culorile lui Noa', fr: 'Les couleurs de Noa', it: 'I Colori di Noa', ca: 'Els Colors de Noa' },
+  'game-music': { es: 'La música de Sofía y Noa', en: "Sofia and Noa's Music", ro: 'Muzica Sofiei și a lui Noa', fr: 'La musique de Sofía et Noa', it: 'La Musica di Sofia e Noa', ca: 'La Música de Sofia i Noa' },
+  'game-song': { es: 'La canción de SofiNoa', en: 'The SofiNoa Song', ro: 'Cântecul SofiNoa', fr: 'La chanson SofiNoa', it: 'La canzone SofiNoa', ca: 'La cançó SofiNoa' },
+  // Music game
+  'music-free-title': { es: '🎹 Piano Libre', en: '🎹 Free Piano', ro: '🎹 Pian Liber', fr: '🎹 Piano Libre', it: '🎹 Piano Libero', ca: '🎹 Piano Lliure' },
+  'music-free-instr': { es: '¡Toca las teclas para hacer música!', en: 'Tap the keys to make music!', ro: 'Atinge tastele pentru a face muzică!', fr: 'Touche les touches pour faire de la musique !', it: 'Tocca i tasti per fare musica!', ca: 'Toca les tecles per fer música!' },
+  'music-simon-instr': { es: 'Escucha la secuencia...', en: 'Listen to the sequence...', ro: 'Ascultă secvența...', fr: 'Écoute la séquence...', it: 'Ascolta la sequenza...', ca: 'Escolta la seqüència...' },
+  'music-your-turn': { es: '¡Tu turno! Repite la secuencia', en: 'Your turn! Repeat the sequence', ro: 'Rândul tău! Repetă secvența', fr: 'À toi ! Répète la séquence', it: 'Tocca a te! Ripeti la sequenza', ca: 'Et toca a tu! Repeteix la seqüència' },
+  'music-listen-again': { es: 'Escucha de nuevo...', en: 'Listen again...', ro: 'Ascultă din nou...', fr: 'Écoute encore...', it: 'Ascolta di nuovo...', ca: 'Escolta de nou...' },
+  'music-round': { es: 'Ronda', en: 'Round', ro: 'Runda', fr: 'Tour', it: 'Turno', ca: 'Ronda' },
+  'music-notes': { es: 'notas', en: 'notes', ro: 'note', fr: 'notes', it: 'note', ca: 'notes' },
+  'learn-music': { es: '🎵 Aprende Música', en: '🎵 Learn Music', ro: '🎵 Învață Muzică', fr: '🎵 Apprends la Musique', it: '🎵 Impara la Musica', ca: '🎵 Aprèn Música' },
+  'music-intro-text': { es: 'Vamos a tocar las notas del piano. ¡Escucha y repite!', en: 'Let\'s play piano notes. Listen and repeat!', ro: 'Vom cânta notele la pian. Ascultă și repetă!', fr: 'Nous allons jouer les notes du piano. Écoute et répète !', it: 'Suoneremo le note del pianoforte. Ascolta e ripeti!', ca: 'Tocarem les notes del piano. Escolta i repeteix!' },
+  'barca-intro-text': { es: '¡Vamos a aprender el Himno del Barça! Escucha las notas.', en: 'Let\'s learn the Barça Anthem! Listen to the notes.', ro: 'Să învățăm Imnul Barça! Ascultă notele.', fr: 'Apprenons l\'Hymne du Barça ! Écoute les notes.', it: 'Impariamo l\'Inno del Barça! Ascolta le note.', ca: 'Aprenem l\'Himne del Barça! Escolta les notes.' },
+  'tap-notes': { es: '¡Toca las notas!', en: 'Tap the notes!', ro: 'Atinge notele!', fr: 'Touche les notes !', it: 'Tocca le note!', ca: 'Toca les notes!' },
+  // Colors game
+  'learn-colors': { es: '¡Aprende los colores!', en: 'Learn the colors!', ro: 'Învață culorile!', fr: 'Apprends les couleurs !', it: 'Impara i colori!', ca: 'Aprèn els colors!' },
+  'what-color': { es: '¿De qué color es', en: 'What color is', ro: 'De ce culoare este', fr: 'De quelle couleur est', it: 'Di che colore è', ca: 'De quin color és' },
+  'tap-correct': { es: 'Toca el color correcto 👆', en: 'Tap the correct color 👆', ro: 'Atinge culoarea corectă 👆', fr: 'Touche la bonne couleur 👆', it: 'Tocca il colore corretto 👆', ca: 'Toca el color correcte 👆' },
+  'correct': { es: '¡Correcto!', en: 'Correct!', ro: 'Corect!', fr: 'Correct !', it: 'Corretto!', ca: 'Correcte!' },
+  'try-again': { es: '¡Intenta de nuevo!', en: 'Try again!', ro: 'Încearcă din nou!', fr: 'Essaie encore !', it: 'Riprova!', ca: 'Torna-ho a provar!' },
+  // Numbers game
+  'learn-numbers': { es: '¡Aprende los números!', en: 'Learn the numbers!', ro: 'Învață numerele!', fr: 'Apprends les nombres !', it: 'Impara i numeri!', ca: 'Aprèn els números!' },
+  'count-objects': { es: '¡Toca cada objeto mientras cuentas!', en: 'Tap each object while counting!', ro: 'Atinge fiecare obiect în timp ce numeri!', fr: 'Touche chaque objet en comptant !', it: 'Tocca ogni oggetto mentre conti!', ca: 'Toca cada objecte mentre comptes!' },
+  'how-many': { es: '¿Cuántos hay?', en: 'How many are there?', ro: 'Câte sunt?', fr: 'Combien y en a-t-il ?', it: 'Quanti ce ne sono?', ca: 'Quants n\'hi ha?' },
+  'tap-continue': { es: '¡Toca para continuar!', en: 'Tap to continue!', ro: 'Atinge pentru a continua!', fr: 'Touche pour continuer !', it: 'Tocca per continuare!', ca: 'Toca per continuar!' },
+  'put-order': { es: 'Pon los números en orden:', en: 'Put the numbers in order:', ro: 'Pune numerele în ordine:', fr: 'Mets les nombres dans l\'ordre:', it: 'Metti i numeri in ordine:', ca: 'Posa els números en ordre:' },
+  // Sofia game
+  'learn-geography': { es: '¡Aprende geografía!', en: 'Learn geography!', ro: 'Învață geografie!', fr: 'Apprends la géographie !', it: 'Impara la geografia!', ca: 'Aprèn geografia!' },
+  'which-capital': { es: '¿Cuál es la capital?', en: 'What is the capital?', ro: 'Care este capitala?', fr: 'Quelle est la capitale ?', it: 'Qual è la capitale?', ca: 'Quina és la capital?' },
+  'guess-capitals': { es: '¡Adivina las capitales!', en: 'Guess the capitals!', ro: 'Ghicește capitalele!', fr: 'Devine les capitales !', it: 'Indovina le capitali!', ca: 'Endevina les capitals!' },
+  'what-capital': { es: '¿Cuál es su capital?', en: 'What is its capital?', ro: 'Care este capitala?', fr: 'Quelle est sa capitale ?', it: 'Qual è la sua capitale?', ca: 'Quina és la seva capital?' },
+  // Completion
+  'congratulations': { es: '¡Lo lograste!', en: 'You did it!', ro: 'Ai reușit!', fr: 'Tu as réussi !', it: 'Ce l\'hai fatta!', ca: 'Ho has aconseguit!' },
+  // Song player
+  'listen-song': { es: '¡Escucha nuestra canción!', en: 'Listen to our song!', ro: 'Ascultă cântecul nostru!', fr: 'Écoute notre chanson !', it: 'Ascolta la nostra canzone!', ca: 'Escolta la nostra cançó!' },
+  'play': { es: 'Reproducir', en: 'Play', ro: 'Redă', fr: 'Lecture', it: 'Riproduci', ca: 'Reproduir' },
+  'pause': { es: 'Pausar', en: 'Pause', ro: 'Pauză', fr: 'Pause', it: 'Pausa', ca: 'Pausar' },
+  'stop': { es: 'Detener', en: 'Stop', ro: 'Oprește', fr: 'Arrêter', it: 'Stop', ca: 'Aturar' }
+};
+
+// Translation helper function
+function t(key) {
+  return TRANSLATIONS[key] ? (TRANSLATIONS[key][lang] || TRANSLATIONS[key]['es']) : key;
+}
+
+// Update all text elements with data-key attributes
+function updateTexts() {
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (TRANSLATIONS[key] && TRANSLATIONS[key][lang]) {
+      if (el.tagName === 'INPUT') {
+        el.placeholder = TRANSLATIONS[key][lang];
+      } else {
+        el.textContent = TRANSLATIONS[key][lang];
+      }
+    }
+  });
+  
+  // Update placeholder for input
+  const nameInput = document.getElementById('playerNameInput');
+  if (nameInput) {
+    nameInput.placeholder = t('your-name');
+  }
+}
+
 // === DEVICE DETECTION ===
 const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(navigator.userAgent) || (window.innerWidth >= 768 && 'ontouchstart' in window);
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -1407,20 +2457,24 @@ const COUNTRIES = [
   {flag:"🇯🇵",country:"Japón",capital:"Tokio",capitalEn:"Tokyo"}
 ];
 const COLORS_OBJ = [
-  {emoji:"🍎",color:"rojo",colorEn:"Red",hex:"#ef4444"},
-  {emoji:"🍌",color:"amarillo",colorEn:"Yellow",hex:"#fbbf24"},
-  {emoji:"🥒",color:"verde",colorEn:"Green",hex:"#22c55e"},
-  {emoji:"🫐",color:"azul",colorEn:"Blue",hex:"#3b82f6"},
-  {emoji:"🧡",color:"naranja",colorEn:"Orange",hex:"#f97316"},
-  {emoji:"🍇",color:"morado",colorEn:"Purple",hex:"#a855f7"},
-  {emoji:"🌸",color:"rosa",colorEn:"Pink",hex:"#ec4899"},
-  {emoji:"☁️",color:"blanco",colorEn:"White",hex:"#f8fafc"}
+  {emoji:"🍎",color:"rojo",colorEn:"Red",colorFr:"Rouge",colorRo:"Roșu",colorIt:"Rosso",colorCa:"Vermell",hex:"#ef4444"},
+  {emoji:"🍌",color:"amarillo",colorEn:"Yellow",colorFr:"Jaune",colorRo:"Galben",colorIt:"Giallo",colorCa:"Groc",hex:"#fbbf24"},
+  {emoji:"🥒",color:"verde",colorEn:"Green",colorFr:"Vert",colorRo:"Verde",colorIt:"Verde",colorCa:"Verd",hex:"#22c55e"},
+  {emoji:"🫐",color:"azul",colorEn:"Blue",colorFr:"Bleu",colorRo:"Albastru",colorIt:"Blu",colorCa:"Blau",hex:"#3b82f6"},
+  {emoji:"🧡",color:"naranja",colorEn:"Orange",colorFr:"Orange",colorRo:"Portocaliu",colorIt:"Arancione",colorCa:"Taronja",hex:"#f97316"},
+  {emoji:"🍇",color:"morado",colorEn:"Purple",colorFr:"Violet",colorRo:"Mov",colorIt:"Viola",colorCa:"Porpra",hex:"#a855f7"},
+  {emoji:"🌸",color:"rosa",colorEn:"Pink",colorFr:"Rose",colorRo:"Roz",colorIt:"Rosa",colorCa:"Rosa",hex:"#ec4899"},
+  {emoji:"☁️",color:"blanco",colorEn:"White",colorFr:"Blanc",colorRo:"Alb",colorIt:"Bianco",colorCa:"Blanc",hex:"#f8fafc"}
 ];
 const COLORS_PAL = [
-  {name:"ROJO",en:"Red",hex:"#ef4444"},{name:"AMARILLO",en:"Yellow",hex:"#fbbf24"},
-  {name:"VERDE",en:"Green",hex:"#22c55e"},{name:"AZUL",en:"Blue",hex:"#3b82f6"},
-  {name:"NARANJA",en:"Orange",hex:"#f97316"},{name:"MORADO",en:"Purple",hex:"#a855f7"},
-  {name:"ROSA",en:"Pink",hex:"#ec4899"},{name:"BLANCO",en:"White",hex:"#f8fafc"}
+  {name:"ROJO",en:"Red",fr:"Rouge",ro:"Roșu",it:"Rosso",ca:"Vermell",hex:"#ef4444"},
+  {name:"AMARILLO",en:"Yellow",fr:"Jaune",ro:"Galben",it:"Giallo",ca:"Groc",hex:"#fbbf24"},
+  {name:"VERDE",en:"Green",fr:"Vert",ro:"Verde",it:"Verde",ca:"Verd",hex:"#22c55e"},
+  {name:"AZUL",en:"Blue",fr:"Bleu",ro:"Albastru",it:"Blu",ca:"Blau",hex:"#3b82f6"},
+  {name:"NARANJA",en:"Orange",fr:"Orange",ro:"Portocaliu",it:"Arancione",ca:"Taronja",hex:"#f97316"},
+  {name:"MORADO",en:"Purple",fr:"Violet",ro:"Mov",it:"Viola",ca:"Porpra",hex:"#a855f7"},
+  {name:"ROSA",en:"Pink",fr:"Rose",ro:"Roz",it:"Rosa",ca:"Rosa",hex:"#ec4899"},
+  {name:"BLANCO",en:"White",fr:"Blanc",ro:"Alb",it:"Bianco",ca:"Blanc",hex:"#f8fafc"}
 ];
 
 // MUSIC GAME DATA - Piano notes
@@ -1458,10 +2512,11 @@ const AVATARS = {teddy:"https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/asset
 // === STATE ===
 let lang='es',playerName='',avatar='teddy',game='',level=0,progress={},score=0,totalRounds=0,learned=[],flipped=[],locked=false,numIdx=0,countAns=0,countTouched=[],sofiaData=[],sofiaIdx=0,colorItem=null,eeStep=0;
 let musicSequence = [], musicUserSequence = [], musicNoteIndex = 0, musicPhase = 'idle', musicRound = 0, musicMaxNotes = 2;
+let currentScreenId = 'welcome';
 
 // === EASTER EGG ===
 function openEasterEgg(){eeStep=0;renderEE();document.getElementById('easterEggOverlay').classList.add('active');}
-function closeEasterEgg(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('easterEggOverlay').classList.remove('active');}
+function closeEasterEgg(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('easterEggOverlay').classList.remove('active');eeStep = 0;}
 function renderEE(){
   const c=document.getElementById('easterEggCard');
   if(eeStep===0)c.innerHTML='<div class="explicalia-brand">www.explicalia.com</div><div class="explicalia-subtitle">Creador del juego</div><div class="explicalia-divider"></div><div class="easter-egg-title">Preguntas importantes para poder jugar 😎😇</div><button class="easter-egg-btn" onclick="eeStep=1;renderEE()">CONTINUAR →</button><div class="deco-bar"><span class="barca-blue-bar"></span><span class="barca-red-bar"></span></div>';
@@ -1476,12 +2531,15 @@ function answerEE(q,a){
       // Correct answer - Apple style feedback
       opts[0].classList.add('correct');
       playSound('success');
+      // Haptic feedback
+      if(navigator.vibrate) navigator.vibrate([30, 20, 30]);
       setTimeout(()=>{eeStep=2;renderEE();},1000);
     }else{
       // Wrong answer - show correct after delay
       const wrongIdx = a==='B'?1:2;
       opts[wrongIdx].classList.add('wrong');
       playSound('wrong');
+      if(navigator.vibrate) navigator.vibrate(50);
       setTimeout(()=>{opts[0].classList.add('correct');playSound('correct');},400);
       setTimeout(()=>{eeStep=2;renderEE();},1500);
     }
@@ -1490,37 +2548,117 @@ function answerEE(q,a){
       // Correct answer - Apple style feedback
       opts[2].classList.add('correct');
       playSound('success');
+      if(navigator.vibrate) navigator.vibrate([30, 20, 30]);
       setTimeout(()=>{eeStep=3;renderEE();},1000);
     }else{
       // Wrong answer - show correct after delay
       const wrongIdx = a==='A'?0:1;
       opts[wrongIdx].classList.add('wrong');
       playSound('wrong');
+      if(navigator.vibrate) navigator.vibrate(50);
       setTimeout(()=>{opts[2].classList.add('correct');playSound('correct');},400);
       setTimeout(()=>{eeStep=3;renderEE();},1500);
     }
   }
 }
 
-// === NAV ===
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+// === NAVIGATION WITH HISTORY ===
+function showScreen(id){
+  currentScreenId = id;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  
+  // Push state to history for back button support
+  history.pushState({screen: id}, '', '');
+}
+
+// Handle browser back button
+window.onpopstate = function(e) {
+  if(e.state && e.state.screen) {
+    // Don't push state again when going back
+    currentScreenId = e.state.screen;
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(e.state.screen).classList.add('active');
+  }
+};
+
 function startGame(e){e.preventDefault();const n=document.getElementById('playerNameInput').value.trim();if(n.length<2)return false;playerName=n.charAt(0).toUpperCase()+n.slice(1).toLowerCase();saveProg();initMenu();showScreen('menu');playSound('success');return false;}
 function initMenu(){document.getElementById('playerNameDisplay').textContent=playerName;document.getElementById('menuMascot').innerHTML='<img src="'+AVATARS[avatar]+'" style="width:40px;height:40px;">';updateProg();updateDots();}
-function goToMenu(){playSound('tap');showScreen('menu');updateProg();updateDots();}
+function goToMenu(){playSound('tap');resetGameState();showScreen('menu');updateProg();updateDots();}
 function changeName(){playSound('tap');document.getElementById('playerNameInput').value='';showScreen('welcome');}
 
+// === RESET GAME STATE - Fix for navigation bugs ===
+function resetGameState() {
+  // Reset all game-specific state variables
+  score = 0;
+  learned = [];
+  flipped = [];
+  locked = false;
+  numIdx = 0;
+  countAns = 0;
+  countTouched = [];
+  sofiaData = [];
+  sofiaIdx = 0;
+  colorItem = null;
+  musicSequence = [];
+  musicUserSequence = [];
+  musicNoteIndex = 0;
+  musicPhase = 'idle';
+  musicRound = 0;
+  musicMaxNotes = 2;
+  
+  // Hide all game areas
+  document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
+}
+
 // === PROGRESS ===
-function loadProg(){const s=localStorage.getItem('progV12');if(s){const d=JSON.parse(s);progress=d.progress||{};playerName=d.name||'';avatar=d.avatar||'teddy';}if(!progress.zoo)progress.zoo=[];if(!progress.numbers)progress.numbers=[];if(!progress.sofia)progress.sofia=[];if(!progress.colors)progress.colors=[];if(!progress.music)progress.music=[];const l=localStorage.getItem('lang');if(l)lang=l;document.querySelectorAll('.avatar-option').forEach(o=>o.classList.toggle('selected',o.dataset.avatar===avatar));}
-function saveProg(){localStorage.setItem('progV12',JSON.stringify({name:playerName,avatar:avatar,progress:progress}));}
+function loadProg(){const s=localStorage.getItem('progV13');if(s){const d=JSON.parse(s);progress=d.progress||{};playerName=d.name||'';avatar=d.avatar||'teddy';lang=d.lang||'es';}if(!progress.zoo)progress.zoo=[];if(!progress.numbers)progress.numbers=[];if(!progress.sofia)progress.sofia=[];if(!progress.colors)progress.colors=[];if(!progress.music)progress.music=[];const l=localStorage.getItem('lang');if(l)lang=l;document.querySelectorAll('.avatar-option').forEach(o=>o.classList.toggle('selected',o.dataset.avatar===avatar));updateLanguageButtons();updateTexts();}
+function saveProg(){localStorage.setItem('progV13',JSON.stringify({name:playerName,avatar:avatar,progress:progress,lang:lang}));}
 function updateProg(){let t=0,c=0;Object.keys(LEVELS).forEach(g=>{t+=LEVELS[g].length;c+=progress[g]?progress[g].length:0;});const p=t>0?Math.round((c/t)*100):0;document.getElementById('totalProgress').textContent=p+'%';document.getElementById('progressFill').style.width=p+'%';const lvl=c<5?'Principiante':c<10?'Explorador':c<15?'Aventurero':'Maestro';document.getElementById('playerLevelDisplay').textContent=lvl;document.getElementById('playerStarsDisplay').textContent='⭐ '+c;}
 function updateDots(){Object.keys(LEVELS).forEach(g=>{const c=document.getElementById(g+'Levels');if(!c)return;c.innerHTML='';const l=LEVELS[g].length,d=progress[g]?progress[g].length:0;for(let i=0;i<l;i++){const dot=document.createElement('div');dot.className='level-dot';if(i<d)dot.classList.add('completed');else if(i===d)dot.classList.add('current');c.appendChild(dot);}});}
-function resetProgress(){if(confirm('¿Borrar todo el progreso?')){progress={zoo:[],numbers:[],sofia:[],colors:[],music:[]};saveProg();updateProg();updateDots();playSound('tap');}}
+function resetProgress(){if(confirm(lang === 'es' ? '¿Borrar todo el progreso?' : lang === 'en' ? 'Delete all progress?' : lang === 'fr' ? 'Effacer toute progression ?' : 'Ștergi tot progresul?')){progress={zoo:[],numbers:[],sofia:[],colors:[],music:[]};saveProg();updateProg();updateDots();playSound('tap');}}
 
 // === LANG ===
-function setLanguage(l){lang=l;localStorage.setItem('lang',l);document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(l==='es'&&i===0)||(l==='en'&&i===1)||(l==='ro'&&i===2)));}
+function setLanguage(l){lang=l;localStorage.setItem('lang',l);updateLanguageButtons();updateTexts();saveProg();}
+function updateLanguageButtons(){
+  const langs = ['es', 'en', 'ro', 'fr', 'it', 'ca'];
+  document.querySelectorAll('.lang-btn').forEach((b, i) => {
+    if(i < langs.length) {
+      b.classList.toggle('active', lang === langs[i]);
+    }
+  });
+}
 
 // === AVATAR ===
-function selectAvatar(a){avatar=a;document.querySelectorAll('.avatar-option').forEach(o=>o.classList.toggle('selected',o.dataset.avatar===a));playSound('tap');}
+function selectAvatar(a){
+  avatar = a;
+  document.querySelectorAll('.avatar-option').forEach(o => o.classList.toggle('selected', o.dataset.avatar === a));
+  playSound('tap');
+  
+  // Apply mascot theme
+  applyMascotTheme(a);
+}
+
+function applyMascotTheme(mascot) {
+  // Remove all mascot classes
+  document.body.classList.remove('mascot-teddy', 'mascot-bunny', 'mascot-fox', 'mascot-cat');
+  
+  // Add the selected mascot class
+  document.body.classList.add('mascot-' + mascot);
+  
+  // Update CSS variables for dynamic theming
+  const themes = {
+    teddy: { primary: '#fff7ed', accent: '#f97316', gradient: 'rgba(249, 115, 22, 0.15)' },
+    bunny: { primary: '#fdf2f8', accent: '#ec4899', gradient: 'rgba(236, 72, 153, 0.15)' },
+    fox: { primary: '#fffbeb', accent: '#f59e0b', gradient: 'rgba(245, 158, 11, 0.15)' },
+    cat: { primary: '#f0fdf4', accent: '#22c55e', gradient: 'rgba(34, 197, 94, 0.15)' }
+  };
+  
+  const theme = themes[mascot] || themes.teddy;
+  document.documentElement.style.setProperty('--color-bg', theme.primary);
+  document.documentElement.style.setProperty('--mascot-accent', theme.accent);
+}
 
 // === AUDIO SYSTEM ===
 let audioCtx = null;
@@ -1619,7 +2757,7 @@ function openGameSelect(g){
   playSound('tap');
   game = g;
   const icons = {zoo:'🦁',numbers:'🔢',sofia:'✈️',colors:'🎨',music:'🎹'};
-  const titles = {zoo:'El Gran Zoo',numbers:'Números',sofia:'El Mundo de Sofía',colors:'Los colores de Noa',music:'La Música de Noa'};
+  const titles = {zoo:t('game-zoo'),numbers:t('game-numbers'),sofia:t('game-sofia'),colors:t('game-colors'),music:t('game-music')};
   document.getElementById('gameSelectIcon').textContent = icons[g];
   document.getElementById('gameSelectTitle').textContent = titles[g];
   renderLevels();
@@ -1660,20 +2798,9 @@ function renderLevels(){
 function startLevel(l){
   playSound('tap');
   level = l;
-  score = 0;
-  learned = [];
-  flipped = [];
-  locked = false;
-  numIdx = 0;
-  musicSequence = [];
-  musicUserSequence = [];
-  musicNoteIndex = 0;
-  musicPhase = 'idle';
-  musicRound = 0;
-  musicMaxNotes = 2;
+  resetGameState();
   document.getElementById('levelBadge').textContent = 'Nivel '+(l+1);
   document.getElementById('instructionPlayerName').textContent = playerName;
-  document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
   totalRounds = LEVELS[game][level].rounds;
   initStars();
   showScreen('game');
@@ -1708,73 +2835,258 @@ function addStar(){
   if(score >= totalRounds) setTimeout(completeLevel, 600);
 }
 
-// === MEMORY ===
+// === MEMORY - ZOO GAME - APPLE STYLE ===
 function startMemory(){
   document.getElementById('memoryArea').classList.add('active');
-  document.getElementById('instructionText').textContent = '¡Encuentra las parejas!';
+  document.getElementById('instructionText').textContent = t('find-pairs');
   const p = LEVELS.zoo[level].pairs;
   const grid = document.getElementById('memoryGrid');
   grid.innerHTML = '';
-  grid.style.gridTemplateColumns = 'repeat('+(p <= 3 ? 3 : 4)+',1fr)';
+  
+  // Calculate columns based on pairs - better layout for larger cards
+  const cols = p <= 3 ? 3 : p <= 4 ? 4 : 4;
+  grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+  grid.style.width = '100%';
+  grid.style.maxWidth = (cols * 95) + 'px';
+  
   const animals = [...ANIMALS].sort(() => Math.random() - 0.5).slice(0, p);
   const cards = [...animals, ...animals].sort(() => Math.random() - 0.5);
+  
   cards.forEach((a, idx) => {
     const card = document.createElement('div');
     card.className = 'memory-card';
     card.dataset.emoji = a.emoji;
     card.dataset.en = a.en;
     card.dataset.es = a.es;
-    card.style.animationDelay = (idx * 0.05) + 's';
-    card.innerHTML = '<div class="card-face card-front"></div><div class="card-face card-back">'+a.emoji+'</div>';
-    card.onclick = () => flipCard(card);
+    
+    // Card content with front and back
+    card.innerHTML = '<div class="card-face card-front"></div><div class="card-face card-back"><span class="animal-emoji">' + a.emoji + '</span><span class="animal-name">' + a.es + '</span></div>';
+    
+    // Click handler
+    card.onclick = (e) => { 
+      e.preventDefault(); 
+      e.stopPropagation();
+      flipCard(card); 
+    };
+    
+    // Touch handler for mobile - don't prevent default to allow click
+    card.ontouchend = (e) => {
+      e.stopPropagation();
+    };
+    
+    // Add entrance animation with stagger
+    card.style.animation = 'cardEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ' + (idx * 0.05) + 's backwards';
+    
     grid.appendChild(card);
   });
+  
+  totalRounds = p;
+  score = 0;
+  updateProgressStars();
+  
+  // Play game start sound
+  playGameStartSound();
 }
 
 function flipCard(c){
   if(locked || c.classList.contains('flipped') || c.classList.contains('matched')) return;
+  
+  // Add flipped class for CSS animation
   c.classList.add('flipped');
-  playSound('pop');
+  
+  // Play flip sound with slight pitch variation
+  playFlipSound();
+  
+  // Haptic feedback
+  if(navigator.vibrate) navigator.vibrate(15);
+  
   flipped.push(c);
-  if(flipped.length === 2){ locked = true; checkMatch(); }
+  if(flipped.length === 2){ 
+    locked = true; 
+    setTimeout(checkMatch, 500); 
+  }
+}
+
+function playFlipSound() {
+  if(!audioCtx) initAudio();
+  if(!audioCtx) return;
+  
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.frequency.value = 800 + Math.random() * 400;
+  osc.type = 'sine';
+  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.15);
+}
+
+function playGameStartSound() {
+  if(!audioCtx) initAudio();
+  if(!audioCtx) return;
+  
+  // Play a pleasant "game ready" sound
+  const notes = [523.25, 659.25]; // C5, E5
+  notes.forEach((freq, i) => {
+    setTimeout(() => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
+    }, i * 100);
+  });
 }
 
 function checkMatch(){
   const [a,b] = flipped;
   if(a.dataset.emoji === b.dataset.emoji){
+    // MATCH!
     a.classList.add('matched');
     b.classList.add('matched');
-    showVocab(a.dataset.emoji, a.dataset.es, a.dataset.en);
+    
+    // Create sparkle particles
+    createSparkles(a);
+    createSparkles(b);
+    
+    // Show vocabulary popup
+    showVocabImproved(a.dataset.emoji, a.dataset.es, a.dataset.en);
+    
     learned.push({emoji:a.dataset.emoji, es:a.dataset.es, en:a.dataset.en});
-    playSound('success');
+    
+    // Play success sound sequence
+    playMatchSound();
+    
     addStar();
     flipped = [];
     locked = false;
   }else{
-    playSound('tap');
+    // No match
+    a.classList.add('wrong');
+    b.classList.add('wrong');
+    playWrongSound();
+    
+    if(navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    
     setTimeout(() => {
-      a.classList.remove('flipped');
-      b.classList.remove('flipped');
+      a.classList.remove('flipped', 'wrong');
+      b.classList.remove('flipped', 'wrong');
       flipped = [];
       locked = false;
-    }, 700);
+    }, 800);
   }
 }
 
-function showVocab(emoji, es, en){
+function playMatchSound() {
+  if(!audioCtx) initAudio();
+  if(!audioCtx) return;
+  
+  // Happy ascending arpeggio
+  const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+  notes.forEach((freq, i) => {
+    setTimeout(() => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    }, i * 60);
+  });
+}
+
+function playWrongSound() {
+  if(!audioCtx) initAudio();
+  if(!audioCtx) return;
+  
+  // Descending "wrong" sound
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.2);
+  osc.type = 'sawtooth';
+  gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.2);
+}
+
+function createSparkles(el) {
+  const rect = el.getBoundingClientRect();
+  const sparkles = ['✨', '⭐', '💫', '🌟'];
+  for(let i = 0; i < 8; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+    sparkle.style.cssText = `
+      position: fixed;
+      left: ${rect.left + rect.width/2 + (Math.random() - 0.5) * 80}px;
+      top: ${rect.top + rect.height/2 + (Math.random() - 0.5) * 80}px;
+      font-size: ${14 + Math.random() * 14}px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: sparkleFloat 1s ease-out forwards;
+    `;
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 1000);
+  }
+}
+
+// Add card entrance animation
+const cardEntranceStyle = document.createElement('style');
+cardEntranceStyle.textContent = `
+  @keyframes cardEntrance {
+    0% { opacity: 0; transform: scale(0.5) rotateY(0); }
+    100% { opacity: 1; transform: scale(1) rotateY(0); }
+  }
+  @keyframes sparkleFloat {
+    0% { opacity: 1; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0.3) translateY(-60px) rotate(180deg); }
+  }
+`;
+document.head.appendChild(cardEntranceStyle);
+
+function showVocabImproved(emoji, es, en){
   const p = document.getElementById('vocabPopup');
-  document.getElementById('vocabEmoji').textContent = emoji;
-  document.getElementById('vocabWord').textContent = es;
-  document.getElementById('vocabTranslation').textContent = en;
+  const emojiEl = document.getElementById('vocabEmoji');
+  const wordEl = document.getElementById('vocabWord');
+  const transEl = document.getElementById('vocabTranslation');
+  
+  emojiEl.textContent = emoji;
+  
+  // Show word in selected language + English (bilingual)
+  const selectedLangWord = lang === 'es' ? es : 
+                            lang === 'fr' ? es : // French uses Spanish base for now
+                            lang === 'ro' ? es : // Romanian uses Spanish base for now
+                            en;
+  
+  // Update with bilingual display
+  wordEl.textContent = selectedLangWord;
+  wordEl.className = 'vocab-word';
+  transEl.textContent = en; // Always show English
+  transEl.className = 'vocab-translation';
+  
   p.classList.add('show');
   speak(en);
-  setTimeout(() => p.classList.remove('show'), 1800);
+  setTimeout(() => p.classList.remove('show'), 2000);
 }
 
 // === NUMBERS ===
 function startNumbers(){
   document.getElementById('numbersArea').classList.add('active');
-  document.getElementById('instructionText').textContent = '¡Aprende los números!';
+  document.getElementById('instructionText').textContent = t('learn-numbers');
   const cfg = LEVELS.numbers[level];
   if(cfg.type === 'intro') runNumIntro(cfg.nums);
   else if(cfg.type === 'count') runNumCount(cfg.max);
@@ -1786,7 +3098,7 @@ function runNumIntro(nums){
   const n = nums[numIdx];
   const nd = NUMBERS.find(x => x.num === n);
   const c = document.getElementById('numbersContainer');
-  c.innerHTML = '<div class="number-intro-card" onclick="nextNumIntro()"><div class="number-big">'+n+'</div><div class="number-objects">'+Array(n).fill(0).map((_, i) => '<span class="number-object" style="animation-delay:'+(i*0.1)+'s">'+COUNT_OBJS[Math.floor(Math.random()*COUNT_OBJS.length)]+'</span>').join('')+'</div><div style="font-size:0.9rem;color:var(--color-text-secondary);margin-top:10px">¡Toca para continuar!</div></div>';
+  c.innerHTML = '<div class="number-intro-card" onclick="nextNumIntro()"><div class="number-big">'+n+'</div><div class="number-objects">'+Array(n).fill(0).map((_, i) => '<span class="number-object" style="animation-delay:'+(i*0.1)+'s">'+COUNT_OBJS[Math.floor(Math.random()*COUNT_OBJS.length)]+'</span>').join('')+'</div><div style="font-size:0.9rem;color:var(--color-text-secondary);margin-top:10px">'+t('tap-continue')+'</div></div>';
   speak(nd.en);
   learned.push({emoji:n.toString(), es:nd.es, en:nd.en});
   addStar();
@@ -1799,7 +3111,7 @@ function runNumCount(max){
   countTouched = [];
   const obj = COUNT_OBJS[Math.floor(Math.random() * COUNT_OBJS.length)];
   const c = document.getElementById('numbersContainer');
-  c.innerHTML = '<p style="font-size:1rem;margin-bottom:10px;text-align:center">¡Toca cada objeto mientras cuentas!</p><div class="counting-objects">'+Array(countAns).fill(0).map((_,i) => '<span class="counting-item" onclick="touchCountItem(this,'+i+')">'+obj+'</span>').join('')+'</div><p style="font-size:1rem;margin:12px 0;text-align:center">¿Cuántos hay?</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+[countAns, Math.max(1,countAns-1), Math.min(max,countAns+1), Math.min(max,countAns+2)].sort(() => Math.random()-0.5).map(n => '<div class="count-option" onclick="checkNumCount('+n+',this)">'+n+'</div>').join('')+'</div>';
+  c.innerHTML = '<p style="font-size:1rem;margin-bottom:10px;text-align:center">'+t('count-objects')+'</p><div class="counting-objects">'+Array(countAns).fill(0).map((_,i) => '<span class="counting-item" onclick="touchCountItem(this,'+i+')">'+obj+'</span>').join('')+'</div><p style="font-size:1rem;margin:12px 0;text-align:center">'+t('how-many')+'</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+[countAns, Math.max(1,countAns-1), Math.min(max,countAns+1), Math.min(max,countAns+2)].sort(() => Math.random()-0.5).map(n => '<div class="count-option" onclick="checkNumCount('+n+',this)">'+n+'</div>').join('')+'</div>';
 }
 
 function touchCountItem(el, idx){
@@ -1833,12 +3145,12 @@ function runNumSelect(max){
   countAns = Math.floor(Math.random() * max) + 1;
   const obj = COUNT_OBJS[Math.floor(Math.random() * COUNT_OBJS.length)];
   const c = document.getElementById('numbersContainer');
-  c.innerHTML = '<div class="counting-objects">'+Array(countAns).fill(0).map(() => '<span class="counting-item">'+obj+'</span>').join('')+'</div><p style="font-size:1rem;margin:12px 0;text-align:center">¿Cuántos hay?</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+Array.from({length:Math.min(max+2,10)},(_,i)=>i+1).sort(() => Math.random()-0.5).slice(0,4).map(n => '<div class="count-option" onclick="checkNumCount('+n+',this)">'+n+'</div>').join('')+'</div>';
+  c.innerHTML = '<div class="counting-objects">'+Array(countAns).fill(0).map(() => '<span class="counting-item">'+obj+'</span>').join('')+'</div><p style="font-size:1rem;margin:12px 0;text-align:center">'+t('how-many')+'</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+Array.from({length:Math.min(max+2,10)},(_,i)=>i+1).sort(() => Math.random()-0.5).slice(0,4).map(n => '<div class="count-option" onclick="checkNumCount('+n+',this)">'+n+'</div>').join('')+'</div>';
 }
 
 function runNumOrder(seq){
   const c = document.getElementById('numbersContainer');
-  c.innerHTML = '<p style="font-size:1rem;margin-bottom:12px;text-align:center">Pon los números en orden:</p><div class="order-slots" id="orderSlots" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+seq.map((_,i) => '<div class="order-slot" style="width:44px;height:44px;border:3px dashed #9ca3af;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:#9ca3af" data-idx="'+i+'"></div>').join('')+'</div><div class="order-items" id="orderItems" style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+seq.slice().sort(() => Math.random()-0.5).map(n => '<div class="count-option" style="width:50px;height:50px;font-size:1.5rem" data-num="'+n+'" onclick="placeNum('+n+',this)">'+n+'</div>').join('')+'</div>';
+  c.innerHTML = '<p style="font-size:1rem;margin-bottom:12px;text-align:center">'+t('put-order')+'</p><div class="order-slots" id="orderSlots" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+seq.map((_,i) => '<div class="order-slot" style="width:44px;height:44px;border:3px dashed #9ca3af;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:#9ca3af" data-idx="'+i+'"></div>').join('')+'</div><div class="order-items" id="orderItems" style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+seq.slice().sort(() => Math.random()-0.5).map(n => '<div class="count-option" style="width:50px;height:50px;font-size:1.5rem" data-num="'+n+'" onclick="placeNum('+n+',this)">'+n+'</div>').join('')+'</div>';
 }
 
 function placeNum(n, el){
@@ -1877,7 +3189,7 @@ function placeNum(n, el){
 // === SOFIA ===
 function startSofia(){
   document.getElementById('sofiaArea').classList.add('active');
-  document.getElementById('instructionText').textContent = '¡Adivina las capitales!';
+  document.getElementById('instructionText').textContent = t('guess-capitals');
   sofiaData = [...COUNTRIES].sort(() => Math.random() - 0.5).slice(0, LEVELS.sofia[level].count);
   sofiaIdx = 0;
   runSofiaQ();
@@ -1888,7 +3200,7 @@ function runSofiaQ(){
   const wrongCapitals = COUNTRIES.filter(c => c.capital !== country.capital).sort(() => Math.random() - 0.5).slice(0, 2).map(c => c.capital);
   const opts = [country.capital, ...wrongCapitals].sort(() => Math.random() - 0.5);
   const c = document.getElementById('sofiaContainer');
-  c.innerHTML = '<div class="sofia-plane">✈️</div><div class="sofia-country-card"><div class="sofia-flag">'+country.flag+'</div><div class="sofia-country-name">'+country.country+'</div><div style="font-size:0.85rem;color:var(--color-text-secondary)">¿Cuál es su capital?</div></div><div class="sofia-options">'+opts.map(cap => '<button class="capital-btn" onclick="checkCapital(\''+cap+'\',\''+country.capital+'\',this,\''+country.capitalEn+'\')">'+cap+'</button>').join('')+'</div>';
+  c.innerHTML = '<div class="sofia-plane">✈️</div><div class="sofia-country-card"><div class="sofia-flag">'+country.flag+'</div><div class="sofia-country-name">'+country.country+'</div><div style="font-size:0.85rem;color:var(--color-text-secondary)">'+t('what-capital')+'</div></div><div class="sofia-options">'+opts.map(cap => '<button class="capital-btn" onclick="checkCapital(\''+cap+'\',\''+country.capital+'\',this,\''+country.capitalEn+'\')">'+cap+'</button>').join('')+'</div>';
   learned.push({emoji:country.flag, es:country.capital, en:country.capitalEn});
 }
 
@@ -1907,10 +3219,10 @@ function checkCapital(sel, correct, el, capEn){
   }
 }
 
-// === COLORS ===
+// === COLORS - IMPROVED WITH BILINGUAL FEEDBACK ===
 function startColors(){
   document.getElementById('colorsArea').classList.add('active');
-  document.getElementById('instructionText').textContent = '¡Aprende los colores!';
+  document.getElementById('instructionText').textContent = t('learn-colors');
   runColorQ();
 }
 
@@ -1924,7 +3236,10 @@ function runColorQ(){
   const opts = [correct, ...wrong].sort(() => Math.random() - 0.5);
   const c = document.getElementById('colorsContainer');
   
-  c.innerHTML = '<div class="color-target"><span class="target-emoji">'+colorItem.emoji+'</span><p class="target-question">¿De qué color es <span class="target-word">'+colorItem.color+'</span>?</p><p class="target-hint">Toca el color correcto 👆</p></div><div class="color-palette">'+opts.map(o => '<div class="color-btn" style="background:'+o.hex+'" data-name="'+o.name+'" data-en="'+o.en+'" onclick="checkColor(\''+o.name+'\',this,\''+o.en+'\')"></div>').join('')+'</div>';
+  // Get color name in current language
+  const colorName = getColorNameLocal(colorItem.color);
+  
+  c.innerHTML = '<div class="color-target"><span class="target-emoji">'+colorItem.emoji+'</span><p class="target-question">'+t('what-color')+' <span class="target-word">'+colorName+'</span>?</p><p class="target-hint">'+t('tap-correct')+'</p></div><div class="color-palette">'+opts.map(o => '<div class="color-btn" style="background:'+o.hex+'" data-name="'+o.name+'" data-en="'+o.en+'" data-fr="'+(o.fr||o.en)+'" data-ro="'+(o.ro||o.en)+'" onclick="checkColor(\''+o.name+'\',this)"></div>').join('')+'</div>';
   
   setTimeout(() => {
     document.querySelectorAll('.color-btn').forEach((btn, i) => {
@@ -1939,13 +3254,41 @@ function runColorQ(){
   }, 100);
 }
 
-function checkColor(sel, el, en){
-  if(sel === colorItem.color.toUpperCase()){
+function getColorNameLocal(colorLower) {
+  const colorUpper = colorLower.toUpperCase();
+  const colorData = COLORS_PAL.find(c => c.name === colorUpper);
+  if(!colorData) return colorLower;
+  if(lang === 'en') return colorData.en;
+  if(lang === 'fr') return colorData.fr || colorData.en;
+  if(lang === 'ro') return colorData.ro || colorData.en;
+  if(lang === 'it') return colorData.it || colorData.en;
+  if(lang === 'ca') return colorData.ca || colorData.en;
+  return colorData.name; // Spanish default
+}
+
+function checkColor(sel, el){
+  const isCorrect = sel === colorItem.color.toUpperCase();
+  const colorData = COLORS_PAL.find(c => c.name === sel);
+  
+  if(isCorrect){
     el.classList.add('correct');
     playSound('success');
-    speak(en);
-    learned.push({emoji:colorItem.emoji, es:colorItem.color, en:en});
+    
+    // Get color names in both languages
+    const localName = getColorNameLocal(colorItem.color);
+    const englishName = colorData ? colorData.en : colorItem.color;
+    
+    // Show color feedback popup
+    showColorFeedback(true, localName, englishName, colorData.hex);
+    
+    // Speak in English
+    speak(englishName);
+    
+    learned.push({emoji:colorItem.emoji, es:colorItem.color, en:englishName});
     addStar();
+    
+    // Haptic feedback
+    if(navigator.vibrate) navigator.vibrate([30, 20, 30]);
     
     document.querySelectorAll('.color-btn').forEach(btn => {
       if(btn !== el) {
@@ -1954,10 +3297,17 @@ function checkColor(sel, el, en){
       }
     });
     
-    setTimeout(runColorQ, 800);
+    setTimeout(() => {
+      hideColorFeedback();
+      runColorQ();
+    }, 1200);
   }else{
     el.classList.add('wrong');
     playSound('wrong');
+    
+    // Haptic feedback for wrong
+    if(navigator.vibrate) navigator.vibrate(50);
+    
     setTimeout(() => {
       el.classList.remove('wrong');
       el.style.transform = 'scale(0.9)';
@@ -1966,31 +3316,116 @@ function checkColor(sel, el, en){
   }
 }
 
-// === MUSIC GAME - SIMON SAYS PROGRESSION ===
-function startMusic(){
-  document.getElementById('musicArea').classList.add('active');
-  document.getElementById('instructionText').textContent = '¡Toca las notas!';
-  const cfg = LEVELS.music[level];
+function showColorFeedback(isCorrect, localName, englishName, hex) {
+  let popup = document.getElementById('colorFeedbackPopup');
+  if(!popup) {
+    popup = document.createElement('div');
+    popup.id = 'colorFeedbackPopup';
+    popup.className = 'color-feedback-popup';
+    popup.innerHTML = `
+      <div class="feedback-icon" id="colorFeedbackIcon"></div>
+      <div class="feedback-text" id="colorFeedbackText"></div>
+      <div class="feedback-color-name" id="colorFeedbackName"></div>
+      <div class="feedback-bilingual" id="colorFeedbackBilingual"></div>
+    `;
+    document.body.appendChild(popup);
+  }
   
-  if(cfg.type === 'free'){
-    runMusicFree();
-  } else if(cfg.type === 'simon'){
-    runMusicSimon(cfg.song);
+  const icon = document.getElementById('colorFeedbackIcon');
+  const text = document.getElementById('colorFeedbackText');
+  const nameEl = document.getElementById('colorFeedbackName');
+  const bilingual = document.getElementById('colorFeedbackBilingual');
+  
+  popup.className = 'color-feedback-popup ' + (isCorrect ? 'correct' : 'wrong');
+  icon.textContent = isCorrect ? '✓' : '✗';
+  text.textContent = isCorrect ? t('correct') : t('try-again');
+  nameEl.textContent = localName;
+  nameEl.style.background = hex;
+  bilingual.textContent = lang !== 'en' ? 'In English: ' + englishName : '';
+  
+  popup.classList.add('show');
+}
+
+function hideColorFeedback() {
+  const popup = document.getElementById('colorFeedbackPopup');
+  if(popup) popup.classList.remove('show');
+}
+
+// === CREATE NOTE PARTICLE - Apple-style visual effect ===
+function createNoteParticle(x, y, color) {
+  const particle = document.createElement('div');
+  particle.className = 'note-particle';
+  particle.textContent = '♪';
+  particle.style.left = x + 'px';
+  particle.style.top = y + 'px';
+  particle.style.color = color;
+  particle.style.fontSize = Math.random() * 10 + 20 + 'px';
+  particle.style.transform = 'translate(-50%, -50%)';
+  document.body.appendChild(particle);
+  
+  setTimeout(() => particle.remove(), 1200);
+}
+
+// === PEDAGOGICAL POPUP ===
+function showPedagogicalPopup(title, text) {
+  document.getElementById('pedagogicalTitle').textContent = title;
+  document.getElementById('pedagogicalText').textContent = text;
+  document.getElementById('pedagogicalPopup').classList.add('show');
+}
+
+function closePedagogicalPopup() {
+  document.getElementById('pedagogicalPopup').classList.remove('show');
+  // Start the game after popup is closed
+  if(game === 'music') {
+    const cfg = LEVELS.music[level];
+    if(cfg.type === 'free') {
+      continueMusicFree();
+    } else {
+      startSimonRound(SONG_PATTERNS[cfg.song]);
+    }
   }
 }
 
-function runMusicFree(){
+// === MUSIC GAME - SIMON SAYS PROGRESSION ===
+function startMusic(){
+  document.getElementById('musicArea').classList.add('active');
+  document.getElementById('instructionText').textContent = t('tap-notes');
+  const cfg = LEVELS.music[level];
+  
+  // Show pedagogical popup first
+  if(cfg.type === 'free'){
+    showPedagogicalPopup(t('learn-music'), t('music-intro-text'));
+  } else if(cfg.type === 'simon') {
+    if(cfg.song === 'barca') {
+      showPedagogicalPopup(t('learn-music'), t('barca-intro-text'));
+    } else {
+      showPedagogicalPopup(t('learn-music'), t('music-intro-text'));
+    }
+  }
+  
+  // Initial render
   const c = document.getElementById('musicContainer');
-  c.innerHTML = '<div class="music-header"><div class="music-level-title">🎹 Piano Libre</div><div class="music-instruction">¡Toca las teclas para hacer música!</div></div><div class="piano-container" id="pianoContainer"></div><div class="music-progress" id="musicProgress"></div>';
+  c.innerHTML = '<div class="music-header"><div class="music-level-title" id="musicLevelTitle"></div><div class="music-instruction" id="musicInstr"></div><div class="music-round-info" id="musicRoundInfo"></div></div><div class="music-sequence" id="sequenceDisplay"></div><div class="piano-container" id="pianoContainer"></div><div class="music-progress" id="musicProgress"></div>';
   
   renderPiano();
+}
+
+function continueMusicFree() {
+  const title = document.getElementById('musicLevelTitle');
+  const instr = document.getElementById('musicInstr');
+  
+  if(title) title.textContent = t('music-free-title');
+  if(instr) instr.textContent = t('music-free-instr');
   
   const progress = document.getElementById('musicProgress');
-  for(let i = 0; i < 5; i++){
-    const dot = document.createElement('div');
-    dot.className = 'music-dot';
-    dot.id = 'dot' + i;
-    progress.appendChild(dot);
+  if(progress) {
+    progress.innerHTML = '';
+    for(let i = 0; i < 5; i++){
+      const dot = document.createElement('div');
+      dot.className = 'music-dot';
+      dot.id = 'dot' + i;
+      progress.appendChild(dot);
+    }
   }
   
   musicPhase = 'free';
@@ -1999,7 +3434,8 @@ function runMusicFree(){
     freePlayCount++;
     const dotIdx = Math.floor(freePlayCount / 3);
     if(dotIdx < 5) {
-      document.getElementById('dot' + dotIdx)?.classList.add('completed');
+      const dot = document.getElementById('dot' + dotIdx);
+      if(dot) dot.classList.add('completed');
     }
     if(freePlayCount >= 15) {
       setTimeout(completeLevel, 500);
@@ -2007,62 +3443,67 @@ function runMusicFree(){
   };
 }
 
-function runMusicSimon(songName){
-  const fullSequence = SONG_PATTERNS[songName];
-  musicRound = 0;
-  musicMaxNotes = 2; // Start with 2 notes
-  musicPhase = 'idle';
-  
-  const c = document.getElementById('musicContainer');
-  c.innerHTML = '<div class="music-header"><div class="music-level-title">🎹 Simon: ' + songName.charAt(0).toUpperCase() + songName.slice(1) + '</div><div class="music-instruction" id="musicInstr">Escucha la secuencia...</div><div class="music-round-info" id="musicRoundInfo">Ronda 1 - 2 notas</div></div><div class="music-sequence" id="sequenceDisplay"></div><div class="piano-container" id="pianoContainer"></div><div class="music-progress" id="musicProgress"></div>';
-  
-  renderPiano();
-  
-  // Start first round
-  setTimeout(() => startSimonRound(fullSequence), 1000);
-}
-
 function startSimonRound(fullSequence){
   // Get the sequence for this round (progressive: 2, 3, 4, 5... notes)
-  musicSequence = fullSequence.slice(0, musicMaxNotes);
+  // Calculate difficulty factor based on level
+  const difficultyFactor = level * 0.5;
+  const maxNotesForLevel = Math.min(2 + musicRound + Math.floor(difficultyFactor), fullSequence.length);
+  
+  musicSequence = fullSequence.slice(0, maxNotesForLevel);
   musicUserSequence = [];
   musicNoteIndex = 0;
   musicPhase = 'listen';
   
+  // Update title
+  const songName = LEVELS.music[level].song;
+  const songNames = {
+    martillo: 'Martillo',
+    twinkle: 'Twinkle',
+    happy: 'Happy',
+    barca: 'Himno Barça'
+  };
+  
+  const title = document.getElementById('musicLevelTitle');
+  if(title) title.textContent = '🎹 Simon: ' + (songNames[songName] || songName);
+  
   // Update round info
   const roundInfo = document.getElementById('musicRoundInfo');
   if(roundInfo) {
-    roundInfo.textContent = 'Ronda ' + (musicRound + 1) + ' - ' + musicMaxNotes + ' notas';
+    roundInfo.textContent = t('music-round') + ' ' + (musicRound + 1) + ' - ' + musicSequence.length + ' ' + t('music-notes');
   }
   
   // Update instruction
   const instr = document.getElementById('musicInstr');
-  if(instr) instr.textContent = 'Escucha la secuencia...';
+  if(instr) instr.textContent = t('music-simon-instr');
   
   // Render sequence display
   const seqDisplay = document.getElementById('sequenceDisplay');
-  seqDisplay.innerHTML = '';
-  musicSequence.forEach((note, i) => {
-    const noteEl = document.createElement('div');
-    noteEl.className = 'sequence-note';
-    noteEl.id = 'seqNote' + i;
-    noteEl.style.backgroundColor = PIANO_NOTES.find(n => n.note === note).color;
-    noteEl.textContent = PIANO_NOTES.find(n => n.note === note).label;
-    seqDisplay.appendChild(noteEl);
-  });
+  if(seqDisplay) {
+    seqDisplay.innerHTML = '';
+    musicSequence.forEach((note, i) => {
+      const noteEl = document.createElement('div');
+      noteEl.className = 'sequence-note';
+      noteEl.id = 'seqNote' + i;
+      noteEl.style.backgroundColor = PIANO_NOTES.find(n => n.note === note).color;
+      noteEl.textContent = PIANO_NOTES.find(n => n.note === note).label;
+      seqDisplay.appendChild(noteEl);
+    });
+  }
   
   // Update progress dots
   const progress = document.getElementById('musicProgress');
-  progress.innerHTML = '';
-  for(let i = 0; i < totalRounds; i++){
-    const dot = document.createElement('div');
-    dot.className = 'music-dot';
-    if(i < musicRound) dot.classList.add('completed');
-    else if(i === musicRound) dot.classList.add('current');
-    progress.appendChild(dot);
+  if(progress) {
+    progress.innerHTML = '';
+    for(let i = 0; i < totalRounds; i++){
+      const dot = document.createElement('div');
+      dot.className = 'music-dot';
+      if(i < musicRound) dot.classList.add('completed');
+      else if(i === musicRound) dot.classList.add('current');
+      progress.appendChild(dot);
+    }
   }
   
-  // Play sequence
+  // Play sequence after delay
   setTimeout(() => playSimonSequence(), 500);
 }
 
@@ -2078,7 +3519,7 @@ function playNextSimonNote(){
     musicNoteIndex = 0;
     musicUserSequence = [];
     const instr = document.getElementById('musicInstr');
-    if(instr) instr.textContent = '¡Tu turno! Repite la secuencia';
+    if(instr) instr.textContent = t('music-your-turn');
     
     // Reset sequence display
     document.querySelectorAll('.sequence-note').forEach(el => {
@@ -2110,11 +3551,17 @@ function playNextSimonNote(){
   });
   
   musicNoteIndex++;
-  setTimeout(playNextSimonNote, 600);
+  
+  // Calculate delay based on level (faster at higher levels)
+  const baseDelay = 600 - (level * 50);
+  const delay = Math.max(300, baseDelay);
+  
+  setTimeout(playNextSimonNote, delay);
 }
 
 function renderPiano(){
   const container = document.getElementById('pianoContainer');
+  if(!container) return;
   container.innerHTML = '';
   
   PIANO_NOTES.forEach(note => {
@@ -2125,20 +3572,33 @@ function renderPiano(){
     key.innerHTML = '<span class="note-label">'+note.label+'</span>';
     key.style.borderBottom = '4px solid ' + note.color;
     
-    key.onclick = () => handlePianoKey(key, note);
+    key.onclick = (e) => handlePianoKey(key, note, e);
     key.ontouchstart = (e) => {
       e.preventDefault();
-      handlePianoKey(key, note);
+      handlePianoKey(key, note, e);
     };
     
     container.appendChild(key);
   });
 }
 
-function handlePianoKey(keyEl, note){
+function handlePianoKey(keyEl, note, event){
+  // Prevent spam during listen phase
+  if(musicPhase === 'listen') return;
+  if(musicPhase === 'idle') return;
+  
   playPianoNote(note.freq);
   keyEl.classList.add('pressed');
   setTimeout(() => keyEl.classList.remove('pressed'), 200);
+  
+  // Create particle effect
+  const rect = keyEl.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top;
+  createNoteParticle(x, y, note.color);
+  
+  // Haptic feedback
+  if(navigator.vibrate) navigator.vibrate(10);
   
   if(musicPhase === 'free' && window.onFreeNote){
     window.onFreeNote();
@@ -2173,16 +3633,8 @@ function checkSimonNote(playedNote, keyEl){
       if(musicRound >= totalRounds){
         setTimeout(completeLevel, 500);
       } else {
-        // Next round: add one more note
-        musicMaxNotes++;
-        
+        // Next round
         const fullSequence = SONG_PATTERNS[LEVELS.music[level].song];
-        
-        // Check if we've used all notes in the song
-        if(musicMaxNotes > fullSequence.length) {
-          musicMaxNotes = fullSequence.length;
-        }
-        
         setTimeout(() => startSimonRound(fullSequence), 800);
       }
     }
@@ -2197,7 +3649,7 @@ function checkSimonNote(playedNote, keyEl){
       musicUserSequence = [];
       musicPhase = 'listen';
       const instr = document.getElementById('musicInstr');
-      if(instr) instr.textContent = 'Escucha de nuevo...';
+      if(instr) instr.textContent = t('music-listen-again');
       
       // Reset sequence display
       document.querySelectorAll('.sequence-note').forEach(n => n.classList.remove('played'));
@@ -2216,8 +3668,8 @@ function completeLevel(){
     saveProg();
   }
   document.getElementById('completeMascot').innerHTML = '<img src="'+AVATARS[avatar]+'" style="width:60px;height:60px">';
-  document.getElementById('completeTitle').textContent = '¡Lo lograste, '+playerName+'!';
-  document.getElementById('completeSubtitle').textContent = 'Completaste el nivel';
+  document.getElementById('completeTitle').textContent = t('congratulations') + ', '+playerName+'!';
+  document.getElementById('completeSubtitle').textContent = t('level-complete');
   document.getElementById('completeStars').innerHTML = '<span class="complete-star earned" style="animation-delay:0s">⭐</span><span class="complete-star earned" style="animation-delay:0.2s">⭐</span><span class="complete-star earned" style="animation-delay:0.4s">⭐</span>';
   const wg = document.getElementById('wordsGrid');
   wg.innerHTML = '';
@@ -2234,7 +3686,7 @@ function completeLevel(){
 }
 
 function nextLevel(){playSound('tap');level++;startLevel(level);}
-function exitGame(){playSound('tap');showScreen('game-select');}
+function exitGame(){playSound('tap');resetGameState();showScreen('game-select');}
 
 // === CONFETTI ===
 function createConfetti(){
@@ -2253,8 +3705,77 @@ function createConfetti(){
   setTimeout(() => c.innerHTML = '', 3500);
 }
 
+// === SONG PLAYER FUNCTIONS ===
+function openSongPlayer(){
+  playSound('tap');
+  showScreen('song-player');
+}
+
+function playSongVideo(){
+  const video = document.getElementById('songVideoPlayer');
+  const playBtn = document.getElementById('songPlayBtn');
+  
+  video.play();
+  playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="32" height="32"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg><span data-key="pause">'+t('pause')+'</span>';
+  playBtn.onclick = pauseSongVideo;
+  
+  updateSongProgress();
+}
+
+function pauseSongVideo(){
+  const video = document.getElementById('songVideoPlayer');
+  const playBtn = document.getElementById('songPlayBtn');
+  
+  video.pause();
+  playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="32" height="32"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><span data-key="play">'+t('play')+'</span>';
+  playBtn.onclick = playSongVideo;
+}
+
+function stopSongVideo(){
+  const video = document.getElementById('songVideoPlayer');
+  const playBtn = document.getElementById('songPlayBtn');
+  const progressBar = document.getElementById('songProgressBar');
+  
+  video.pause();
+  video.currentTime = 0;
+  playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="32" height="32"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><span data-key="play">'+t('play')+'</span>';
+  playBtn.onclick = playSongVideo;
+  progressBar.style.width = '0%';
+}
+
+function updateSongProgress(){
+  const video = document.getElementById('songVideoPlayer');
+  const progressBar = document.getElementById('songProgressBar');
+  
+  if(!video.paused && !video.ended){
+    const progress = (video.currentTime / video.duration) * 100;
+    progressBar.style.width = progress + '%';
+    requestAnimationFrame(updateSongProgress);
+  }
+}
+
+// Add event listener for video end
+document.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('songVideoPlayer');
+  if(video) {
+    video.addEventListener('ended', function(){
+      const playBtn = document.getElementById('songPlayBtn');
+      const progressBar = document.getElementById('songProgressBar');
+      playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="32" height="32"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><span data-key="play">'+t('play')+'</span>';
+      playBtn.onclick = playSongVideo;
+      progressBar.style.width = '0%';
+    });
+  }
+});
+
 // === INIT ===
 loadProg();
 if(playerName){document.getElementById('playerNameInput').value = playerName;}
+
+// Apply mascot theme on load
+if(avatar) {
+  applyMascotTheme(avatar);
+}
 </script>
 </body>
+</html>
